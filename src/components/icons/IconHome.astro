@@ -1,0 +1,22 @@
+---
+// Material Design Filled Home icon
+// Reference: @Icons.Material.Filled.Home (MudBlazor)
+export interface Props {
+  class?: string;
+  size?: number | string;
+}
+
+const { class: className = 'icon', size = 20 } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="currentColor"
+  aria-hidden="true"
+  class={className}
+>
+  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+</svg>

@@ -1,0 +1,210 @@
+---
+// Tanect Hero — Based on Mindful Figma template, adapted for Tanect brand.
+// Japanese copy. Replace the hero image with an actual app screenshot later.
+import IconHome from './icons/IconHome.astro';
+---
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="badge">🌿 家族のあゆみを、やさしくつなぐ</span>
+
+      <h1 class="hero-title">
+        <span class="hero-title-line">日々のあゆみを、</span>
+        <span class="hero-title-line hero-title-emphasis">家族とそっとつなぐ。</span>
+      </h1>
+
+      <p class="hero-lead">
+        Tanect Home は、高齢の親御さんの日常を、離れて暮らすご家族と
+        そっと共有するアプリです。<br />
+        見守りではなく「つながり」を、管理ではなく「共感」を。
+      </p>
+
+      <div class="hero-actions">
+        <a href="#monitor" class="btn btn-accent">
+          <IconHome />
+          モニターに参加する
+        </a>
+        <a href="#features" class="btn btn-secondary">詳しく見る</a>
+      </div>
+
+      <div class="hero-proof">
+        <div class="avatars" aria-hidden="true">
+          <span class="avatar avatar-1"></span>
+          <span class="avatar avatar-2"></span>
+          <span class="avatar avatar-3"></span>
+        </div>
+        <p class="proof-text">奈良からはじまる、三世代のつながり</p>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <!-- Placeholder: 実際のアプリスクリーンショット or 家族の温かなイメージに差し替え予定 -->
+      <div class="hero-image">
+        <div class="hero-image-inner">
+          <div class="hero-glow"></div>
+          <span class="placeholder-label">アプリ画面 or 家族の写真</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: var(--space-3xl) 0;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: var(--space-2xl);
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-md);
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .hero-title {
+    font-size: var(--fs-h1);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    letter-spacing: 0.012em;
+    color: var(--color-text);
+  }
+
+  .hero-title-line {
+    display: block;
+  }
+
+  .hero-title-emphasis {
+    color: var(--color-primary);
+  }
+
+  .hero-lead {
+    max-width: 560px;
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    letter-spacing: -0.025em;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  /* Social proof row */
+  .hero-proof {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+  }
+
+  .avatars {
+    display: inline-flex;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px var(--color-border-subtle);
+  }
+
+  .avatar + .avatar {
+    margin-left: -7px;
+  }
+
+  .avatar-1 {
+    background: var(--color-avatar-1);
+  }
+  .avatar-2 {
+    background: var(--color-avatar-2);
+  }
+  .avatar-3 {
+    background: var(--color-avatar-3);
+  }
+
+  .proof-text {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+    letter-spacing: -0.002em;
+  }
+
+  /* Hero visual */
+  .hero-visual {
+    width: 100%;
+  }
+
+  .hero-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(148.658deg, rgba(3, 2, 19, 0.08) 0%, rgba(233, 235, 239, 0.6) 100%);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .hero-image-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(3, 2, 19, 0.08) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+
+  .placeholder-label {
+    position: relative;
+    padding: 8px 16px;
+    color: var(--color-text-muted);
+    font-size: var(--fs-small);
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--radius-sm);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .hero {
+      padding: calc(var(--space-3xl) * 1.2) 0;
+    }
+
+    .hero-title {
+      font-size: 42px;
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .hero-inner {
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      gap: var(--space-3xl);
+    }
+
+    .hero-title {
+      font-size: var(--fs-h1-lg);
+    }
+  }
+</style>

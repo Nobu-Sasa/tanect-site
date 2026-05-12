@@ -1,0 +1,97 @@
+---
+// Tanect Header — Navigation bar
+import IconHome from './icons/IconHome.astro';
+---
+
+<header class="header">
+  <div class="header-inner">
+    <a href="/" class="logo" aria-label="Tanect Home">
+      <span class="logo-mark" aria-hidden="true">🌿</span>
+      <span class="logo-text">Tanect</span>
+    </a>
+
+    <nav class="nav" aria-label="メインナビゲーション">
+      <a href="#features" class="nav-link">機能</a>
+      <a href="#use-case" class="nav-link">使い方</a>
+      <a href="#pricing" class="nav-link">料金</a>
+      <a href="#faq" class="nav-link">よくある質問</a>
+    </nav>
+
+    <a href="#monitor" class="btn btn-accent btn-sm">
+      <IconHome size={16} />
+      モニターに参加
+    </a>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: saturate(180%) blur(10px);
+    -webkit-backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-md) var(--space-md);
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-weight: 700;
+  }
+
+  .logo-mark {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    color: var(--color-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .nav {
+    display: none;
+    gap: var(--space-xl);
+  }
+
+  .nav-link {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-link:hover {
+    color: var(--color-primary);
+  }
+
+  .btn-sm {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .nav {
+      display: flex;
+    }
+
+    .btn-sm {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  }
+</style>
