@@ -1,0 +1,639 @@
+---
+// 三世代シナリオ — 親世代・子世代・孫世代それぞれの利用イメージをタブで比較
+// 画面モックは <img> プレースホルダ。実スクショは public/screens/ に配置して差し替え。
+
+type Generation = {
+  id: 'parent' | 'child' | 'grandchild';
+  tabLabel: string;
+  tabSub: string;
+  persona: {
+    emoji: string;
+    name: string;
+    age: string;
+    location: string;
+    situation: string;
+    voice: string;
+  };
+  scenes: {
+    time: string;
+    title: string;
+    body: string;
+    screenshot?: {
+      src: string;
+      alt: string;
+    };
+  }[];
+  pitch: string;
+};
+
+const generations: Generation[] = [
+  {
+    id: 'parent',
+    tabLabel: '親世代',
+    tabSub: '記録する人',
+    persona: {
+      emoji: '👵',
+      name: 'はる子さん（78歳）',
+      age: '78歳',
+      location: '奈良県・一人暮らし',
+      situation: '畑仕事と近所の散歩が日課。子・孫は東京。スマホは持っているが、細かい操作は苦手。',
+      voice: '「毎日のちょっとした話を、子どもや孫にも知っておいてほしい。でも電話するほどでもないし、文字を打つのは大変で…」',
+    },
+    scenes: [
+      {
+        time: '朝',
+        title: 'カレンダーで今日の予定を確認',
+        body: '通院や法事も、子どもが遠隔で登録してくれた今日の予定が大きな文字で見える。朝にひと目で確認できて、忘れても家族が見ていてくれる安心。',
+        screenshot: {
+          src: 'screens/parent-today-calendar.png',
+          alt: 'ホーム画面。週表示のカレンダーで今日(13日)が強調され、下に「きょうの活動」として朝のお薬・お花の水やりが時刻付きで並ぶ。',
+        },
+      },
+      {
+        time: '昼',
+        title: '畑仕事の後、音声でひと言',
+        body: 'マイクボタンを押して「今朝はトマトを収穫しました」と話すだけ。AIが文章をやさしく整え、記録に残ります。',
+        screenshot: {
+          src: 'screens/parent-voice-record.png',
+          alt: '「タッチして話す」ボタン、ひとこと欄、写真、現在地が並ぶ、音声でひとことを記録するダイアログ',
+        },
+      },
+      {
+        time: '夕方',
+        title: '家族からの「いいね」が届く',
+        body: '東京の息子や孫が見て反応してくれたことが、"みんなの"画面に表示されます。一日の終わりに、ひとりじゃないと感じられる時間。',
+        screenshot: {
+          src: 'screens/parent-like-received.png',
+          alt: '「いいねが届きました」のお知らせダイアログ。家族からのいいねを通知し、「ありがとう」ボタンで返答できる。',
+        },
+      },
+    ],
+    pitch: '操作はかんたん3ステップ。シニアモードの大きな文字とボタン、音声入力で、毎日のひと言が自然に家族へ届きます。',
+  },
+  {
+    id: 'child',
+    tabLabel: '子世代',
+    tabSub: '見守る人',
+    persona: {
+      emoji: '👨',
+      name: 'たけしさん（45歳）',
+      age: '45歳',
+      location: '東京都・共働き・小学生の子あり',
+      situation: '仕事と子育てで毎日電話する余裕はないが、奈良で一人暮らしの母が気がかり。',
+      voice: '「元気にしているか毎日気にはなる。でも電話を毎日かけるのは、お互い気疲れする。さりげなく知れる方法がほしい。」',
+    },
+    scenes: [
+      {
+        time: '通勤中',
+        title: 'みんなの活動で母の昨日を確認',
+        body: '気分・体調のマーク付きで、母の一日がカード形式で並ぶ。電車の中でもサッと目を通せます。',
+        screenshot: {
+          src: 'screens/child-family-activity.png',
+          alt: '子世代の「みんなの活動」画面',
+        },
+      },
+      {
+        time: '昼休み',
+        title: 'AI週次サマリで変化に気づく',
+        body: '「今週は散歩の頻度が増えています」「気分マークが安定しています」など、見落としがちな兆しをAIが要約。',
+      },
+      {
+        time: '帰宅後',
+        title: '来週の通院予定を遠隔登録',
+        body: 'カレンダーで「誰の予定？」を母に切り替え、病院の予定を入れてあげる。母の画面にもそのまま反映されます。',
+      },
+    ],
+    pitch: '毎日電話できなくても、母の今日が見える。気分・体調・AI週次サマリで、忙しい中でもさりげない見守りが続けられます。',
+  },
+  {
+    id: 'grandchild',
+    tabLabel: '孫世代',
+    tabSub: '応援する人',
+    persona: {
+      emoji: '👦',
+      name: 'あおいさん（12歳）',
+      age: '12歳',
+      location: '東京都・小学6年生',
+      situation: '奈良のおばあちゃんが大好き。会えるのは年に2〜3回。短い時間でもつながりたい。',
+      voice: '「おばあちゃんが何してるか知りたい。でも長い手紙とか電話とかは、自分からはちょっと照れる。」',
+    },
+    scenes: [
+      {
+        time: '学校から帰って',
+        title: 'おばあちゃんの今日の散歩をのぞく',
+        body: 'みんなの活動でおばあちゃんが歩いたコースが見える。地図で「今日はあの神社まで行ったんだ」と分かります。',
+      },
+      {
+        time: 'おやつの時間',
+        title: 'いいねスタンプで応援',
+        body: 'タップひとつで「いいね」が送れる。長い言葉はいらない。おばあちゃんの画面にちゃんと届きます。',
+        screenshot: {
+          src: 'screens/grandchild-reaction.png',
+          alt: '孫世代のリアクション画面',
+        },
+      },
+      {
+        time: '寝る前',
+        title: 'プッシュ通知でゆるくつながる',
+        body: 'おばあちゃんが新しい記録をしたら通知が来る。次に会うときの会話のネタにもなります。',
+      },
+    ],
+    pitch: 'タップひとつでつながれる。地図とスタンプで、会えない時間も「ちゃんと見てるよ」が自然に伝わります。',
+  },
+];
+---
+
+<section class="scenarios" id="use-case" aria-labelledby="scenarios-title">
+  <div class="scenarios-inner">
+    <header class="scenarios-head">
+      <span class="badge">👨‍👩‍👧 三世代それぞれの使いかた</span>
+      <h2 class="scenarios-title" id="scenarios-title">
+        立場が違えば、欲しい体験も違う。
+      </h2>
+      <p class="scenarios-lead">
+        Tanect Home は、親世代・子世代・孫世代の役割と気持ちにあわせて、画面と機能が設計されています。<br />
+        タブを切り替えて、それぞれの一日を覗いてみてください。
+      </p>
+    </header>
+
+    <div class="tablist" role="tablist" aria-label="世代を選択">
+      {generations.map((gen, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`tab-${gen.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-controls={`panel-${gen.id}`}
+          tabindex={i === 0 ? 0 : -1}
+          class={`tab ${i === 0 ? 'is-active' : ''}`}
+          data-tab={gen.id}
+        >
+          <span class="tab-emoji" aria-hidden="true">{gen.persona.emoji}</span>
+          <span class="tab-text">
+            <span class="tab-label">{gen.tabLabel}</span>
+            <span class="tab-sub">{gen.tabSub}</span>
+          </span>
+        </button>
+      ))}
+    </div>
+
+    {generations.map((gen, i) => (
+      <div
+        role="tabpanel"
+        id={`panel-${gen.id}`}
+        aria-labelledby={`tab-${gen.id}`}
+        class={`panel ${i === 0 ? 'is-active' : ''}`}
+        data-panel={gen.id}
+        hidden={i !== 0}
+      >
+        <div class="panel-grid">
+          <div class="panel-left">
+            <article class="persona">
+              <div class="persona-head">
+                <span class="persona-emoji" aria-hidden="true">{gen.persona.emoji}</span>
+                <div>
+                  <h3 class="persona-name">{gen.persona.name}</h3>
+                  <p class="persona-meta">{gen.persona.location}</p>
+                </div>
+              </div>
+              <p class="persona-situation">{gen.persona.situation}</p>
+              <blockquote class="persona-voice">{gen.persona.voice}</blockquote>
+            </article>
+
+            <ol class="scenes">
+              {gen.scenes.map((scene) => (
+                <li class="scene">
+                  <span class="scene-time">{scene.time}</span>
+                  <div class="scene-body">
+                    <h4 class="scene-title">{scene.title}</h4>
+                    <p class="scene-desc">{scene.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            <p class="pitch">{gen.pitch}</p>
+          </div>
+
+          <div class="panel-right">
+            {gen.scenes.filter((s) => s.screenshot).map((scene) => (
+              <figure class="screenshot">
+                <span class="screenshot-badge">{scene.time}</span>
+                <div class="screenshot-frame">
+                  <img
+                    src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/${scene.screenshot!.src}`}
+                    alt={scene.screenshot!.alt}
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
+                  />
+                  <div class="screenshot-placeholder" aria-hidden="true" hidden>
+                    <span>📱 スクリーンショット差し替え予定</span>
+                    <code>{scene.screenshot!.src}</code>
+                  </div>
+                </div>
+                <figcaption class="screenshot-caption">{scene.title}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.scenarios .tab');
+  const panels = document.querySelectorAll<HTMLElement>('.scenarios .panel');
+
+  const activate = (id: string) => {
+    tabs.forEach((tab) => {
+      const isActive = tab.dataset.tab === id;
+      tab.classList.toggle('is-active', isActive);
+      tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      tab.tabIndex = isActive ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      const isActive = panel.dataset.panel === id;
+      panel.classList.toggle('is-active', isActive);
+      panel.hidden = !isActive;
+    });
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const id = tab.dataset.tab;
+      if (id) activate(id);
+    });
+  });
+
+  // キーボード操作（←→で世代切替）
+  const tabList = document.querySelector('.scenarios .tablist');
+  tabList?.addEventListener('keydown', (e) => {
+    const event = e as KeyboardEvent;
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    const current = document.activeElement as HTMLButtonElement;
+    if (!current?.dataset.tab) return;
+    const tabArr = Array.from(tabs);
+    const idx = tabArr.indexOf(current);
+    const next = event.key === 'ArrowRight'
+      ? tabArr[(idx + 1) % tabArr.length]
+      : tabArr[(idx - 1 + tabArr.length) % tabArr.length];
+    next.focus();
+    if (next.dataset.tab) activate(next.dataset.tab);
+  });
+</script>
+
+<style>
+  .scenarios {
+    padding: var(--space-3xl) 0;
+    background: var(--color-bg-soft);
+  }
+
+  .scenarios-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-md);
+  }
+
+  .scenarios-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .scenarios-title {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .scenarios-lead {
+    max-width: 640px;
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  /* ──────────── Tabs ──────────── */
+  .tablist {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-xs);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-pill);
+    max-width: 720px;
+    margin-inline: auto;
+    margin-block-end: var(--space-2xl);
+  }
+
+  .tab {
+    flex: 1 1 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    min-height: 56px;
+    border-radius: var(--radius-pill);
+    color: var(--color-text-muted);
+    transition: background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .tab:hover {
+    color: var(--color-text);
+    background: var(--color-bg-soft);
+  }
+
+  .tab.is-active {
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+
+  .tab.is-active:hover {
+    background: var(--color-primary-hover);
+  }
+
+  .tab-emoji {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .tab-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+  }
+
+  .tab-label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .tab-sub {
+    font-size: 11px;
+    opacity: 0.8;
+  }
+
+  /* ──────────── Panel ──────────── */
+  .panel {
+    animation: fade-in var(--duration-base) var(--ease-out);
+  }
+
+  .panel[hidden] {
+    display: none;
+  }
+
+  .panel-grid {
+    display: grid;
+    gap: var(--space-2xl);
+  }
+
+  .panel-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  /* Persona */
+  .persona {
+    padding: var(--space-xl);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .persona-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .persona-emoji {
+    font-size: 40px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .persona-name {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .persona-meta {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+    margin-top: 2px;
+  }
+
+  .persona-situation {
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .persona-voice {
+    padding: var(--space-md);
+    background: var(--color-accent-soft);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text);
+    font-style: normal;
+  }
+
+  /* Scenes */
+  .scenes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .scene {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .scene-time {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xs) var(--space-sm);
+    height: fit-content;
+    background: var(--color-badge-bg);
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.04em;
+  }
+
+  .scene-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 4px;
+    letter-spacing: 0.005em;
+  }
+
+  .scene-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+
+  .pitch {
+    padding: var(--space-md) var(--space-lg);
+    background: linear-gradient(135deg, var(--color-accent-soft), #ffffff);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  /* Screenshot */
+  .panel-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xl);
+  }
+
+  .screenshot {
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .screenshot-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    margin-bottom: var(--space-sm);
+    background: var(--color-accent);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 2px 6px rgba(237, 114, 50, 0.25);
+  }
+
+  .screenshot-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 19;
+    border-radius: 32px;
+    background: linear-gradient(148deg, #1a1a2e 0%, #030213 100%);
+    padding: 12px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .screenshot-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 24px;
+  }
+
+  .screenshot-placeholder {
+    position: absolute;
+    inset: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    border-radius: 24px;
+    background: linear-gradient(148deg, #e9ebef 0%, #ffffff 100%);
+    color: var(--color-text-muted);
+    font-size: 13px;
+    text-align: center;
+    padding: var(--space-md);
+  }
+
+  .screenshot-placeholder[hidden] {
+    display: none;
+  }
+
+  .screenshot-placeholder code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
+  }
+
+  .screenshot-caption {
+    margin-top: var(--space-md);
+    text-align: center;
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .scenarios-title {
+      font-size: 36px;
+    }
+
+    .tab-emoji {
+      font-size: 26px;
+    }
+
+    .tab-label {
+      font-size: 15px;
+    }
+
+    .tab-sub {
+      font-size: 12px;
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .panel-grid {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: start;
+      gap: var(--space-3xl);
+    }
+  }
+</style>
