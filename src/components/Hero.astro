@@ -1,7 +1,17 @@
 ---
 // Tanect Hero — Based on Mindful Figma template, adapted for Tanect brand.
-// Japanese copy. Replace the hero image with an actual app screenshot later.
+// Japanese copy. Hero image rotates through the Nara landscape and four seasons.
 import IconHome from './icons/IconHome.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const heroImages = [
+  { src: `${base}/images/hero-nara.png`, alt: '奈良の山並みと木漏れ日。Tanect Home が生まれた土地の風景。' },
+  { src: `${base}/images/hero-nara-spring.png`, alt: '奈良の春。桜並木の道を歩く犬。' },
+  { src: `${base}/images/hero-nara-summer.png`, alt: '奈良の夏。畑で実るゴーヤと青々とした葉。' },
+  { src: `${base}/images/hero-nara-autumn.png`, alt: '奈良の秋。紅葉と石灯籠のある庭。' },
+  { src: `${base}/images/hero-nara-winter.png`, alt: '奈良の冬。雪をまとった山と冬空。' },
+];
 ---
 
 <section class="hero">
@@ -39,15 +49,31 @@ import IconHome from './icons/IconHome.astro';
     </div>
 
     <div class="hero-visual">
-      <figure class="hero-image">
-        <img
-          src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/hero-nara.png`}
-          alt="奈良の山並みと木漏れ日。Tanect Home が生まれた土地の風景。"
-        />
+      <figure class="hero-image" aria-label="奈良の四季の風景">
+        {heroImages.map((img, i) => (
+          <img
+            src={img.src}
+            alt={img.alt}
+            class={i === 0 ? 'is-active' : ''}
+            loading={i === 0 ? 'eager' : 'lazy'}
+          />
+        ))}
       </figure>
     </div>
   </div>
 </section>
+
+<script>
+  const imgs = document.querySelectorAll<HTMLImageElement>('.hero-image img');
+  if (imgs.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let idx = 0;
+    setInterval(() => {
+      imgs[idx].classList.remove('is-active');
+      idx = (idx + 1) % imgs.length;
+      imgs[idx].classList.add('is-active');
+    }, 4500);
+  }
+</script>
 
 <style>
   .hero {
@@ -152,13 +178,28 @@ import IconHome from './icons/IconHome.astro';
     box-shadow: var(--shadow-lg);
     overflow: hidden;
     margin: 0;
+    background: var(--color-bg-soft);
   }
 
   .hero-image img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+  }
+
+  .hero-image img.is-active {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-image img {
+      transition: none;
+    }
   }
 
   /* Tablet and up */
