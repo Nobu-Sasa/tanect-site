@@ -38,14 +38,13 @@ import IconHome from './icons/IconHome.astro';
       </div>
     </div>
 
-    <div class="hero-visual" aria-hidden="true">
-      <!-- Placeholder: 実際のアプリスクリーンショット or 家族の温かなイメージに差し替え予定 -->
-      <div class="hero-image">
-        <div class="hero-image-inner">
-          <div class="hero-glow"></div>
-          <span class="placeholder-label">アプリ画面 or 家族の写真</span>
-        </div>
-      </div>
+    <div class="hero-visual">
+      <figure class="hero-image">
+        <img
+          src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/hero-nara.png`}
+          alt="奈良の山並みと木漏れ日。Tanect Home が生まれた土地の風景。"
+        />
+      </figure>
     </div>
   </div>
 </section>
@@ -150,38 +149,16 @@ import IconHome from './icons/IconHome.astro';
     width: 100%;
     aspect-ratio: 16 / 10;
     border-radius: var(--radius-lg);
-    background: linear-gradient(148.658deg, rgba(3, 2, 19, 0.08) 0%, rgba(233, 235, 239, 0.6) 100%);
     box-shadow: var(--shadow-lg);
     overflow: hidden;
+    margin: 0;
   }
 
-  .hero-image-inner {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hero-glow {
-    position: absolute;
-    inset: -20%;
-    background: radial-gradient(
-      ellipse at center,
-      rgba(3, 2, 19, 0.08) 0%,
-      transparent 60%
-    );
-    pointer-events: none;
-  }
-
-  .placeholder-label {
-    position: relative;
-    padding: 8px 16px;
-    color: var(--color-text-muted);
-    font-size: var(--fs-small);
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: var(--radius-sm);
-    backdrop-filter: blur(4px);
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   /* Tablet and up */
