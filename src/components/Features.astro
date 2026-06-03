@@ -1,0 +1,163 @@
+---
+// 主な機能 — Tanect Home のコア機能をカード形式で紹介
+type Feature = {
+  emoji: string;
+  title: string;
+  body: string;
+};
+
+const features: Feature[] = [
+  {
+    emoji: '🎙️',
+    title: '音声でひとこと記録',
+    body: 'ボタンを押して話すだけ。AIが文章をやさしく整えて記録します。文字入力が苦手な方でも、毎日のひと言が自然に残せます。',
+  },
+  {
+    emoji: '👨‍👩‍👧',
+    title: 'みんなの活動',
+    body: '家族それぞれの一日が、気分・体調のマーク付きでカードに並びます。電話するほどでもない日々の様子が、さりげなく見えます。',
+  },
+  {
+    emoji: '🗺️',
+    title: '地図と写真でつながる',
+    body: '「今日はあの畑まで行ったんだ」。活動の場所が地図と写真で見えるから、離れていても同じ景色を分かち合えます。',
+  },
+  {
+    emoji: '👍',
+    title: 'いいね・応援',
+    body: 'タップひとつで「見てるよ」が届く。長い言葉はいりません。送った気持ちは、ちゃんと相手の画面に届きます。',
+  },
+  {
+    emoji: '🤖',
+    title: 'AI週次サマリ',
+    body: '「今週は散歩が増えています」など、見落としがちな変化をAIが要約。忙しくても、家族の小さな兆しに気づけます。',
+  },
+  {
+    emoji: '🗓️',
+    title: 'カレンダー遠隔登録',
+    body: '通院や法事の予定を、離れた家族が代わりに登録。本人の画面にも大きな文字でそのまま反映され、うっかり忘れを防ぎます。',
+  },
+];
+---
+
+<section class="features" id="features" aria-labelledby="features-title">
+  <div class="features-inner">
+    <header class="features-head">
+      <span class="badge">✨ 主な機能</span>
+      <h2 class="features-title" id="features-title">
+        毎日のあゆみを、つなぐ道具。
+      </h2>
+      <p class="features-lead">
+        記録するのも、見守るのも、応援するのも、できるだけかんたんに。<br />
+        Tanect Home は、家族のつながりに必要な機能だけをそろえました。
+      </p>
+    </header>
+
+    <ul class="feature-grid">
+      {features.map((f) => (
+        <li class="feature-card">
+          <span class="feature-emoji" aria-hidden="true">{f.emoji}</span>
+          <h3 class="feature-card-title">{f.title}</h3>
+          <p class="feature-card-body">{f.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .features {
+    padding: var(--space-3xl) 0;
+  }
+
+  .features-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-md);
+  }
+
+  .features-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .features-title {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .features-lead {
+    max-width: 640px;
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-xl);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .feature-emoji {
+    font-size: 36px;
+    line-height: 1;
+  }
+
+  .feature-card-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .feature-card-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .features-title {
+      font-size: 36px;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-xl);
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .feature-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

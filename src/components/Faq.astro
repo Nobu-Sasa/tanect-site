@@ -1,0 +1,179 @@
+---
+// よくある質問 — <details> ベースのアコーディオン
+type Qa = {
+  q: string;
+  a: string;
+};
+
+const faqs: Qa[] = [
+  {
+    q: '家族モニターの参加に費用はかかりますか？',
+    a: '家族モニター期間中は完全に無料です。すべての機能を、家族6人までお使いいただけます。',
+  },
+  {
+    q: 'どんな人が参加できますか？',
+    a: '離れて暮らすご家族とのつながりを大切にしたい方なら、どなたでもご参加いただけます。スマホの操作が苦手なご家族がいても大丈夫。やさしい操作モードや音声入力で、毎日のひと言を自然に残せます。',
+  },
+  {
+    q: 'スマホの操作が苦手な家族でも使えますか？',
+    a: 'はい。大きな文字とボタンの「やさしい操作モード」や、話すだけで記録できる音声入力を用意しています。予定の登録は離れた家族が代わりに行うこともできます。',
+  },
+  {
+    q: '対応している端末は？',
+    a: 'スマートフォン（iPhone / Android）でご利用いただけます。家族モニター参加のご案内時に、インストール方法を個別にお送りします。',
+  },
+  {
+    q: '家族モニター期間が終わったらどうなりますか？',
+    a: '正式リリース後は有料プラン（基本プラン 980円/月、上位プラン 1,480円/月）を予定しています。継続するかどうかは、その時点で自由にお選びいただけます。',
+  },
+  {
+    q: '家族の情報はどう扱われますか？',
+    a: '記録した内容は、招待した家族の中だけで共有されます。大切な毎日の記録だからこそ、取り扱いには十分配慮して運用しています。詳しくは参加時のご案内でお伝えします。',
+  },
+];
+---
+
+<section class="faq" id="faq" aria-labelledby="faq-title">
+  <div class="faq-inner">
+    <header class="faq-head">
+      <span class="badge">❓ よくある質問</span>
+      <h2 class="faq-title" id="faq-title">
+        気になることに、お答えします。
+      </h2>
+    </header>
+
+    <div class="faq-list">
+      {faqs.map((item) => (
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>{item.q}</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-answer">
+            <p>{item.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    padding: var(--space-3xl) 0;
+  }
+
+  .faq-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding-inline: var(--space-md);
+  }
+
+  .faq-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .faq-title {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .faq-item {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .faq-item[open] {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    letter-spacing: 0.005em;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-icon {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    background: var(--color-accent-ink);
+    border-radius: 1px;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  /* horizontal bar */
+  .faq-icon::before {
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 2px;
+    transform: translateY(-50%);
+  }
+
+  /* vertical bar */
+  .faq-icon::after {
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 16px;
+    transform: translateX(-50%);
+  }
+
+  .faq-item[open] .faq-icon::after {
+    transform: translateX(-50%) scaleY(0);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-lg) var(--space-lg);
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--color-text-muted);
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .faq-title {
+      font-size: 36px;
+    }
+
+    .faq-question {
+      font-size: 17px;
+    }
+  }
+</style>

@@ -6,20 +6,27 @@ import IconHome from './icons/IconHome.astro';
 <header class="header">
   <div class="header-inner">
     <a href={import.meta.env.BASE_URL} class="logo" aria-label="Tanect Home">
-      <span class="logo-mark" aria-hidden="true">🌿</span>
+      <img
+        class="logo-mark"
+        src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/app-icon.png`}
+        width="32"
+        height="32"
+        alt=""
+        aria-hidden="true"
+      />
       <span class="logo-text">Tanect</span>
     </a>
 
     <nav class="nav" aria-label="メインナビゲーション">
-      <a href="#features" class="nav-link">機能</a>
       <a href="#use-case" class="nav-link">使い方</a>
-      <a href="#pricing" class="nav-link">料金</a>
+      <a href="#features" class="nav-link">機能</a>
       <a href="#faq" class="nav-link">よくある質問</a>
+      <a href="#pricing" class="nav-link">料金</a>
     </nav>
 
     <a href="#monitor" class="btn btn-accent btn-sm">
       <IconHome size={16} />
-      モニターに参加
+      家族モニターに参加
     </a>
   </div>
 </header>
@@ -53,8 +60,10 @@ import IconHome from './icons/IconHome.astro';
   }
 
   .logo-mark {
-    font-size: 24px;
-    line-height: 1;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: block;
   }
 
   .logo-text {

@@ -7,9 +7,11 @@
   /* Brand */
   --color-primary: #030213;          /* メイン（ボタン・見出し強調） */
   --color-primary-hover: #1a1a2e;
-  --color-accent: #ED7232;           /* Tanect Home ブランドオレンジ */
-  --color-accent-hover: #D55E1F;     /* ホバー時（暗め） */
-  --color-accent-soft: #FFF0E6;      /* アクセントのやわらかい背景 */
+  --color-accent: #FCA351;           /* Tanect Home プライマリ（穏やかな黄みオレンジ・アプリ実装に一致） */
+  --color-accent-hover: #F0922E;     /* ホバー時（暗め） */
+  --color-accent-soft: #FFF1E2;      /* アクセントのやわらかい背景 */
+  --color-accent-text: #333333;      /* アクセント塗りの上に乗る文字色（アプリ実装に一致） */
+  --color-accent-ink: #C9741B;       /* 白地に乗るアクセント文字・アイコン（視認性確保用の濃いめ同系色） */
   --color-text: #0a0a0a;              /* 見出し */
   --color-text-muted: #717182;        /* 本文・補助テキスト */
 

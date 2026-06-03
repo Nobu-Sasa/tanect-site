@@ -1,0 +1,147 @@
+---
+// 家族モニター募集 — Tanect Home の家族モニター参加を呼びかける最終CTAセクション
+import IconHome from './icons/IconHome.astro';
+
+// ⚠️ 差し替え必須：家族モニター申し込みフォーム（Googleフォーム）のURL
+// 本番のフォームURLが決まったら、この1行を書き換えてください。
+const FORM_URL = 'https://forms.gle/your-form-id-here';
+
+// シンプルな募集ポイント（条件は最小限）
+const points = [
+  { emoji: '🆓', text: '家族モニター期間中は無料' },
+  { emoji: '✨', text: 'すべての機能を開放' },
+  { emoji: '📝', text: 'お申し込みはフォームから1分' },
+];
+---
+
+<section class="monitor" id="monitor" aria-labelledby="monitor-title">
+  <div class="monitor-inner">
+    <span class="badge monitor-badge">🌿 家族モニター募集中</span>
+
+    <h2 class="monitor-title" id="monitor-title">
+      家族のつながりを、<br />
+      いっしょに育ててくれる方を募集しています。
+    </h2>
+
+    <p class="monitor-lead">
+      Tanect Home はいま、最初の家族モニターのみなさんを募集しています。<br />
+      離れて暮らすご家族との毎日を、やさしくつなぐ。その第一歩を、ぜひご一緒に。
+    </p>
+
+    <ul class="monitor-points">
+      {points.map((p) => (
+        <li class="monitor-point">
+          <span class="monitor-point-emoji" aria-hidden="true">{p.emoji}</span>
+          <span>{p.text}</span>
+        </li>
+      ))}
+    </ul>
+
+    <div class="monitor-actions">
+      <a
+        href={FORM_URL}
+        class="btn btn-accent monitor-cta"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <IconHome size={20} />
+        家族モニターに申し込む
+      </a>
+      <p class="monitor-subnote">所要時間 約1分・家族モニター期間中は無料でご利用いただけます</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .monitor {
+    padding: var(--space-3xl) 0;
+  }
+
+  .monitor-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding: var(--space-3xl) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    text-align: center;
+    background: linear-gradient(150deg, var(--color-accent-soft) 0%, #ffffff 70%);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-inline: var(--space-md);
+  }
+
+  .monitor-badge {
+    background: #ffffff;
+    color: var(--color-accent-ink);
+  }
+
+  .monitor-title {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .monitor-lead {
+    max-width: 600px;
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  .monitor-points {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-block: var(--space-sm);
+  }
+
+  .monitor-point {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: #ffffff;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .monitor-point-emoji {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .monitor-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .monitor-cta {
+    font-size: var(--fs-body);
+    padding: var(--space-md) var(--space-2xl);
+  }
+
+  .monitor-subnote {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .monitor-title {
+      font-size: 34px;
+    }
+  }
+</style>

@@ -96,13 +96,13 @@ ol {
 /* Tanect Home ブランドオレンジ CTA */
 .btn-accent {
   background: var(--color-accent);
-  color: #ffffff;
-  box-shadow: 0 1px 2px rgba(237, 114, 50, 0.2);
+  color: var(--color-accent-text);
+  box-shadow: 0 1px 2px rgba(252, 163, 81, 0.3);
 }
 
 .btn-accent:hover {
   background: var(--color-accent-hover);
-  box-shadow: 0 4px 12px rgba(237, 114, 50, 0.25);
+  box-shadow: 0 4px 12px rgba(252, 163, 81, 0.35);
 }
 
 .btn-secondary {

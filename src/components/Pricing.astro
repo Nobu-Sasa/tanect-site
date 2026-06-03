@@ -1,0 +1,278 @@
+---
+// 料金 — 正式リリース後に予定している有料プラン（家族モニター期間中は無料）
+import IconHome from './icons/IconHome.astro';
+
+type Plan = {
+  name: string;
+  price: string;
+  priceNote: string;
+  description: string;
+  features: string[];
+  featured?: boolean;
+  badge?: string;
+  cta?: { label: string; href: string };
+  note?: string;
+};
+
+const plans: Plan[] = [
+  {
+    name: '基本プラン',
+    price: '980円',
+    priceNote: '月額・1家族（6人まで）',
+    description: '日々の記録とつながりを、シンプルに。',
+    features: [
+      '記録・みんなの活動・地図・いいね',
+      'ご家族6人まで登録可能',
+      '過去の記録の閲覧 1ヶ月',
+      'プッシュ通知',
+    ],
+  },
+  {
+    name: '上位プラン',
+    price: '1,480円',
+    priceNote: '月額・1家族（6人まで）',
+    description: 'AIの気づきで、変化までやさしく見守る。',
+    features: [
+      '基本プランのすべて',
+      '過去の記録をいつでも見返せる',
+      'AI分析・ナラティブ生成',
+      'AI週次サマリ',
+    ],
+  },
+];
+---
+
+<section class="pricing" id="pricing" aria-labelledby="pricing-title">
+  <div class="pricing-inner">
+    <header class="pricing-head">
+      <span class="badge">💴 料金</span>
+      <h2 class="pricing-title" id="pricing-title">
+        正式リリース後の料金プラン
+      </h2>
+      <p class="pricing-lead">
+        Tanect Home はいま、サービスとして続けていけるかを確かめる「家族モニター」の段階です。期間中は無料でお使いいただけます。<br />
+        下記は、正式にリリースした場合に予定している料金プランです。
+      </p>
+    </header>
+
+    <p class="pricing-trial">
+      正式リリース後は、はじめの3週間を無料でお試しいただけます。<br />
+      ダウンロードしてご家族をひとつ登録すると、お試し期間がはじまります。
+    </p>
+
+    <ul class="plan-grid">
+      {plans.map((plan) => (
+        <li class={`plan ${plan.featured ? 'is-featured' : ''}`}>
+          {plan.badge && <span class="plan-badge">{plan.badge}</span>}
+          <h3 class="plan-name">{plan.name}</h3>
+          <p class="plan-price">
+            <span class="plan-price-value">{plan.price}</span>
+            <span class="plan-price-note">{plan.priceNote}</span>
+          </p>
+          <p class="plan-desc">{plan.description}</p>
+          <ul class="plan-features">
+            {plan.features.map((f) => (
+              <li class="plan-feature">
+                <span class="plan-check" aria-hidden="true">✓</span>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+          {plan.cta && (
+            <a href={plan.cta.href} class="btn btn-accent plan-cta">
+              <IconHome size={18} />
+              {plan.cta.label}
+            </a>
+          )}
+          {plan.note && <p class="plan-note">{plan.note}</p>}
+        </li>
+      ))}
+    </ul>
+
+    <p class="plan-grid-note">※ 料金はすべて1家族あたりの月額です（1家族 = ご家族6人まで登録可能）。</p>
+  </div>
+</section>
+
+<style>
+  .pricing {
+    padding: var(--space-3xl) 0;
+    background: var(--color-bg-soft);
+  }
+
+  .pricing-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-md);
+  }
+
+  .pricing-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .pricing-title {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .pricing-lead {
+    max-width: 640px;
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  .pricing-trial {
+    max-width: 640px;
+    margin: 0 auto var(--space-2xl);
+    padding: var(--space-md) var(--space-lg);
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+  }
+
+  .plan-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    align-items: start;
+  }
+
+  .plan-grid-note {
+    margin-top: var(--space-lg);
+    text-align: center;
+    font-size: var(--fs-small);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+
+  .plan {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-xl);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .plan.is-featured {
+    border: 2px solid var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .plan-badge {
+    position: absolute;
+    top: calc(var(--space-md) * -1);
+    left: var(--space-xl);
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 14px;
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 2px 6px rgba(252, 163, 81, 0.4);
+  }
+
+  .plan-name {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .plan-price {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .plan-price-value {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color-text);
+  }
+
+  .is-featured .plan-price-value {
+    color: var(--color-accent-ink);
+  }
+
+  .plan-price-note {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  .plan-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+
+  .plan-features {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .plan-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .plan-check {
+    color: var(--color-accent-ink);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .plan-cta {
+    margin-top: var(--space-sm);
+    width: 100%;
+  }
+
+  .plan-note {
+    font-size: var(--fs-small);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .pricing-title {
+      font-size: 36px;
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .plan-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-xl);
+      max-width: 760px;
+      margin-inline: auto;
+    }
+  }
+</style>
