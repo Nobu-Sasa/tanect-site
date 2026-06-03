@@ -17,6 +17,9 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 家族モニター（検証）期間中は検索エンジンに載せない。公開してよくなったら下記2行を削除する。 -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/png" sizes="32x32" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon-32.png`} />
     <link rel="icon" type="image/png" sizes="192x192" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon-192.png`} />

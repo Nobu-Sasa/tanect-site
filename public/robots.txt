@@ -1,0 +1,10 @@
+# 家族モニター（検証）期間中はクロールを抑制する。
+# 公開してよくなったら、この内容を許可設定に戻す（または本ファイルを削除する）。
+#
+# 注意: 本サイトは GitHub Pages のプロジェクトページ（/tanect-site/ 配下）のため、
+# クローラーが実際に参照する robots.txt は https://nobu-sasa.github.io/robots.txt
+# （ユーザーサイトのルート＝別リポジトリ）側です。このファイルは
+# https://nobu-sasa.github.io/tanect-site/robots.txt で配信され、補助的な位置づけです。
+# 実効的な検索除外は各ページの <meta name="robots" content="noindex"> が担います。
+User-agent: *
+Disallow: /
