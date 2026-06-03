@@ -2,12 +2,19 @@
 // フッター — ロゴ・ナビ・コピーライト
 const year = 2026;
 
-const navLinks = [
+type NavLink = {
+  href: string;
+  label: string;
+  external?: boolean;
+};
+
+const navLinks: NavLink[] = [
   { href: '#use-case', label: '使い方' },
   { href: '#features', label: '機能' },
   { href: '#faq', label: 'よくある質問' },
   { href: '#pricing', label: '料金' },
   { href: '#monitor', label: '家族モニター募集' },
+  { href: 'https://nobu-sasa.github.io/tanect-privacy/', label: 'プライバシーポリシー', external: true },
 ];
 ---
 
@@ -33,7 +40,11 @@ const navLinks = [
 
     <nav class="footer-nav" aria-label="フッターナビゲーション">
       {navLinks.map((link) => (
-        <a href={link.href} class="footer-link">{link.label}</a>
+        <a
+          href={link.href}
+          class="footer-link"
+          {...(link.external === true ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        >{link.label}</a>
       ))}
     </nav>
   </div>

@@ -3,6 +3,7 @@
 type Qa = {
   q: string;
   a: string;
+  link?: { href: string; label: string };
 };
 
 const faqs: Qa[] = [
@@ -29,6 +30,7 @@ const faqs: Qa[] = [
   {
     q: '家族の情報はどう扱われますか？',
     a: '記録した内容は、招待した家族の中だけで共有されます。大切な毎日の記録だからこそ、取り扱いには十分配慮して運用しています。詳しくは参加時のご案内でお伝えします。',
+    link: { href: 'https://nobu-sasa.github.io/tanect-privacy/', label: '詳しくはプライバシーポリシーをご覧ください' },
   },
 ];
 ---
@@ -51,6 +53,16 @@ const faqs: Qa[] = [
           </summary>
           <div class="faq-answer">
             <p>{item.a}</p>
+            {item.link && (
+              <p>
+                <a
+                  class="faq-link"
+                  href={item.link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >{item.link.label}</a>
+              </p>
+            )}
           </div>
         </details>
       ))}
@@ -164,6 +176,15 @@ const faqs: Qa[] = [
     font-size: 14px;
     line-height: 1.85;
     color: var(--color-text-muted);
+  }
+
+  .faq-answer p + p {
+    margin-top: var(--space-sm);
+  }
+
+  .faq-link {
+    color: var(--color-accent-ink);
+    text-decoration: underline;
   }
 
   /* Tablet and up */
