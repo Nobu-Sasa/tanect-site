@@ -25,10 +25,11 @@
   --color-border: rgba(0, 0, 0, 0.1);
   --color-border-subtle: rgba(0, 0, 0, 0.06);
 
-  /* Avatar dummy colors (social proof) */
-  --color-avatar-1: #030213;
-  --color-avatar-2: #e9ebef;
-  --color-avatar-3: #eceef2;
+  /* Avatar colors (social proof) — 三世代をイメージしたグラデーション
+     親世代=あたたかいオレンジ → 子世代=黄金色 → 孫世代=若葉グリーン */
+  --color-avatar-1: #E89043;
+  --color-avatar-2: #E8B54A;
+  --color-avatar-3: #82B96A;
 
   /* ──────────────── Typography ──────────────── */
   --font-sans: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont,
