@@ -1,0 +1,397 @@
+---
+// リリースノート（更新情報）ページ（/release-notes）
+//
+// 家族モニター向け。/install ページからリンクする身内向けページ。
+// サイト全体が noindex,nofollow（BaseLayout）なので検索には載らない。
+//
+// 内容の出典：tanect-management の参照先 ~/src/Tanect2-1/Tanect2/CHANGELOG.md
+//   1.9.0 が現行公開バージョン。1.9.1 / 1.10.0 / 1.10.1 / 1.10.3 の変更を
+//   まとめて「1.10.3」として下の changes に集約（開発者向け技術記述を利用者向けに翻訳）。
+//   ※ 1.10.3 は 2026-06-09 にタグ付け済み（1.10.2 は欠番）。
+//
+// ⚠️ 公開のたびに見直す箇所：
+//   - currentVersions … いま各ストア／配布で公開中のバージョンと公開日
+//   - LATEST_VERSION / LATEST_DATE … 下の変更表の見出しに出るバージョンと日付
+//   - changes … 利用者向けの変更内容（新しい版を出すたびに追記）
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const HOME_URL = import.meta.env.BASE_URL;
+const INSTALL_URL = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/install`;
+
+// ── いま公開中のバージョン（公開のたびに更新） ──
+// date は「実際にモニターへ配布／公開した日」。未確定のうちは '—' のままでOK。
+const currentVersions = [
+  { os: 'iPhone（iOS）', emoji: '🍎', version: '1.9.0', date: '2026-06-04', note: '承認後に 1.10.3 へ更新予定' },
+  { os: 'Android', emoji: '🤖', version: '1.10.3', date: '2026-06-09', note: '最新版' },
+];
+
+// ── 1.10.3 の変更内容（1.9.0 からの差分） ──
+const LATEST_VERSION = '1.10.3';
+const LATEST_DATE = '2026-06-09'; // CHANGELOG の 1.10.3 タグ日
+
+// kind: 'new'（新機能） / 'improve'（改善） / 'fix'（修正）
+const changes = [
+  {
+    kind: 'new',
+    text: '運用からの「お知らせ」をアプリの中で受け取れるようになりました。「私の」画面の上部にお知らせカードが表示され、過去のお知らせも「お知らせ履歴」から確認できます。',
+  },
+  {
+    kind: 'improve',
+    text: '「知る」→「活動を見る」の体調・気分グラフを見やすく改善しました。期間中のすべての日を並べて表示し、記録のない日は線が途切れるので、続けて記録できた日が一目で分かります。点をタップすると、その日の体調と気分をまとめて大きく表示します。',
+  },
+  {
+    kind: 'improve',
+    text: '予期しないエラーが起きたときの画面を、むずかしい文字の羅列ではなく、やさしいメッセージとお問い合わせのご案内に変更しました。',
+  },
+  {
+    kind: 'fix',
+    text: 'アプリを更新したあと、起動時にまれにエラーで終了してしまう問題を修正しました。',
+  },
+  {
+    kind: 'fix',
+    text: '「あたらしいいいね」のお知らせで、すでに確認したいいねが何度もくり返し表示されてしまう問題を修正しました。',
+  },
+  {
+    kind: 'fix',
+    text: '「わたしの」で活動を記録したのに、「みんなの」画面ではしばらく予定のまま（実施済みにならない）表示が続くことがある問題を修正しました。',
+  },
+  {
+    kind: 'fix',
+    text: 'アプリを更新したあと、運営側の管理画面に表示される「アプリのバージョン」がすぐに更新されないことがある問題を修正しました。（運営が把握する情報だけの問題で、お使いのアプリの動作には影響ありません）',
+  },
+];
+
+const kindLabel: Record<string, { text: string; cls: string }> = {
+  new: { text: '新機能', cls: 'tag-new' },
+  improve: { text: '改善', cls: 'tag-improve' },
+  fix: { text: '修正', cls: 'tag-fix' },
+};
+---
+
+<BaseLayout
+  title="更新情報（リリースノート） — Tanect Home"
+  description="Tanect Home のバージョンごとの更新内容のご案内です。"
+>
+  <header class="page-head">
+    <a href={HOME_URL} class="logo" aria-label="Tanect Home トップへ">
+      <img
+        class="logo-mark"
+        src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/app-icon.png`}
+        width="32"
+        height="32"
+        alt=""
+        aria-hidden="true"
+      />
+      <span class="logo-text">Tanect</span>
+    </a>
+  </header>
+
+  <main class="notes">
+    <div class="notes-inner">
+      <section class="intro">
+        <span class="badge">📓 更新情報</span>
+        <h1 class="intro-title">アプリの更新内容</h1>
+        <p class="intro-lead">
+          Tanect Home のこれまでの更新内容をまとめています。<br />
+          いつも使ってくださり、ありがとうございます。
+        </p>
+      </section>
+
+      <!-- 現在公開中のバージョン -->
+      <section class="current" aria-labelledby="current-title">
+        <h2 class="section-title" id="current-title">いま公開中のバージョン</h2>
+        <div class="table-wrap">
+          <table class="ver-table">
+            <thead>
+              <tr>
+                <th scope="col">端末</th>
+                <th scope="col">バージョン</th>
+                <th scope="col">公開日</th>
+                <th scope="col" class="col-note">補足</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentVersions.map((v) => (
+                <tr>
+                  <td>
+                    <span class="os-emoji" aria-hidden="true">{v.emoji}</span>
+                    {v.os}
+                  </td>
+                  <td class="ver-num">{v.version}</td>
+                  <td>{v.date}</td>
+                  <td class="col-note">{v.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="current-note">
+          iPhone 版は審査の都合で、Android 版より少し遅れて最新版になることがあります。
+        </p>
+      </section>
+
+      <!-- バージョンごとの変更内容 -->
+      <section class="release" aria-labelledby="release-title">
+        <div class="release-head">
+          <h2 class="section-title" id="release-title">バージョン {LATEST_VERSION} の変更内容</h2>
+          <span class="release-date">{LATEST_DATE}</span>
+        </div>
+        <p class="release-sub">前のバージョン 1.9.0 からの変更点をまとめています。</p>
+
+        <ul class="change-list">
+          {changes.map((c) => (
+            <li class="change-item">
+              <span class={`tag ${kindLabel[c.kind].cls}`}>{kindLabel[c.kind].text}</span>
+              <span class="change-text">{c.text}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="foot-links">
+        <a href={INSTALL_URL} class="foot-link">インストール方法を見る</a>
+        <a href={HOME_URL} class="foot-link">Tanect Home のトップへもどる</a>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p class="page-foot-copy">© 2026 Tanect Home</p>
+  </footer>
+</BaseLayout>
+
+<style>
+  /* ── ヘッダー（最小：ロゴのみ） ── */
+  .page-head {
+    border-bottom: 1px solid var(--color-border-subtle);
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-md);
+    font-weight: 700;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: block;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    color: var(--color-primary);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── 本文 ── */
+  .notes {
+    padding: var(--space-3xl) var(--space-md);
+    background: linear-gradient(180deg, var(--color-accent-soft) 0%, #ffffff 280px);
+  }
+
+  .notes-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+  }
+
+  .intro-title {
+    font-size: var(--fs-h1);
+    font-weight: 700;
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .intro-lead {
+    font-size: var(--fs-body);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  .section-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  /* ── 現在公開中のバージョン ── */
+  .current {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .table-wrap {
+    margin-top: var(--space-md);
+    overflow-x: auto;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--color-card-bg);
+  }
+
+  .ver-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+
+  .ver-table th,
+  .ver-table td {
+    padding: var(--space-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border-subtle);
+    white-space: nowrap;
+  }
+
+  .ver-table thead th {
+    background: var(--color-bg-soft);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    font-size: 13px;
+  }
+
+  .ver-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .os-emoji {
+    margin-right: 6px;
+  }
+
+  .ver-num {
+    font-weight: 700;
+    color: var(--color-accent-ink);
+  }
+
+  .col-note {
+    color: var(--color-text-muted);
+    font-size: 13px;
+    white-space: normal;
+  }
+
+  .current-note {
+    margin-top: var(--space-md);
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+    line-height: 1.8;
+  }
+
+  /* ── 変更内容 ── */
+  .release-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .release-date {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  .release-sub {
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-lg);
+    font-size: 14px;
+    color: var(--color-text-muted);
+  }
+
+  .change-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .change-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .tag {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .tag-new {
+    background: #e8f3e1;
+    color: #4f7a3a;
+  }
+
+  .tag-improve {
+    background: var(--color-accent-soft);
+    color: var(--color-accent-ink);
+  }
+
+  .tag-fix {
+    background: #eceef2;
+    color: #5a6172;
+  }
+
+  .change-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+    padding-top: 2px;
+  }
+
+  /* ── 下部リンク ── */
+  .foot-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    justify-content: center;
+    margin-top: var(--space-3xl);
+  }
+
+  .foot-link {
+    font-size: 14px;
+    color: var(--color-accent-ink);
+    text-decoration: underline;
+  }
+
+  /* ── フッター ── */
+  .page-foot {
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .page-foot-copy {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* ── Tablet and up ── */
+  @media (min-width: 768px) {
+    .intro-title {
+      font-size: var(--fs-h1-lg);
+    }
+  }
+</style>
