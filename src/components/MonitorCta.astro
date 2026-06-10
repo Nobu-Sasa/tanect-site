@@ -1,10 +1,7 @@
 ---
 // 家族モニター募集 — Tanect Home の家族モニター参加を呼びかける最終CTAセクション
 import IconHome from './icons/IconHome.astro';
-
-// ⚠️ 差し替え必須：家族モニター申し込みフォーム（Googleフォーム）のURL
-// 本番のフォームURLが決まったら、この1行を書き換えてください。
-const FORM_URL = 'https://forms.gle/your-form-id-here';
+import { FORM_URL } from '../config';
 
 // シンプルな募集ポイント（条件は最小限）
 const points = [
@@ -43,6 +40,7 @@ const points = [
         class="btn btn-accent monitor-cta"
         target="_blank"
         rel="noopener noreferrer"
+        data-track-event="monitor_apply_click"
       >
         <IconHome size={20} />
         家族モニターに申し込む

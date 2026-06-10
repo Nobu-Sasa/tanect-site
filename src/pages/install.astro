@@ -20,6 +20,7 @@ const IOS_READY = false;
 
 const HOME_URL = import.meta.env.BASE_URL;
 const RELEASE_NOTES_URL = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/release-notes`;
+const FAMILY_SETUP_URL = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/family-setup`;
 
 const androidSteps = [
   'このページを <strong>Androidスマホ</strong> で開き、下のボタンを押します。',
@@ -161,6 +162,7 @@ const iosSteps = [
           インストール後は、アプリ内の画面右上の人アイコン →「お問い合わせ」からもご連絡いただけます。
         </p>
         <div class="help-links">
+          <a href={FAMILY_SETUP_URL} class="help-back">👪 アプリを開いたら（家族のつくり方）を見る</a>
           <a href={RELEASE_NOTES_URL} class="help-back">📓 最新の更新内容（リリースノート）を見る</a>
           <a href={HOME_URL} class="help-back">← Tanect Home のトップへもどる</a>
         </div>

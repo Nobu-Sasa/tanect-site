@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { GA_MEASUREMENT_ID } from '../config';
 
 export interface Props {
   title?: string;
@@ -41,8 +42,37 @@ const {
 
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    {/* GA4: 測定IDが設定されているときだけ読み込む（config.ts の GA_MEASUREMENT_ID） */}
+    {GA_MEASUREMENT_ID && (
+      <Fragment>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+        <script is:inline define:vars={{ gaId: GA_MEASUREMENT_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { window.dataLayer.push(arguments); }
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      </Fragment>
+    )}
   </head>
   <body>
     <slot />
+
+    {/* CTAクリック計測：data-track-event を持つ要素のクリックを GA4 イベントとして送る。
+        gtag 未定義（GA_MEASUREMENT_ID 未設定）のときは何もしない。 */}
+    <script>
+      document.addEventListener('click', (e) => {
+        const el = (e.target as HTMLElement)?.closest<HTMLElement>('[data-track-event]');
+        if (!el) return;
+        const eventName = el.dataset.trackEvent;
+        const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+        if (!eventName || typeof gtag !== 'function') return;
+        gtag('event', eventName, {
+          cta_location: el.dataset.ctaLocation || undefined,
+        });
+      });
+    </script>
   </body>
 </html>
