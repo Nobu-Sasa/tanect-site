@@ -3,7 +3,7 @@
 // 家族モニター申し込みフォーム（Googleフォーム）の本番URL。
 // ⚠️ 差し替え必須：本番のフォームURLが決まったらここを書き換える。
 // フォーム回答は連携先のスプレッドシートに自動集約される。
-export const FORM_URL = 'https://forms.gle/your-form-id-here';
+export const FORM_URL = 'https://forms.gle/j5j61WtzYTnhFY2Z8';
 
 // GA4 測定ID（例 'G-XXXXXXXXXX'）。
 // 空文字のうちは計測スクリプトを一切ロードしない（サイトは正常表示）。
