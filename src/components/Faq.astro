@@ -40,7 +40,7 @@ const faqs: Qa[] = [
     <header class="faq-head">
       <span class="badge">❓ よくある質問</span>
       <h2 class="faq-title" id="faq-title">
-        気になることに、お答えします。
+        気になることに、<wbr />お答えします。
       </h2>
     </header>
 
@@ -96,6 +96,8 @@ const faqs: Qa[] = [
     line-height: var(--lh-tight);
     color: var(--color-text);
     letter-spacing: 0.012em;
+    /* 文節の途中で折らず、<wbr> を入れた位置でのみ改行する */
+    word-break: keep-all;
   }
 
   .faq-list {

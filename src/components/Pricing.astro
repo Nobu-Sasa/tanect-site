@@ -4,8 +4,8 @@ import IconHome from './icons/IconHome.astro';
 
 type Plan = {
   name: string;
-  price: string;
-  priceNote: string;
+  monthlyYen: number;
+  capacity: number; // 1家族で登録できる人数
   description: string;
   features: string[];
   featured?: boolean;
@@ -17,8 +17,8 @@ type Plan = {
 const plans: Plan[] = [
   {
     name: '基本プラン',
-    price: '980円',
-    priceNote: '月額・1家族（6人まで）',
+    monthlyYen: 980,
+    capacity: 6,
     description: '日々の記録とつながりを、シンプルに。',
     features: [
       '記録・みんなの活動・地図・いいね',
@@ -30,8 +30,8 @@ const plans: Plan[] = [
   },
   {
     name: '上位プラン',
-    price: '1,480円',
-    priceNote: '月額・1家族（6人まで）',
+    monthlyYen: 1480,
+    capacity: 6,
     description: 'AI週次レポートと画像投票で、家族みんなで。',
     features: [
       '基本プランのすべて',
@@ -41,6 +41,10 @@ const plans: Plan[] = [
     ],
   },
 ];
+
+// 表示ヘルパー（金額の手打ちズレを防ぐため一元計算）
+const yen = (n: number) => n.toLocaleString('ja-JP');
+const perPerson = (p: Plan) => Math.round(p.monthlyYen / p.capacity);
 ---
 
 <section class="pricing" id="pricing" aria-labelledby="pricing-title">
@@ -48,11 +52,11 @@ const plans: Plan[] = [
     <header class="pricing-head">
       <span class="badge">💴 料金</span>
       <h2 class="pricing-title" id="pricing-title">
-        正式リリース後の料金プラン
+        正式リリース後の<wbr />料金プラン
       </h2>
       <p class="pricing-lead">
         Tanect Home はいま、サービスとして続けていけるかを確かめる「家族モニター」の段階です。期間中は無料でお使いいただけます。<br />
-        下記は、正式にリリースした場合に予定している料金プランです。
+        下記は、正式リリース時に予定している料金プランの<strong>たたき台</strong>です。金額はまだ検討中で、モニターのみなさんのご意見をうかがいながら調整していきます。
       </p>
     </header>
 
@@ -67,8 +71,14 @@ const plans: Plan[] = [
           {plan.badge && <span class="plan-badge">{plan.badge}</span>}
           <h3 class="plan-name">{plan.name}</h3>
           <p class="plan-price">
-            <span class="plan-price-value">{plan.price}</span>
-            <span class="plan-price-note">{plan.priceNote}</span>
+            <span class="plan-price-row">
+              <span class="plan-price-value">{yen(plan.monthlyYen)}円</span>
+              <span class="plan-price-tag">検討中</span>
+            </span>
+            <span class="plan-price-note">月額・1家族（{plan.capacity}人まで）</span>
+            <span class="plan-price-per-person">
+              {plan.capacity}人で使うと、1人あたり<strong>約{yen(perPerson(plan))}円</strong>/月（参考）
+            </span>
           </p>
           <p class="plan-desc">{plan.description}</p>
           <ul class="plan-features">
@@ -91,7 +101,9 @@ const plans: Plan[] = [
     </ul>
 
     <p class="plan-grid-note">
+      ※ 料金はすべて検討中のもので、今後変更になる場合があります。<br />
       ※ 料金はすべて1家族あたりの月額です（1家族 = ご家族6人まで登録可能）。<br />
+      ※「1人あたり」の金額は、6人で使った場合の参考値です。<br />
       ※ 7人以上のご家族には、3人単位で追加できるオプションも予定しています。
     </p>
   </div>
@@ -124,6 +136,8 @@ const plans: Plan[] = [
     line-height: var(--lh-tight);
     color: var(--color-text);
     letter-spacing: 0.012em;
+    /* 文節の途中で折らず、<wbr> を入れた位置でのみ改行する */
+    word-break: keep-all;
   }
 
   .pricing-lead {
@@ -207,6 +221,12 @@ const plans: Plan[] = [
     gap: 2px;
   }
 
+  .plan-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+
   .plan-price-value {
     font-size: 36px;
     font-weight: 700;
@@ -218,9 +238,33 @@ const plans: Plan[] = [
     color: var(--color-accent-ink);
   }
 
+  /* 「検討中」タグ：金額がまだ確定でないことを明示 */
+  .plan-price-tag {
+    align-self: center;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-accent-ink);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-pill);
+  }
+
   .plan-price-note {
     font-size: var(--fs-small);
     color: var(--color-text-muted);
+  }
+
+  /* 1人あたりの参考値 */
+  .plan-price-per-person {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  .plan-price-per-person strong {
+    color: var(--color-text);
+    font-weight: 700;
   }
 
   .plan-desc {

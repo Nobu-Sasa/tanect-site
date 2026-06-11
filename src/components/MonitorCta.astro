@@ -3,6 +3,10 @@
 import IconHome from './icons/IconHome.astro';
 import { FORM_URL } from '../config';
 
+// 内部リンクは base 付きで組み立てる（他ページと同じパターン）
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const INSTALL_URL = `${base}/install`;
+
 // シンプルな募集ポイント（条件は最小限）
 const points = [
   { emoji: '🆓', text: '家族モニター期間中は無料' },
@@ -22,7 +26,13 @@ const points = [
 
     <p class="monitor-lead">
       Tanect Home はいま、最初の家族モニターのみなさんを募集しています。<br />
-      離れて暮らすご家族との毎日を、やさしくつなぐ。その第一歩を、ぜひご一緒に。
+      離れて暮らすご家族との毎日を、やさしくつなぐ。その第一歩を、ぜひご一緒に。<br />
+      なお、モニター終了後も継続してご利用いただける方が、アカウントやこれまでの記録を本番環境へ引き継げるよう、現在その仕組みを準備中です。
+    </p>
+
+    <p class="monitor-note">
+      実際に使ってみて Tanect Home を知っていただき、共感できる点や「ここを直してほしい」という声をいただくこと——その改善こそが、いちばんの目的です。<br />
+      お試し後にアンケートへお答えいただくだけでも、私たちにとって本当にありがたいことです。
     </p>
 
     <ul class="monitor-points">
@@ -35,20 +45,69 @@ const points = [
     </ul>
 
     <div class="monitor-actions">
-      <a
-        href={FORM_URL}
-        class="btn btn-accent monitor-cta"
-        target="_blank"
-        rel="noopener noreferrer"
-        data-track-event="monitor_apply_click"
-      >
-        <IconHome size={20} />
-        家族モニターに申し込む
-      </a>
-      <p class="monitor-subnote">所要時間 約1分・家族モニター期間中は無料でご利用いただけます</p>
+      <div class="monitor-action">
+        <a
+          href={FORM_URL}
+          class="btn btn-accent monitor-cta"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track-event="monitor_apply_click"
+        >
+          <IconHome size={20} />
+          家族モニターに<wbr />申し込む
+        </a>
+        <p class="monitor-subnote">代表の方おひとりがご回答（事前アンケート・約1分）</p>
+      </div>
+
+      <div class="monitor-action">
+        <a
+          href={INSTALL_URL}
+          class="btn btn-secondary monitor-cta"
+          data-track-event="monitor_install_click"
+        >
+          <span class="monitor-cta-emoji" aria-hidden="true">📱</span>
+          アプリの<wbr />入れかたを見る
+        </a>
+        <p class="monitor-subnote">いっしょに使うご家族はこちら（アンケート不要）</p>
+      </div>
+
+      <div class="monitor-action">
+        <button
+          type="button"
+          class="btn btn-prep monitor-cta"
+          id="surveyPrepButton"
+          data-track-event="monitor_survey_click"
+        >
+          <span class="monitor-cta-emoji" aria-hidden="true">📝</span>
+          お試し後の<wbr />アンケート（準備中）
+        </button>
+        <p class="monitor-subnote">利用後に、ご家族みなさんからお聞かせください</p>
+      </div>
     </div>
   </div>
+
+  <dialog class="prep-dialog" id="surveyPrepDialog" aria-labelledby="prep-dialog-title">
+    <button type="button" class="prep-dialog-close" aria-label="閉じる">×</button>
+    <p class="prep-dialog-title" id="prep-dialog-title">準備中です 🌱</p>
+    <p class="prep-dialog-body">
+      お試し後のアンケートは、ただいま準備中です。<br />
+      しばらくお待ちください。
+    </p>
+  </dialog>
 </section>
+
+<script>
+  const button = document.getElementById('surveyPrepButton');
+  const dialog = document.getElementById('surveyPrepDialog') as HTMLDialogElement | null;
+  const closeBtn = dialog?.querySelector('.prep-dialog-close');
+
+  button?.addEventListener('click', () => dialog?.showModal());
+  closeBtn?.addEventListener('click', () => dialog?.close());
+  // 背景（::backdrop）クリックで閉じる
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>
 
 <style>
   .monitor {
@@ -90,6 +149,18 @@ const points = [
     color: var(--color-text-muted);
   }
 
+  /* 運営の姿勢：引き止めではなく、理解・共感・改善が目的であることを伝える */
+  .monitor-note {
+    max-width: 600px;
+    padding: var(--space-md) var(--space-lg);
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--color-text);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+  }
+
   .monitor-points {
     display: flex;
     flex-wrap: wrap;
@@ -121,17 +192,104 @@ const points = [
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-lg);
     margin-top: var(--space-sm);
+    width: 100%;
+  }
+
+  /* ボタン＋補足文のペア（対象者ごとの導線） */
+  .monitor-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
   }
 
   .monitor-cta {
     font-size: var(--fs-body);
     padding: var(--space-md) var(--space-2xl);
+    /* 文節の途中で折らず、<wbr> を入れた位置でのみ改行する */
+    word-break: keep-all;
+  }
+
+  /* インストール導線：アクセント枠のアウトラインで視認性を確保 */
+  .monitor-cta.btn-secondary {
+    background: #ffffff;
+    color: var(--color-accent-ink);
+    border: 1.5px solid var(--color-accent);
+    box-shadow: 0 1px 2px rgba(252, 163, 81, 0.25);
+  }
+
+  .monitor-cta.btn-secondary:hover {
+    background: var(--color-accent-soft);
+    box-shadow: 0 4px 12px rgba(252, 163, 81, 0.3);
+  }
+
+  .monitor-cta-emoji {
+    font-size: 1.1em;
+    line-height: 1;
+  }
+
+  /* 準備中ボタン：クリック可だが控えめな見た目 */
+  .btn-prep {
+    background: var(--color-badge-bg);
+    color: var(--color-text-muted);
+  }
+
+  .btn-prep:hover {
+    background: var(--color-border-subtle);
+    transform: translateY(-1px);
   }
 
   .monitor-subnote {
     font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* 準備中ダイアログ */
+  .prep-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    max-width: 360px;
+    width: calc(100% - 2 * var(--space-lg));
+    padding: var(--space-2xl) var(--space-xl) var(--space-xl);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(150deg, var(--color-accent-soft) 0%, #ffffff 70%);
+    text-align: center;
+    color: var(--color-text);
+  }
+
+  .prep-dialog::backdrop {
+    background: rgba(10, 10, 10, 0.4);
+  }
+
+  .prep-dialog-close {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-md);
+    font-size: 22px;
+    line-height: 1;
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .prep-dialog-title {
+    font-size: var(--fs-h3, 20px);
+    font-weight: 700;
+    color: var(--color-accent-ink);
+    margin-bottom: var(--space-sm);
+  }
+
+  .prep-dialog-body {
+    font-size: var(--fs-body);
+    line-height: 1.8;
     color: var(--color-text-muted);
   }
 

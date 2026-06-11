@@ -45,7 +45,7 @@ const features: Feature[] = [
     <header class="features-head">
       <span class="badge">✨ 主な機能</span>
       <h2 class="features-title" id="features-title">
-        毎日のあゆみを、つなぐ道具。
+        毎日のあゆみを、<wbr />つなぐ道具。
       </h2>
       <p class="features-lead">
         記録するのも、見守るのも、応援するのも、できるだけかんたんに。<br />
@@ -91,6 +91,8 @@ const features: Feature[] = [
     line-height: var(--lh-tight);
     color: var(--color-text);
     letter-spacing: 0.012em;
+    /* 文節の途中で折らず、<wbr> を入れた位置でのみ改行する */
+    word-break: keep-all;
   }
 
   .features-lead {
