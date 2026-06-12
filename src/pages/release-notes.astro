@@ -216,8 +216,8 @@ const kindLabel: Record<string, { text: string; cls: string }> = {
       </section>
 
       <section class="foot-links">
-        <a href={INSTALL_URL} class="foot-link">インストール方法を見る</a>
-        <a href={HOME_URL} class="foot-link">Tanect Home のトップへもどる</a>
+        <a href={INSTALL_URL} class="foot-link">📲 インストール方法を見る</a>
+        <a href={HOME_URL} class="foot-link">← Tanect Home のトップへもどる</a>
       </section>
     </div>
   </main>
@@ -432,12 +432,13 @@ const kindLabel: Record<string, { text: string; cls: string }> = {
   .foot-links {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-lg);
+    gap: var(--space-md) var(--space-lg);
     justify-content: center;
     margin-top: var(--space-3xl);
   }
 
   .foot-link {
+    display: inline-block;
     font-size: 14px;
     color: var(--color-accent-ink);
     text-decoration: underline;

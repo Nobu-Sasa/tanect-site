@@ -1,0 +1,102 @@
+---
+// 関連ページ — トップから各ガイドページへの導線をまとめたリンク集
+// 内部リンクは base 付きで組み立てる（他ページと同じパターン）
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+type SiteLink = {
+  href: string;
+  label: string;
+  desc: string;
+};
+
+const links: SiteLink[] = [
+  { href: `${base}/install`, label: 'インストール手順', desc: 'iPhone / Android の入れ方ガイド' },
+  { href: `${base}/family-setup`, label: '家族グループの作り方', desc: '家族グループの作成・招待の流れ' },
+  { href: `${base}/first-settings`, label: '初期設定ガイド', desc: '表示・利便性などの初期設定' },
+  { href: `${base}/release-notes`, label: 'リリースノート', desc: 'バージョンごとの更新履歴' },
+];
+---
+
+<section class="site-links" aria-labelledby="site-links-title">
+  <div class="site-links-inner">
+    <h2 class="site-links-title" id="site-links-title">関連ページ</h2>
+
+    <ul class="site-links-grid">
+      {links.map((link) => (
+        <li>
+          <a href={link.href} class="site-link-card">
+            <span class="site-link-label">{link.label}</span>
+            <span class="site-link-desc">{link.desc}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .site-links {
+    padding: var(--space-2xl) var(--space-md) var(--space-3xl);
+  }
+
+  .site-links-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+
+  .site-links-title {
+    font-size: var(--fs-h3, 20px);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-lg);
+    text-align: center;
+  }
+
+  .site-links-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .site-link-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-md) var(--space-lg);
+    background: #ffffff;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .site-link-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .site-link-label {
+    font-size: var(--fs-body);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .site-link-desc {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .site-links-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

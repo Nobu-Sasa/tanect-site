@@ -16,6 +16,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const HOME_URL = import.meta.env.BASE_URL;
 const INSTALL_URL = `${base}/install`;
+const FIRST_SETTINGS_URL = `${base}/first-settings`;
 const RELEASE_NOTES_URL = `${base}/release-notes`;
 
 // まとめ役（家族をはじめる人）の手順
@@ -227,6 +228,7 @@ const joinSteps = [
           インストール後は、アプリ内の画面右上の人アイコン →「お問い合わせ」からもご連絡いただけます。
         </p>
         <div class="help-links">
+          <a href={FIRST_SETTINGS_URL} class="help-back">⚙️ つながったあとの設定のととのえ方を見る</a>
           <a href={INSTALL_URL} class="help-back">📲 インストール方法のご案内を見る</a>
           <a href={RELEASE_NOTES_URL} class="help-back">📓 最新の更新内容（リリースノート）を見る</a>
           <a href={HOME_URL} class="help-back">← Tanect Home のトップへもどる</a>
