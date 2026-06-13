@@ -2,11 +2,11 @@
 // 見守り役向け「離れて暮らす親をサポートする」案内ページ（/support-parent）
 //
 // first-settings.astro（親本人向けの設定案内）の続きにあたる、見守り役（子世代）向けページ。
-// 親の端末で「委任」をONにしたあと、見守り役が自分の端末から
-// ①親の設定の代行 ②親の予定の代理入力 ③親の活動の見守り を行う手順を案内する。
+// 家族設定で役割（見守り役/まとめ役）を決め、親の端末で「委任」をONにしたあと、
+// 見守り役が自分の端末から 親の設定の代行・予定の代理入力・活動の見守り を行う手順を案内する。
 // サイト全体が noindex,nofollow（BaseLayout）。
 //
-// 出典（ラベル・挙動）：Tanect2 PersonalSettings.razor / Calendar.razor / WeeklySummary.razor / Analysis.razor
+// 出典（ラベル・挙動）：Tanect2 PersonalSettings.razor / Calendar.razor / WeeklySummary.razor / Analysis.razor / FamilySettings.razor / RoleEditDialog.razor
 // ⚠️ 役割名は公開版アプリに合わせ「見守り役」で統一（最新版は「サポーター」）。
 // ⚠️ スクショ差し替え：下の screens/support-*.png はまだ未配置。
 //    画像が無いあいだは「差し替え予定」プレースホルダが表示される（onerror フォールバック）。
@@ -19,15 +19,28 @@ const FAMILY_SETUP_URL = `${base}/family-setup`;
 const FIRST_SETTINGS_URL = `${base}/first-settings`;
 const RELEASE_NOTES_URL = `${base}/release-notes`;
 
-// 離れた親をサポートする4ステップ（カード）
+// 離れた親をサポートする5ステップ（カード）
 const steps = [
   {
+    emoji: '👪',
+    title: '① 見守りをする人に役割を設定',
+    where: '家族設定 →「メンバーと役割」（まとめ役が設定）',
+    shot: 'support-role.png',
+    alt: '家族設定「メンバーと役割」で、各メンバーの役割（まとめ役・見守り役など）を確認・編集する画面',
+    lead: 'まず、離れた親を支える人（お子さんなど）に、家族の中での<strong>役割</strong>を決めます。役割を設定できるのは<strong>まとめ役</strong>で、<strong>家族設定</strong>から行います。',
+    points: [
+      '<strong>家族設定 →「メンバーと役割」</strong>で、見守りをする人をタップ →「役割の編集」をひらきます。',
+      '<strong>「見守り役」</strong>にチェック … 親の<strong>活動を見守ったり、予定をかわりに入れたり</strong>できるようになります。',
+      '<strong>「まとめ役」</strong>にもチェック … 親の<strong>設定もかわりに整えられる</strong>ようになります（家族をつくった人は、はじめからまとめ役のことが多いです）。',
+    ],
+  },
+  {
     emoji: '🤝',
-    title: '① まず、親の端末で「委任」をONに',
+    title: '② 親の端末で「委任」をONに',
     where: '親の個人設定 →「その他」',
     shot: 'support-delegate.png',
     alt: '親の個人設定「その他」にある、設定／分析を見守り役へ委任のトグル画面',
-    lead: 'サポートのスタートは、2つのスイッチをONにすることから。<strong>この設定は親の端末（親の画面）で行います。</strong>離れていても大丈夫、電話などで一緒に進めてみてください。',
+    lead: '役割を決めたら、つぎは親ごしに2つのスイッチをONにします。<strong>この設定は親の端末（親の画面）で行います。</strong>離れていても大丈夫、電話などで一緒に進めてみてください。',
     points: [
       '<strong>設定を見守り役へ委任</strong> … ONにすると、見守り役が親の<strong>設定や予定</strong>をかわりに整えられるようになります。',
       '<strong>分析を見守り役へ委任</strong> … ONにすると、見守り役が親の<strong>暮らしのまとめ（活動）</strong>を見守れるようになります。',
@@ -36,7 +49,7 @@ const steps = [
   },
   {
     emoji: '⚙️',
-    title: '② 親の設定を、かわりに整える',
+    title: '③ 親の設定を、かわりに整える',
     where: '自分の個人設定 →「誰の設定？」で親を選ぶ',
     shot: 'support-settings.png',
     alt: '自分の個人設定の上部「誰の設定？」で親を選び、親の表示設定などを代理で整える画面',
@@ -49,7 +62,7 @@ const steps = [
   },
   {
     emoji: '🗓',
-    title: '③ 親の予定を、かわりに入れる',
+    title: '④ 親の予定を、かわりに入れる',
     where: '下のメニュー →「予定」',
     shot: 'support-schedule.png',
     alt: '予定画面で「誰の予定？」から親を選び、予定を追加する画面',
@@ -62,7 +75,7 @@ const steps = [
   },
   {
     emoji: '📊',
-    title: '④ 親の活動を、そっと見守る',
+    title: '⑤ 親の活動を、そっと見守る',
     where: '下のメニュー →「知る」→「活動を見る」',
     shot: 'support-activity.png',
     alt: '「知る」→「活動を見る」で分析対象に親を選び、活動件数・体調・気分・時間帯を見る画面',
@@ -101,10 +114,10 @@ const steps = [
         <h1 class="intro-title">離れて暮らす<wbr />親をサポートする</h1>
         <p class="intro-lead">
           離れて暮らしていても、見守り役（お子さんなど）が、<wbr />親の暮らしをそっと支えられます。<br />
-          必要なのは、つぎの4つのステップだけです。
+          必要なのは、つぎの5つのステップだけです。
         </p>
         <p class="intro-pick">
-          まずは親の端末で「委任」をONに。<br />
+          まずは家族設定で「役割」を決めて、親の端末で「委任」をON。<br />
           <span class="intro-pick-note">設定はあとからいつでも変えられます。気になるところから、少しずつで大丈夫です。</span>
         </p>
       </section>
