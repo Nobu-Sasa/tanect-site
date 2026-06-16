@@ -136,3 +136,9 @@ ol {
   border-radius: var(--radius-sm);
   white-space: nowrap;
 }
+
+/* ──────────────── Logo wordmark ──────────────── */
+/* ロゴ「Tanect Home」の "Home" 部分。白地で読めるよう濃いめのアクセント色を使う。 */
+.logo-home {
+  color: var(--color-accent-ink);
+}
