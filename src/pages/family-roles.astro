@@ -1,0 +1,672 @@
+---
+// 家族の役割「どの役割の人が何ができる／できないか」早見ページ（/family-roles）
+//
+// モニターからの質問「どの役割の人が何ができて何ができないの？」に答える俯瞰ページ。
+// 役割ごとの "できること・できないこと" を早見でまとめる（権限の俯瞰）。
+// 手順（どうやって委任するか等）は support-parent.astro へ相互リンクして重複を避ける。
+// サイト全体が noindex,nofollow（BaseLayout）。
+//
+// 出典（ラベル・挙動）：Tanect2
+//   FamilyRole.cs（Admin=まとめ役 / Payer=お支払い担当 / Analyst=サポーター）
+//   RoleEditDialog.razor / FamilySettings.razor（役割の付与・まとめ役最低1人・お支払い担当の移譲）
+//   PersonalSettings.razor（委任2種は _isParentGeneration のみ表示＝親世代だけ）
+//   UserController.cs / Calendar.razor（サポーターの代理は 同一家族∧Admin∧Gen1∧委任ON の4条件）
+// ⚠️ 役割名は STG/最新版アプリに合わせ「サポーター」で統一（support-parent.astro も統一済み）。
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const HOME_URL = import.meta.env.BASE_URL;
+const SUPPORT_PARENT_URL = `${base}/support-parent`;
+const FAMILY_SETUP_URL = `${base}/family-setup`;
+const FIRST_SETTINGS_URL = `${base}/first-settings`;
+
+// 役割ごとの「できること・できないこと」
+const roles = [
+  {
+    emoji: '👑',
+    name: 'まとめ役',
+    sub: '家族の入口をととのえる人',
+    can: [
+      '家族のメンバーを <strong>招待・追加</strong> する',
+      'メンバーを <strong>停止・再開</strong> する',
+      '各メンバーの <strong>役割を決める・変える</strong>',
+    ],
+    cannot: [
+      '家族には <strong>まとめ役が最低1人</strong> 必要です。ひとりだけのまとめ役は、自分の役割を外したり、グループを退出したりはできません（先に別の方をまとめ役にしてください）。',
+    ],
+  },
+  {
+    emoji: '💳',
+    name: 'お支払い担当',
+    sub: 'お支払いをまとめる人',
+    can: [
+      'App Store / Google Play での <strong>お支払い</strong>',
+      '<strong>プランの確認・変更</strong>',
+    ],
+    cannot: [
+      '家族で <strong>1人だけ</strong> です。別の方に変わるときは「<strong>移譲</strong>（引き継ぎ）」というかたちになります。',
+    ],
+  },
+  {
+    emoji: '🤝',
+    name: 'サポーター',
+    sub: '離れた家族を、そっと支える人',
+    can: [
+      '親世代の方が <strong>「おまかせ」してくれた範囲だけ</strong>、暮らしの <strong>活動を見る</strong>',
+      'おまかせを受けていれば、親世代の <strong>予定や個人設定をかわりに整える</strong>',
+    ],
+    cannot: [
+      '<strong>おまかせがOFFのときは、見ることも代わりに整えることもできません。</strong>勝手にのぞけない仕組みです。',
+    ],
+  },
+  {
+    emoji: '🌱',
+    name: '役割なし（みんな共通）',
+    sub: 'すべてのメンバーができること',
+    can: [
+      '<strong>自分の活動を記録</strong>して、家族に共有する',
+      '<strong>家族みんなの活動を見る・いいね</strong>する',
+    ],
+    cannot: [
+      '特別な役割がなくても、毎日の使い方に困ることはありません。役割は「必要な人が、必要なだけ」持てば大丈夫です。',
+    ],
+  },
+];
+
+// できること早見表（行＝できること、列＝役割）
+const matrixCols = ['まとめ役', 'お支払い担当', 'サポーター', 'みんな'];
+const matrixRows = [
+  { label: '自分の活動を記録・共有する', cells: ['○', '○', '○', '○'] },
+  { label: '家族みんなの活動を見る・いいね', cells: ['○', '○', '○', '○'] },
+  { label: 'メンバーの招待・役割の変更', cells: ['○', '—', '—', '—'] },
+  { label: 'お支払い・プランの管理', cells: ['—', '○', '—', '—'] },
+  { label: '親世代の活動・予定・個人設定をおまかせで整える', cells: ['—', '—', '△', '—'] },
+];
+---
+
+<BaseLayout
+  title="家族の役割と、できること — Tanect Home（家族モニター）"
+  description="まとめ役・お支払い担当・サポーターなど、どの役割の人が何ができて何ができないのかを、やさしい早見表でご案内します。"
+>
+  <header class="page-head">
+    <a href={HOME_URL} class="logo" aria-label="Tanect Home トップへ">
+      <img
+        class="logo-mark"
+        src={`${base}/images/app-icon.png`}
+        width="32"
+        height="32"
+        alt=""
+        aria-hidden="true"
+      />
+      <span class="logo-text">Tanect<span class="logo-home"> Home</span></span>
+    </a>
+  </header>
+
+  <main class="setup">
+    <div class="setup-inner">
+      <section class="intro">
+        <span class="badge">👪 家族の役割</span>
+        <h1 class="intro-title">どの役割の人が、<wbr />何ができる？</h1>
+        <p class="intro-lead">
+          Tanect Home には、家族の中で持てる「役割」があります。<br />
+          むずかしく考えなくて大丈夫。<wbr />どの役割が何をできるのか、<wbr />やさしくまとめました。
+        </p>
+        <p class="intro-pick">
+          役割は <strong>必要な人が、必要なだけ</strong> 持てば大丈夫。<br />
+          <span class="intro-pick-note">役割はあとからいつでも変えられます。まずは気になるところからご覧ください。</span>
+        </p>
+      </section>
+
+      <!-- 役割ごとの できること・できないこと -->
+      <div class="cards">
+        {roles.map((r) => (
+          <section class="card role-card">
+            <div class="card-head">
+              <span class="card-emoji" aria-hidden="true">{r.emoji}</span>
+              <div>
+                <h2 class="card-title">{r.name}</h2>
+                <p class="card-role">{r.sub}</p>
+              </div>
+            </div>
+            <div class="role-body">
+              <div class="role-block role-can">
+                <h3 class="role-block-title">できること</h3>
+                <ul class="role-list">
+                  {r.can.map((c) => (
+                    <li set:html={c} />
+                  ))}
+                </ul>
+              </div>
+              <div class="role-block role-cannot">
+                <h3 class="role-block-title">気をつけること</h3>
+                <ul class="role-list">
+                  {r.cannot.map((c) => (
+                    <li set:html={c} />
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <!-- おまかせのしくみ -->
+      <section class="notice" aria-labelledby="delegate-title">
+        <div class="notice-head">
+          <span class="notice-emoji" aria-hidden="true">🤝</span>
+          <h2 class="notice-title" id="delegate-title">「サポーター」と「おまかせ」のしくみ</h2>
+        </div>
+        <p class="notice-lead">
+          サポーターは、いつでも勝手に家族を見られるわけではありません。<br />
+          <strong>親世代ご本人が「おまかせ」してくれたときだけ</strong>、そっと支えられます。
+        </p>
+        <div class="delegate-shot">
+          <div class="shot-frame">
+            <img
+              src={`${base}/screens/delegate-omakase.png`}
+              alt="親世代の個人設定「その他」にある『設定をサポーターにおまかせ』『分析をサポーターにおまかせ』のON/OFFトグル"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
+            />
+            <div class="shot-ph" aria-hidden="true" hidden>
+              <span>📱 スクリーンショット差し替え予定</span>
+              <code>screens/delegate-omakase.png</code>
+            </div>
+          </div>
+        </div>
+        <ul class="notice-list">
+          <li><strong>分析をサポーターにおまかせ</strong> … ONにすると、サポーターが親世代の暮らしの活動を見守れます。</li>
+          <li><strong>設定をサポーターにおまかせ</strong> … ONにすると、サポーターが親世代の個人設定や予定をかわりに整えられます。</li>
+          <li>おまかせは <strong>あとからいつでもOFF</strong> にできます。気軽に試してみてください。</li>
+        </ul>
+      </section>
+
+      <!-- 子・孫は干渉されない -->
+      <section class="notice notice-safe" aria-labelledby="safe-title">
+        <div class="notice-head">
+          <span class="notice-emoji" aria-hidden="true">🛡️</span>
+          <h2 class="notice-title" id="safe-title">お子さん・お孫さんは、見られすぎない安心</h2>
+        </div>
+        <p class="notice-lead">
+          おまかせのスイッチが出るのは <strong>親世代の画面だけ</strong> です。
+        </p>
+        <ul class="notice-list">
+          <li>お子さん世代・お孫さん世代の画面には、<strong>そもそもおまかせのスイッチがありません</strong>。</li>
+          <li>だから、お子さん・お孫さんの活動や予定が、<strong>本人の知らないうちにサポーターに見られることはありません</strong>。</li>
+          <li>「支えるのは親世代を、そっと」。家族のだれもが、見られすぎずに使えます。</li>
+        </ul>
+      </section>
+
+      <!-- できること早見表 -->
+      <section class="matrix-wrap" aria-labelledby="matrix-title">
+        <h2 class="matrix-title" id="matrix-title">できること早見表</h2>
+        <div class="matrix-scroll">
+          <table class="matrix">
+            <thead>
+              <tr>
+                <th scope="col" class="matrix-rowhead">できること</th>
+                {matrixCols.map((c) => (
+                  <th scope="col">{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {matrixRows.map((row) => (
+                <tr>
+                  <th scope="row" class="matrix-rowhead">{row.label}</th>
+                  {row.cells.map((cell) => (
+                    <td class={cell === '○' ? 'is-ok' : cell === '△' ? 'is-partial' : 'is-no'}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="matrix-note">
+          ○ … できます ／ △ … 親世代がおまかせにしたときだけ ／ — … その役割では行いません
+        </p>
+      </section>
+
+      <section class="help">
+        <h2 class="help-title">もっと知りたいときは</h2>
+        <p class="help-text">
+          役割の決め方や、おまかせのONのしかた、予定の代理入力などの<strong>くわしい手順</strong>は、<br />
+          下の「親のサポート方法」のページで、画面の写真つきでご案内しています。
+        </p>
+        <div class="help-links">
+          <a href={SUPPORT_PARENT_URL} class="help-back">🤝 親のサポート方法（くわしい手順）を見る</a>
+          <a href={FAMILY_SETUP_URL} class="help-back">👪 家族のつくり方を見る</a>
+          <a href={FIRST_SETTINGS_URL} class="help-back">🌱 設定のととのえ方を見る</a>
+          <a href={HOME_URL} class="help-back">← Tanect Home のトップへもどる</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p class="page-foot-copy">© 2026 Tanect</p>
+  </footer>
+</BaseLayout>
+
+<style>
+  /* ── ヘッダー（最小：ロゴのみ） ── */
+  .page-head {
+    border-bottom: 1px solid var(--color-border-subtle);
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-md);
+    font-weight: 700;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: block;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    color: var(--color-primary);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── 本文 ── */
+  .setup {
+    padding: var(--space-3xl) var(--space-md);
+    background: linear-gradient(180deg, var(--color-accent-soft) 0%, #ffffff 320px);
+  }
+
+  .setup-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+  }
+
+  .intro-title {
+    font-size: var(--fs-h1);
+    font-weight: 700;
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+    word-break: keep-all;
+  }
+
+  .intro-lead {
+    font-size: var(--fs-body);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  .intro-pick {
+    margin-top: var(--space-sm);
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .intro-pick-note {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* ── カード ── */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding: var(--space-xl);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .card-emoji {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .card-role {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* ── 役割カードの中身（できること／気をつけること） ── */
+  .role-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .role-block-title {
+    font-size: var(--fs-small);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .role-can .role-block-title {
+    color: var(--color-accent-ink);
+  }
+
+  .role-can .role-block-title::before {
+    content: '○';
+  }
+
+  .role-cannot .role-block-title {
+    color: var(--color-text-muted);
+  }
+
+  .role-cannot .role-block-title::before {
+    content: '!';
+    font-weight: 700;
+  }
+
+  .role-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-left: 1.2em;
+    list-style: disc;
+  }
+
+  .role-list li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  /* ── おまかせスクショ ── */
+  .delegate-shot {
+    display: flex;
+    justify-content: center;
+    margin: var(--space-lg) 0;
+  }
+
+  .delegate-shot .shot-frame {
+    position: relative;
+    width: 100%;
+    max-width: 220px;
+    aspect-ratio: 9 / 19;
+    border-radius: 28px;
+    background: linear-gradient(148deg, #1a1a2e 0%, #030213 100%);
+    padding: 10px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .delegate-shot .shot-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  .delegate-shot .shot-ph {
+    position: absolute;
+    inset: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    border-radius: 20px;
+    background: linear-gradient(148deg, #e9ebef 0%, #ffffff 100%);
+    color: var(--color-text-muted);
+    font-size: 13px;
+    text-align: center;
+    padding: var(--space-md);
+  }
+
+  .delegate-shot .shot-ph[hidden] {
+    display: none;
+  }
+
+  .delegate-shot .shot-ph code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
+  }
+
+  /* ── 注意ボックス（おまかせ／安心） ── */
+  .notice {
+    margin-top: var(--space-3xl);
+    padding: var(--space-xl);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-border-subtle);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+  }
+
+  .notice-safe {
+    margin-top: var(--space-xl);
+    background: var(--color-bg-soft);
+    border-left-color: var(--color-primary);
+  }
+
+  .notice-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .notice-emoji {
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .notice-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .notice-lead {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .notice-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding-left: 1.2em;
+    list-style: disc;
+  }
+
+  .notice-list li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  /* ── できること早見表 ── */
+  .matrix-wrap {
+    margin-top: var(--space-3xl);
+  }
+
+  .matrix-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+  }
+
+  .matrix-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .matrix {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    font-size: 14px;
+  }
+
+  .matrix th,
+  .matrix td {
+    padding: var(--space-md) var(--space-sm);
+    border-bottom: 1px solid var(--color-border-subtle);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .matrix thead th {
+    background: var(--color-accent-soft);
+    font-weight: 700;
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  .matrix-rowhead {
+    text-align: left !important;
+    font-weight: 600;
+    color: var(--color-text);
+    min-width: 13em;
+  }
+
+  .matrix tbody tr:last-child th,
+  .matrix tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .matrix .is-ok {
+    color: var(--color-accent-ink);
+    font-weight: 700;
+  }
+
+  .matrix .is-partial {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .matrix .is-no {
+    color: var(--color-text-muted);
+  }
+
+  .matrix-note {
+    margin-top: var(--space-md);
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  /* ── もっと知りたいときは ── */
+  .help {
+    margin-top: var(--space-3xl);
+    padding: var(--space-xl);
+    background: var(--color-bg-soft);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .help-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .help-text {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  .help-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-lg);
+    justify-content: center;
+    margin-top: var(--space-lg);
+  }
+
+  .help-back {
+    display: inline-block;
+    font-size: 14px;
+    color: var(--color-accent-ink);
+    text-decoration: underline;
+  }
+
+  /* ── フッター ── */
+  .page-foot {
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .page-foot-copy {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* ── Tablet and up ── */
+  @media (min-width: 768px) {
+    .intro-title {
+      font-size: var(--fs-h1-lg);
+    }
+
+    /* 役割カードの できること／気をつけること を横並びに */
+    .role-body {
+      flex-direction: row;
+    }
+
+    .role-block {
+      flex: 1;
+    }
+
+    .matrix th,
+    .matrix td {
+      padding: var(--space-md);
+    }
+  }
+</style>

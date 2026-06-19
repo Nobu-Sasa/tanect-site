@@ -18,6 +18,7 @@ const HOME_URL = import.meta.env.BASE_URL;
 const INSTALL_URL = `${base}/install`;
 const FIRST_SETTINGS_URL = `${base}/first-settings`;
 const RELEASE_NOTES_URL = `${base}/release-notes`;
+const FAMILY_ROLES_URL = `${base}/family-roles`;
 
 // まとめ役（家族をはじめる人）の手順
 const adminSteps = [
@@ -193,18 +194,19 @@ const joinSteps = [
             <p class="role-count">家族で <strong>1人だけ</strong></p>
           </article>
           <article class="role-card">
-            <span class="role-emoji" aria-hidden="true">👀</span>
-            <h3 class="role-name">見守り役</h3>
+            <span class="role-emoji" aria-hidden="true">🤝</span>
+            <h3 class="role-name">サポーター</h3>
             <p class="role-can">
-              親世代の暮らしの「まとめ」を見て、<br />
-              そっと見守ることができます。
+              親世代が「おまかせ」してくれれば、<br />
+              活動を見たり、予定や設定を整えたりできます。
             </p>
             <p class="role-count"><strong>何人でも</strong> なれます</p>
           </article>
         </div>
         <p class="roles-note">
-          ※ ひとりが <strong>いくつもの役割を兼ねる</strong> こともできます（例：まとめ役 兼 見守り役）。<br />
-          ※ 役割を決めたり変えたりできるのは <strong>まとめ役</strong> です。家族を作った人は、はじめから「まとめ役」になっています。
+          ※ ひとりが <strong>いくつもの役割を兼ねる</strong> こともできます（例：まとめ役 兼 サポーター）。<br />
+          ※ 役割を決めたり変えたりできるのは <strong>まとめ役</strong> です。家族を作った人は、はじめから「まとめ役」になっています。<br />
+          ※ <strong>どの役割が何をできるか</strong>は、<a href={FAMILY_ROLES_URL}>「役割とできること」</a>でくわしくご案内しています。
         </p>
       </section>
 
@@ -526,6 +528,11 @@ const joinSteps = [
     line-height: 1.8;
     color: var(--color-text-muted);
     text-align: center;
+  }
+
+  .roles-note a {
+    color: var(--color-accent-ink);
+    text-decoration: underline;
   }
 
   /* ── 知っておくと安心なこと ── */
