@@ -13,12 +13,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const HOME_URL = import.meta.env.BASE_URL;
-const INSTALL_URL = `${base}/install`;
 const FAMILY_SETUP_URL = `${base}/family-setup`;
 const FIRST_SETTINGS_URL = `${base}/first-settings`;
 const FAMILY_ROLES_URL = `${base}/family-roles`;
 const SUPPORT_PARENT_URL = `${base}/support-parent`;
-const RELEASE_NOTES_URL = `${base}/release-notes`;
 
 // 対象期間のかんたんボタン（Analysis.razor のプリセット）
 const periods = ['今日', '1週間', '1ヶ月', '3ヶ月'];
@@ -137,10 +135,44 @@ const filters = [
           自分や、おまかせされた家族の暮らしのようすを、<wbr />えらんだ期間でふりかえれます。<br />
           グラフで見える化して、ボタンひとつで AI がやさしく言葉にまとめます。
         </p>
-        <p class="intro-pick">
-          下のメニュー →「知る」→「活動を見る」からひらけます。<br />
-          <span class="intro-pick-note">「活動を見る」と AI まとめは、どのプランでもお使いいただけます。</span>
-        </p>
+        <p class="intro-pick-note">「活動を見る」と AI まとめは、どのプランでもお使いいただけます。</p>
+      </section>
+
+      <!-- ひらき方（下メニュー →「知る」→ タブ「活動を見る」） -->
+      <section class="open" aria-labelledby="open-title">
+        <h2 class="open-title" id="open-title">ひらき方</h2>
+        <ol class="open-steps">
+          <li class="open-step">
+            <p class="open-cap"><span class="open-num" aria-hidden="true">1</span>下のメニューの<strong>「知る」</strong>をタップ</p>
+            <figure class="open-figure">
+              <img
+                src={`${base}/screens/activity-nav-know.png`}
+                alt="画面下のメニューで「知る」が選ばれている様子（私の／みんなの／予定／知る）"
+                loading="lazy"
+                onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
+              />
+              <figcaption class="open-ph" aria-hidden="true" hidden>
+                <span>🖼 画像差し替え予定</span>
+                <code>screens/activity-nav-know.png</code>
+              </figcaption>
+            </figure>
+          </li>
+          <li class="open-step">
+            <p class="open-cap"><span class="open-num" aria-hidden="true">2</span>上のタブで<strong>「活動を見る」</strong>をえらぶ</p>
+            <figure class="open-figure">
+              <img
+                src={`${base}/screens/activity-tab.png`}
+                alt="「知る」の上部タブで「活動を見る」が選ばれている様子（今週の家族／活動を見る）"
+                loading="lazy"
+                onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
+              />
+              <figcaption class="open-ph" aria-hidden="true" hidden>
+                <span>🖼 画像差し替え予定</span>
+                <code>screens/activity-tab.png</code>
+              </figcaption>
+            </figure>
+          </li>
+        </ol>
       </section>
 
       <!-- ① 分析の条件をえらぶ -->
@@ -403,6 +435,101 @@ const filters = [
   .intro-pick-note {
     font-size: var(--fs-small);
     color: var(--color-text-muted);
+  }
+
+  /* ── ひらき方（導線） ── */
+  .open {
+    margin-bottom: var(--space-3xl);
+    padding: var(--space-xl);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .open-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+  }
+
+  .open-steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .open-step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .open-cap {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  .open-num {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .open-figure {
+    margin: 0;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .open-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .open-ph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-xl) var(--space-md);
+    background: linear-gradient(148deg, #e9ebef 0%, #ffffff 100%);
+    color: var(--color-text-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .open-ph[hidden] {
+    display: none;
+  }
+
+  .open-ph code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
   }
 
   /* ── カード（共通） ── */
