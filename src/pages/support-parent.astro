@@ -19,6 +19,7 @@ const FAMILY_SETUP_URL = `${base}/family-setup`;
 const FIRST_SETTINGS_URL = `${base}/first-settings`;
 const RELEASE_NOTES_URL = `${base}/release-notes`;
 const FAMILY_ROLES_URL = `${base}/family-roles`;
+const VIEW_ACTIVITY_URL = `${base}/view-activity`;
 
 // 離れた親をサポートする5ステップ（カード）
 const steps = [
@@ -184,6 +185,7 @@ const steps = [
           アプリ内の画面右上の人アイコン →「お問い合わせ」からもご連絡いただけます。
         </p>
         <div class="help-links">
+          <a href={VIEW_ACTIVITY_URL} class="help-back">📈 活動を見る（AIまとめ）を見る</a>
           <a href={FIRST_SETTINGS_URL} class="help-back">🌱 設定のととのえ方を見る</a>
           <a href={FAMILY_SETUP_URL} class="help-back">👪 家族のつくり方を見る</a>
           <a href={INSTALL_URL} class="help-back">📲 インストール方法のご案内を見る</a>

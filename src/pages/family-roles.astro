@@ -19,6 +19,7 @@ const HOME_URL = import.meta.env.BASE_URL;
 const SUPPORT_PARENT_URL = `${base}/support-parent`;
 const FAMILY_SETUP_URL = `${base}/family-setup`;
 const FIRST_SETTINGS_URL = `${base}/first-settings`;
+const VIEW_ACTIVITY_URL = `${base}/view-activity`;
 
 // 役割ごとの「できること・できないこと」
 const roles = [
@@ -235,6 +236,7 @@ const matrixRows = [
         </p>
         <div class="help-links">
           <a href={SUPPORT_PARENT_URL} class="help-back">🤝 親のサポート方法（くわしい手順）を見る</a>
+          <a href={VIEW_ACTIVITY_URL} class="help-back">📈 活動を見る（AIまとめ）を見る</a>
           <a href={FAMILY_SETUP_URL} class="help-back">👪 家族のつくり方を見る</a>
           <a href={FIRST_SETTINGS_URL} class="help-back">🌱 設定のととのえ方を見る</a>
           <a href={HOME_URL} class="help-back">← Tanect Home のトップへもどる</a>

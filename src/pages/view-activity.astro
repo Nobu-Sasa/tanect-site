@@ -1,0 +1,867 @@
+---
+// 機能紹介「活動を見る（AIまとめ）」案内ページ（/view-activity）
+//
+// アプリ内の「活動を見る」（Analysis.razor）の機能ショーケース。
+// 分析の条件項目・3つのパネル・✨まとめる（AIまとめの流れ）・まとめる時の絞り込み条件を、
+// support-parent.astro と同じテイスト（やさしい敬語・カード・暖色トークン）で紹介する。
+// サイト全体が noindex,nofollow（BaseLayout）。
+//
+// 出典（ラベル・挙動）：Tanect2 Analysis.razor / AiAnalysis.razor
+// ⚠️ スクショ差し替え：下の screens/activity-*.png はまだ未配置。
+//    画像が無いあいだは「差し替え予定」プレースホルダが表示される（onerror フォールバック）。
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const HOME_URL = import.meta.env.BASE_URL;
+const INSTALL_URL = `${base}/install`;
+const FAMILY_SETUP_URL = `${base}/family-setup`;
+const FIRST_SETTINGS_URL = `${base}/first-settings`;
+const FAMILY_ROLES_URL = `${base}/family-roles`;
+const SUPPORT_PARENT_URL = `${base}/support-parent`;
+const RELEASE_NOTES_URL = `${base}/release-notes`;
+
+// 対象期間のかんたんボタン（Analysis.razor のプリセット）
+const periods = ['今日', '1週間', '1ヶ月', '3ヶ月'];
+
+// 3つのパネル
+const panels = [
+  {
+    emoji: '📊',
+    title: '活動件数',
+    shot: 'activity-count.png',
+    alt: '完了した活動をカテゴリ別にドーナツグラフで集計した「活動件数」パネル',
+    lead: '完了した活動を<strong>カテゴリ別にドーナツグラフ</strong>でまとめます。',
+    points: [
+      '散歩・食事・交流など、<strong>どんな活動をどれくらいしているか</strong>がひと目で分かります。',
+      'まんなかに合計件数、まわりに種類ごとの内訳が出ます。',
+    ],
+  },
+  {
+    emoji: '📈',
+    title: '体調・気分',
+    shot: 'activity-wellness.png',
+    alt: '日々の体調と気分の平均を折れ線で示し、気になる日を一覧する「体調・気分」パネル',
+    lead: '日々の<strong>体調と気分の平均</strong>を、折れ線でやさしく見える化します。',
+    points: [
+      '良い・ふつう・よくない、の移り変わりが線でたどれます。',
+      '<strong>気になる日</strong>（落ち込んでいた日）も一覧で分かるので、そっと気にかけられます。',
+    ],
+  },
+  {
+    emoji: '🕒',
+    title: '操作している時間帯',
+    shot: 'activity-heatmap.png',
+    alt: '曜日×時間帯のヒートマップで活動の多い時間を示す「操作している時間帯」パネル',
+    lead: '曜日と時間帯の<strong>ヒートマップ</strong>で、いつ活動しているかが分かります。',
+    points: [
+      '色の濃さで、活動が多い時間帯がひと目で分かります。',
+      '朝型・夜型といった<strong>暮らしのリズム</strong>を、さりげなく知る手がかりに。',
+    ],
+  },
+];
+
+// ✨ まとめる（AIまとめ）の流れ
+const aiFlow = [
+  {
+    step: '①',
+    title: '分析しています…',
+    text: '「✨まとめる」を押すと、選んだ期間の<strong>活動・体調・気分</strong>を AI が読み取ります。',
+  },
+  {
+    step: '②',
+    title: '気づきを、短い言葉で',
+    text: '見えてきたことを<strong>短いメッセージで順に</strong>語ります。「続きを表示」「次へ」で、自分のペースで読み進められます。',
+  },
+  {
+    step: '③',
+    title: '家族からの応援にふれる',
+    text: '記録についた<strong>家族からの応援（リアクション）</strong>があれば、それにもそっとふれてくれます。',
+  },
+  {
+    step: '④',
+    title: 'あたたかい励まし',
+    text: 'がんばりや変化に寄りそった、<strong>あたたかい励ましのメッセージ</strong>が届きます。',
+  },
+  {
+    step: '⑤',
+    title: '気になることを質問できる',
+    text: '「<strong>最近の様子は？</strong>」のように、気になることを続けて質問できます。AI がさらに読み解いて答えます。',
+  },
+];
+
+// まとめる時の絞り込み条件（任意）
+const filters = [
+  {
+    emoji: '🌤',
+    title: '気分・体調でしぼる',
+    points: [
+      'すべて',
+      '気分が落ちていた日 / 気分が良かった日',
+      '体調がすぐれない日 / 体調が良かった日',
+    ],
+  },
+  {
+    emoji: '🔎',
+    title: '内容でしぼる',
+    points: [
+      '「散歩」などの<strong>キーワード</strong>で活動をしぼってまとめられます。',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="活動を見る（AIまとめ） — Tanect Home（家族モニター）"
+  description="Tanect Home の「活動を見る」機能のご案内。活動件数・体調・気分・操作している時間帯の3つのパネルと、✨まとめるボタンによる AI まとめ（応援や励ましの流れ）、まとめる時の絞り込み条件を、画面付きでご紹介します。"
+>
+  <header class="page-head">
+    <a href={HOME_URL} class="logo" aria-label="Tanect Home トップへ">
+      <img
+        class="logo-mark"
+        src={`${base}/images/app-icon.png`}
+        width="32"
+        height="32"
+        alt=""
+        aria-hidden="true"
+      />
+      <span class="logo-text">Tanect<span class="logo-home"> Home</span></span>
+    </a>
+  </header>
+
+  <main class="setup">
+    <div class="setup-inner">
+      <section class="intro">
+        <span class="badge">📈 暮らしのようすを見る</span>
+        <h1 class="intro-title">活動を、<wbr />やさしく見る</h1>
+        <p class="intro-lead">
+          自分や、おまかせされた家族の暮らしのようすを、<wbr />えらんだ期間でふりかえれます。<br />
+          グラフで見える化して、ボタンひとつで AI がやさしく言葉にまとめます。
+        </p>
+        <p class="intro-pick">
+          下のメニュー →「知る」→「活動を見る」からひらけます。<br />
+          <span class="intro-pick-note">「活動を見る」と AI まとめは、どのプランでもお使いいただけます。</span>
+        </p>
+      </section>
+
+      <!-- ① 分析の条件をえらぶ -->
+      <section class="card cond-card" aria-labelledby="cond-title">
+        <div class="card-head">
+          <span class="card-emoji" aria-hidden="true">🎛</span>
+          <div>
+            <h2 class="card-title" id="cond-title">① 分析の条件をえらぶ</h2>
+            <p class="card-role">いつの・誰の活動を見るか</p>
+          </div>
+        </div>
+        <div class="cond-body">
+          <div class="cond-block">
+            <h3 class="cond-block-title">対象期間</h3>
+            <p class="cond-block-lead">かんたんボタンか、自由な期間でえらべます。</p>
+            <ul class="cond-chips">
+              {periods.map((p) => (
+                <li class="cond-chip">{p}</li>
+              ))}
+              <li class="cond-chip cond-chip-free">期間を指定</li>
+            </ul>
+          </div>
+          <div class="cond-block">
+            <h3 class="cond-block-title">誰の活動？</h3>
+            <p class="cond-block-lead">
+              自分のほか、<strong>「分析のおまかせ」をONにした家族</strong>をえらべます
+              （サポーターとして見守る場合）。
+            </p>
+            <p class="cond-note">
+              ※ 家族を見守る手順は <a href={SUPPORT_PARENT_URL}>親のサポート方法</a> をご覧ください。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ② 3つのパネルで見える化 -->
+      <section class="section-lead" aria-hidden="true">
+        <h2 class="section-lead-title">② 3つのパネルで、見える化</h2>
+        <p class="section-lead-text">条件をえらぶと、つぎの3つが表示されます。</p>
+      </section>
+
+      <div class="cards panels-cards">
+        {panels.map((g) => (
+          <section class="card step-card">
+            <div class="card-head">
+              <span class="card-emoji" aria-hidden="true">{g.emoji}</span>
+              <div>
+                <h2 class="card-title">{g.title}</h2>
+              </div>
+            </div>
+            <div class="setting-body">
+              <div class="shot">
+                <div class="shot-frame">
+                  <img
+                    src={`${base}/screens/${g.shot}`}
+                    alt={g.alt}
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
+                  />
+                  <div class="shot-ph" aria-hidden="true" hidden>
+                    <span>📱 スクリーンショット差し替え予定</span>
+                    <code>screens/{g.shot}</code>
+                  </div>
+                </div>
+              </div>
+              <div class="setting-text">
+                <p class="setting-lead" set:html={g.lead} />
+                <ul class="setting-points">
+                  {g.points.map((p) => (
+                    <li set:html={p} />
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <!-- ③ まとめる（AIまとめ） -->
+      <section class="card ai-card" aria-labelledby="ai-title">
+        <div class="card-head">
+          <span class="card-emoji" aria-hidden="true">✨</span>
+          <div>
+            <h2 class="card-title" id="ai-title">③ まとめる ― AI がやさしく言葉に</h2>
+            <p class="card-role">ボタンひとつで、暮らしを読み解く</p>
+          </div>
+        </div>
+        <div class="ai-body">
+          <div class="shot ai-shot">
+            <div class="shot-frame">
+              <img
+                src={`${base}/screens/activity-ai-summary.png`}
+                alt="「✨まとめる」を押すと開く、AI が活動をやさしくまとめて語るダイアログ画面"
+                loading="lazy"
+                onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
+              />
+              <div class="shot-ph" aria-hidden="true" hidden>
+                <span>📱 スクリーンショット差し替え予定</span>
+                <code>screens/activity-ai-summary.png</code>
+              </div>
+            </div>
+          </div>
+          <div class="ai-text">
+            <p class="setting-lead">
+              「<strong>✨まとめる</strong>」を押すと、グラフの数字を AI が読み解いて、
+              暮らしのようすを<strong>やさしい言葉</strong>にまとめてくれます。
+            </p>
+            <ol class="ai-flow">
+              {aiFlow.map((f) => (
+                <li class="ai-flow-item">
+                  <span class="ai-flow-step" aria-hidden="true">{f.step}</span>
+                  <div>
+                    <h3 class="ai-flow-title">{f.title}</h3>
+                    <p class="ai-flow-text" set:html={f.text} />
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ④ まとめる時の絞り込み（任意） -->
+      <section class="card filter-card" aria-labelledby="filter-title">
+        <div class="card-head">
+          <span class="card-emoji" aria-hidden="true">🧭</span>
+          <div>
+            <h2 class="card-title" id="filter-title">④ まとめる時の絞り込み（任意）</h2>
+            <p class="card-role">気になるところに、しぼってまとめる</p>
+          </div>
+        </div>
+        <p class="filter-lead">
+          「まとめる」前に、見たいところへしぼれます。<br />
+          たとえば「気分が落ちていた日」や「散歩」だけに注目してまとめてもらえます。
+        </p>
+        <div class="filter-grid">
+          {filters.map((f) => (
+            <div class="filter-item">
+              <span class="filter-emoji" aria-hidden="true">{f.emoji}</span>
+              <h3 class="filter-item-title">{f.title}</h3>
+              <ul class="filter-points">
+                {f.points.map((p) => (
+                  <li set:html={p} />
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p class="filter-note">
+          ※ 絞り込みは <strong>「まとめ（AI）」にだけ</strong>効きます。上のグラフは変わりません。
+        </p>
+      </section>
+
+      <section class="notice" aria-labelledby="notice-title">
+        <div class="notice-head">
+          <span class="notice-emoji" aria-hidden="true">💡</span>
+          <h2 class="notice-title" id="notice-title">知っておくと安心なこと</h2>
+        </div>
+        <ul class="notice-list">
+          <li>家族の活動を見られるのは、<strong>「分析のおまかせ」をONにした方だけ</strong>です。家族のプライバシーは守られます。</li>
+          <li>「活動を見る」と AI まとめは、<strong>どのプランでも</strong>お使いいただけます。</li>
+          <li>おまかせの設定は、<strong>あとからいつでもOFF</strong>にできます。気軽に試してみてください。</li>
+        </ul>
+      </section>
+
+      <section class="help">
+        <h2 class="help-title">関連ページ</h2>
+        <p class="help-text">
+          家族を見守る手順や、役割の決め方とあわせてご覧ください。
+        </p>
+        <div class="help-links">
+          <a href={SUPPORT_PARENT_URL} class="help-back">🤝 離れた親をサポートする方法を見る</a>
+          <a href={FAMILY_ROLES_URL} class="help-back">🗂 役割とできることを見る</a>
+          <a href={FIRST_SETTINGS_URL} class="help-back">🌱 設定のととのえ方を見る</a>
+          <a href={FAMILY_SETUP_URL} class="help-back">👪 家族のつくり方を見る</a>
+          <a href={HOME_URL} class="help-back">← Tanect Home のトップへもどる</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <p class="page-foot-copy">© 2026 Tanect</p>
+  </footer>
+</BaseLayout>
+
+<style>
+  /* ── ヘッダー（最小：ロゴのみ） ── */
+  .page-head {
+    border-bottom: 1px solid var(--color-border-subtle);
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-md);
+    font-weight: 700;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: block;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    color: var(--color-primary);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── 本文 ── */
+  .setup {
+    padding: var(--space-3xl) var(--space-md);
+    background: linear-gradient(180deg, var(--color-accent-soft) 0%, #ffffff 320px);
+  }
+
+  .setup-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+  }
+
+  .intro-title {
+    font-size: var(--fs-h1);
+    font-weight: 700;
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+    /* 文節の途中で折らず、<wbr> を入れた位置でのみ改行する */
+    word-break: keep-all;
+  }
+
+  .intro-lead {
+    font-size: var(--fs-body);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  .intro-pick {
+    margin-top: var(--space-sm);
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .intro-pick-note {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* ── カード（共通） ── */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding: var(--space-xl);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* 単体カード（条件・AI・絞り込み）はカード間の余白を確保 */
+  .cond-card,
+  .ai-card,
+  .filter-card {
+    margin-bottom: var(--space-xl);
+  }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .card-emoji {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .card-role {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* ── ① 分析の条件 ── */
+  .cond-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .cond-block-title {
+    font-size: var(--fs-body);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-xs);
+  }
+
+  .cond-block-lead {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .cond-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .cond-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-accent-ink);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-pill);
+  }
+
+  .cond-chip-free {
+    color: var(--color-text-muted);
+    background: #fff;
+    border-color: var(--color-border-subtle);
+    border-style: dashed;
+  }
+
+  .cond-note {
+    margin-top: var(--space-sm);
+    font-size: var(--fs-small);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+
+  .cond-note :global(a) {
+    color: var(--color-accent-ink);
+    text-decoration: underline;
+  }
+
+  /* ── セクション見出し（パネル群の上） ── */
+  .section-lead {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+  }
+
+  .section-lead-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .section-lead-text {
+    margin-top: var(--space-xs);
+    font-size: 15px;
+    color: var(--color-text-muted);
+  }
+
+  .panels-cards {
+    margin-bottom: var(--space-xl);
+  }
+
+  /* ── パネル／設定の中身（スクショ＋説明） ── */
+  .setting-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .shot {
+    position: relative;
+    width: 100%;
+    max-width: 220px;
+    flex-shrink: 0;
+  }
+
+  .shot-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 19;
+    border-radius: 28px;
+    background: linear-gradient(148deg, #1a1a2e 0%, #030213 100%);
+    padding: 10px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .shot-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  .shot-ph {
+    position: absolute;
+    inset: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    border-radius: 20px;
+    background: linear-gradient(148deg, #e9ebef 0%, #ffffff 100%);
+    color: var(--color-text-muted);
+    font-size: 13px;
+    text-align: center;
+    padding: var(--space-md);
+  }
+
+  .shot-ph[hidden] {
+    display: none;
+  }
+
+  .shot-ph code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
+  }
+
+  .setting-text {
+    width: 100%;
+  }
+
+  .setting-lead {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .setting-points {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding-left: 1.2em;
+    list-style: disc;
+  }
+
+  .setting-points li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  /* ── ③ AI まとめの流れ ── */
+  .ai-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .ai-shot {
+    align-self: center;
+  }
+
+  .ai-text {
+    width: 100%;
+  }
+
+  .ai-flow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ai-flow-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--color-accent-soft);
+    border-radius: var(--radius-md);
+  }
+
+  .ai-flow-step {
+    flex-shrink: 0;
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-accent-ink);
+    line-height: 1.4;
+  }
+
+  .ai-flow-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 2px;
+  }
+
+  .ai-flow-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  /* ── ④ 絞り込み ── */
+  .filter-lead {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .filter-item {
+    padding: var(--space-lg);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .filter-emoji {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .filter-item-title {
+    margin-top: var(--space-xs);
+    font-size: var(--fs-body);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+  }
+
+  .filter-points {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-left: 1.2em;
+    list-style: disc;
+  }
+
+  .filter-points li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  .filter-note {
+    font-size: var(--fs-small);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+
+  /* ── 知っておくと安心なこと ── */
+  .notice {
+    margin-top: var(--space-3xl);
+    padding: var(--space-xl);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-border-subtle);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+  }
+
+  .notice-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .notice-emoji {
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .notice-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .notice-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding-left: 1.2em;
+    list-style: disc;
+  }
+
+  .notice-list li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  /* ── 関連ページ ── */
+  .help {
+    margin-top: var(--space-3xl);
+    padding: var(--space-xl);
+    background: var(--color-bg-soft);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  .help-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .help-text {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  .help-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-lg);
+    justify-content: center;
+    margin-top: var(--space-lg);
+  }
+
+  .help-back {
+    display: inline-block;
+    font-size: 14px;
+    color: var(--color-accent-ink);
+    text-decoration: underline;
+  }
+
+  /* ── フッター ── */
+  .page-foot {
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .page-foot-copy {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  /* ── Tablet and up ── */
+  @media (min-width: 768px) {
+    .intro-title {
+      font-size: var(--fs-h1-lg);
+    }
+
+    /* 条件の2ブロックを横並びに */
+    .cond-body {
+      flex-direction: row;
+    }
+
+    .cond-block {
+      flex: 1;
+    }
+
+    /* パネルのスクショと説明を横並びに */
+    .setting-body {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-2xl);
+    }
+
+    .setting-text {
+      flex: 1;
+    }
+
+    /* AI：スクショと流れを横並びに */
+    .ai-body {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-2xl);
+    }
+
+    .ai-text {
+      flex: 1;
+    }
+
+    /* 絞り込みの2カードを横並びに */
+    .filter-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
