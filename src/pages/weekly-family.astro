@@ -1,13 +1,14 @@
 ---
-// 機能紹介「活動を見る（AIまとめ）」案内ページ（/view-activity）
+// 機能紹介「今週の家族 ＆ 思い出をさがす」案内ページ（/weekly-family）
 //
-// アプリ内の「活動を見る」（Analysis.razor）の機能ショーケース。
-// 分析の条件項目・3つのパネル・✨まとめる（AIまとめの流れ）・まとめる時の絞り込み条件を、
-// support-parent.astro と同じテイスト（やさしい敬語・カード・暖色トークン）で紹介する。
+// アプリ内「知る」→タブ「今週の家族」（WeeklySummary.razor）の機能ショーケース。
+// 毎週日曜朝に届く週次AIサマリー（今週の家族）と、その画面内の「思い出をさがす」
+// （Discovery.razor のハイブリッド検索）を、view-activity.astro と同じテイスト
+// （やさしい敬語・カード・暖色トークン）で紹介する。
 // サイト全体が noindex,nofollow（BaseLayout）。
 //
-// 出典（ラベル・挙動）：Tanect2 Analysis.razor / AiAnalysis.razor
-// ⚠️ スクショ差し替え：下の screens/activity-*.png はまだ未配置。
+// 出典（ラベル・挙動）：Tanect2 WeeklySummary.razor / Discovery.razor、release-notes L50。
+// ⚠️ スクショ差し替え：下の screens/weekly-*.png はまだ未配置。
 //    画像が無いあいだは「差し替え予定」プレースホルダが表示される（onerror フォールバック）。
 import BaseLayout from '../layouts/BaseLayout.astro';
 
@@ -17,100 +18,51 @@ const FAMILY_SETUP_URL = `${base}/family-setup`;
 const FIRST_SETTINGS_URL = `${base}/first-settings`;
 const FAMILY_ROLES_URL = `${base}/family-roles`;
 const SUPPORT_PARENT_URL = `${base}/support-parent`;
+const VIEW_ACTIVITY_URL = `${base}/view-activity`;
 
-// 対象期間のかんたんボタン（Analysis.razor のプリセット）
-const periods = ['今日', '1週間', '1ヶ月', '3ヶ月'];
-
-// 3つのパネル
-const panels = [
-  {
-    emoji: '📊',
-    title: '活動件数',
-    shot: 'activity-count.png',
-    alt: '完了した活動をカテゴリ別にドーナツグラフで集計した「活動件数」パネル',
-    lead: '完了した活動を<strong>カテゴリ別にドーナツグラフ</strong>でまとめます。',
-    points: [
-      '散歩・食事・交流など、<strong>どんな活動をどれくらいしているか</strong>がひと目で分かります。',
-      'まんなかに合計件数、まわりに種類ごとの内訳が出ます。',
-    ],
-  },
-  {
-    emoji: '📈',
-    title: '体調・気分',
-    shot: 'activity-wellness.png',
-    alt: '日々の体調と気分の平均を折れ線で示し、気になる日を一覧する「体調・気分」パネル',
-    lead: '日々の<strong>体調と気分の平均</strong>を、折れ線でやさしく見える化します。',
-    points: [
-      '良い・ふつう・よくない、の移り変わりが線でたどれます。',
-      '<strong>気になる日</strong>（落ち込んでいた日）も一覧で分かるので、そっと気にかけられます。',
-    ],
-  },
-  {
-    emoji: '🕒',
-    title: '操作している時間帯',
-    shot: 'activity-heatmap.png',
-    alt: '曜日×時間帯のヒートマップで活動の多い時間を示す「操作している時間帯」パネル',
-    lead: '曜日と時間帯の<strong>ヒートマップ</strong>で、いつ活動しているかが分かります。',
-    points: [
-      '色の濃さで、活動が多い時間帯がひと目で分かります。',
-      '朝型・夜型といった<strong>暮らしのリズム</strong>を、さりげなく知る手がかりに。',
-    ],
-  },
+// ① 今週の家族（週次AIサマリー）の説明ポイント
+const weeklyPoints = [
+  '<strong>毎週日曜の朝</strong>に、前の週（日曜〜土曜の7日間）の家族のようすが、ひとつの<strong>物語</strong>になって届きます。',
+  '完了した活動・気分・体調・家族からの応援を、AI が<strong>やさしい言葉</strong>でまとめます。点数をつけたり、前の週とくらべたりはしません。',
+  'その週の<strong>お気に入り写真の上位3枚</strong>もいっしょに並びます。',
+  '<strong>過去12週ぶん</strong>をさかのぼって読み返せます。電波がないときも、前回ひらいた内容を表示します。',
 ];
 
-// ✨ まとめる（AIまとめ）の流れ
-const aiFlow = [
+// ② 思い出をさがす（Discovery）の流れ ― view-activity の ai-flow UI を流用
+const discoverySteps = [
   {
     step: '①',
-    title: '分析しています…',
-    text: '「✨まとめる」を押すと、選んだ期間の<strong>活動・体調・気分</strong>を AI が読み取ります。',
+    title: '自然な言葉でさがす',
+    text: '「<strong>家族で海に行ったのは？</strong>」「<strong>散歩したのはいつ？</strong>」のように入力すると、内容の近い週の物語カードが<strong>すぐに</strong>出てきます（このときは AI を動かさず、すばやく表示します）。',
   },
   {
     step: '②',
-    title: '気づきを、短い言葉で',
-    text: '見えてきたことを<strong>短いメッセージで順に</strong>語ります。「続きを表示」「次へ」で、自分のペースで読み進められます。',
+    title: 'おまかせ発見',
+    text: '「<strong>1年前のきょう</strong>」「<strong>この季節の思い出</strong>」を、入力しなくてもそっと提案します。タップするだけで、ふとした思い出にふれられます。',
   },
   {
     step: '③',
-    title: '家族からの応援にふれる',
-    text: '記録についた<strong>家族からの応援（リアクション）</strong>があれば、それにもそっとふれてくれます。',
+    title: 'お名前でしぼる',
+    text: 'ご家族のお名前（例：「<strong>はる子さんが登場するのは？</strong>」）を入れると、その方が出てくる週にしぼってさがせます。',
   },
   {
     step: '④',
-    title: 'あたたかい励まし',
-    text: 'がんばりや変化に寄りそった、<strong>あたたかい励ましのメッセージ</strong>が届きます。',
-  },
-  {
-    step: '⑤',
-    title: '気になることを質問できる',
-    text: '「<strong>最近の様子は？</strong>」のように、気になることを続けて質問できます。AI がさらに読み解いて答えます。',
+    title: 'まとめて答えてもらう',
+    text: '気になるときだけ「<strong>まとめて答えてもらう</strong>」を押すと、AI が質問に沿ってまとめてお答えします。どの週を参照したかも、いっしょに教えてくれます。',
   },
 ];
 
-// まとめる時の絞り込み条件（任意）
-const filters = [
-  {
-    emoji: '🌤',
-    title: '気分・体調でしぼる',
-    points: [
-      'すべて',
-      '気分が落ちていた日 / 気分が良かった日',
-      '体調がすぐれない日 / 体調が良かった日',
-    ],
-  },
-  {
-    emoji: '🔎',
-    title: '内容でしぼる',
-    points: [
-      '「散歩」などの<strong>キーワード</strong>で活動をしぼってまとめられます。',
-    ],
-  },
+// 知っておくと安心なこと
+const notices = [
+  '今週の家族と思い出をさがすは、<strong>家族の中だけ</strong>で共有されます。「分析のおまかせ」と同じ、見守りの輪の中の機能です。',
+  '今週の家族は<strong>毎週日曜の朝</strong>に届きます。まだ届いていないときは、つぎの日曜をお待ちください。',
+  '今週の家族と思い出をさがすは、<strong>上位・プレミアムプラン</strong>でお使いいただけます。',
 ];
 ---
 
 <BaseLayout
-  title="活動を見る（AIまとめ） — Tanect Home（家族モニター）"
-  description="Tanect Home の「活動を見る」機能のご案内。活動件数・体調・気分・操作している時間帯の3つのパネルと、✨まとめるボタンによる AI まとめ（応援や励ましの流れ）、まとめる時の絞り込み条件を、画面付きでご紹介します。"
+  title="今週の家族 ＆ 思い出をさがす — Tanect Home（家族モニター）"
+  description="Tanect Home の「今週の家族」機能のご案内。毎週日曜の朝に届く週次のAIまとめ（家族の一週間の物語とお気に入り写真）と、過去の週を自然な言葉でさがせる「思い出をさがす」を、画面付きでやさしくご紹介します。"
 >
   <header class="page-head">
     <a href={HOME_URL} class="logo" aria-label="Tanect Home トップへ">
@@ -129,16 +81,16 @@ const filters = [
   <main class="setup">
     <div class="setup-inner">
       <section class="intro">
-        <span class="badge">📈 暮らしのようすを見る</span>
-        <h1 class="intro-title">活動を、<wbr />やさしく見る</h1>
+        <span class="badge">📖 今週の家族</span>
+        <h1 class="intro-title">家族の一週間を、<wbr />物語で受け取る</h1>
         <p class="intro-lead">
-          自分や、おまかせされた家族の暮らしのようすを、<wbr />えらんだ期間でふりかえれます。<br />
-          グラフで見える化して、ボタンひとつで AI がやさしく言葉にまとめます。
+          毎週日曜の朝、家族のこの一週間が、<wbr />ひとつのやさしい物語になって届きます。<br />
+          そして、これまでの週を<wbr />「思い出」として、自然な言葉でさがせます。
         </p>
-        <p class="intro-pick-note">「活動を見る」と AI まとめは、どのプランでもお使いいただけます。</p>
+        <p class="intro-pick-note">「知る」→ タブ「今週の家族」からひらけます。</p>
       </section>
 
-      <!-- ひらき方（下メニュー →「知る」→ タブ「活動を見る」） -->
+      <!-- ひらき方（下メニュー →「知る」→ タブ「今週の家族」） -->
       <section class="open" aria-labelledby="open-title">
         <h2 class="open-title" id="open-title">ひらき方</h2>
         <ol class="open-steps">
@@ -158,130 +110,97 @@ const filters = [
             </figure>
           </li>
           <li class="open-step">
-            <p class="open-cap"><span class="open-num" aria-hidden="true">2</span>上のタブで<strong>「活動を見る」</strong>をえらぶ</p>
+            <p class="open-cap"><span class="open-num" aria-hidden="true">2</span>上のタブで<strong>「今週の家族」</strong>をえらぶ</p>
             <figure class="open-figure">
               <img
-                src={`${base}/screens/activity-tab.png`}
-                alt="「知る」の上部タブで「活動を見る」が選ばれている様子（今週の家族／活動を見る）"
+                src={`${base}/screens/weekly-tab.png`}
+                alt="「知る」の上部タブで「今週の家族」が選ばれている様子（今週の家族／活動を見る）"
                 loading="lazy"
                 onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
               />
               <figcaption class="open-ph" aria-hidden="true" hidden>
                 <span>🖼 画像差し替え予定</span>
-                <code>screens/activity-tab.png</code>
+                <code>screens/weekly-tab.png</code>
               </figcaption>
             </figure>
           </li>
         </ol>
       </section>
 
-      <!-- ① 分析の条件をえらぶ -->
-      <section class="card cond-card" aria-labelledby="cond-title">
+      <!-- ① 今週の家族（週次AIサマリー） -->
+      <section class="card weekly-card" aria-labelledby="weekly-title">
         <div class="card-head">
-          <span class="card-emoji" aria-hidden="true">🎛</span>
+          <span class="card-emoji" aria-hidden="true">📖</span>
           <div>
-            <h2 class="card-title" id="cond-title">① 分析の条件をえらぶ</h2>
-            <p class="card-role">いつの・誰の活動を見るか</p>
+            <h2 class="card-title" id="weekly-title">① 今週の家族 ― 一週間の物語が届く</h2>
+            <p class="card-role">毎週日曜の朝に、そっと</p>
           </div>
         </div>
-        <div class="cond-body">
-          <div class="cond-block">
-            <h3 class="cond-block-title">対象期間</h3>
-            <p class="cond-block-lead">かんたんボタンか、自由な期間でえらべます。</p>
-            <ul class="cond-chips">
-              {periods.map((p) => (
-                <li class="cond-chip">{p}</li>
+        <div class="setting-body">
+          <div class="shot">
+            <div class="shot-frame">
+              <img
+                src={`${base}/screens/weekly-summary.png`}
+                alt="毎週日曜の朝に届く「今週の家族」。家族の一週間をまとめた物語とお気に入り写真上位3枚が並ぶ画面"
+                loading="lazy"
+                onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
+              />
+              <div class="shot-ph" aria-hidden="true" hidden>
+                <span>📱 スクリーンショット差し替え予定</span>
+                <code>screens/weekly-summary.png</code>
+              </div>
+            </div>
+          </div>
+          <div class="setting-text">
+            <p class="setting-lead">
+              選んだご家族の<strong>一週間のようす</strong>を、AI が<strong>ひとつの物語</strong>にまとめてお届けします。
+            </p>
+            <ul class="setting-points">
+              {weeklyPoints.map((p) => (
+                <li set:html={p} />
               ))}
-              <li class="cond-chip cond-chip-free">期間を指定</li>
             </ul>
           </div>
-          <div class="cond-block">
-            <h3 class="cond-block-title">誰の活動？</h3>
-            <p class="cond-block-lead">
-              自分のほか、<strong>「分析のおまかせ」をONにした家族</strong>をえらべます
-              （サポーターとして見守る場合）。
-            </p>
-            <p class="cond-note">
-              ※ 家族を見守る手順は <a href={SUPPORT_PARENT_URL}>親のサポート方法</a> をご覧ください。
-            </p>
-          </div>
         </div>
       </section>
 
-      <!-- ② 3つのパネルで見える化 -->
-      <section class="section-lead" aria-hidden="true">
-        <h2 class="section-lead-title">② 3つのパネルで、見える化</h2>
-        <p class="section-lead-text">条件をえらぶと、つぎの3つが表示されます。</p>
+      <!-- ② 思い出をさがす の見出し -->
+      <section class="section-lead">
+        <h2 class="section-lead-title">② 思い出をさがす</h2>
+        <p class="section-lead-text">同じ「今週の家族」の画面で、これまでの週を言葉でさがせます。</p>
       </section>
 
-      <div class="cards panels-cards">
-        {panels.map((g) => (
-          <section class="card step-card">
-            <div class="card-head">
-              <span class="card-emoji" aria-hidden="true">{g.emoji}</span>
-              <div>
-                <h2 class="card-title">{g.title}</h2>
-              </div>
-            </div>
-            <div class="setting-body">
-              <div class="shot">
-                <div class="shot-frame">
-                  <img
-                    src={`${base}/screens/${g.shot}`}
-                    alt={g.alt}
-                    loading="lazy"
-                    onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
-                  />
-                  <div class="shot-ph" aria-hidden="true" hidden>
-                    <span>📱 スクリーンショット差し替え予定</span>
-                    <code>screens/{g.shot}</code>
-                  </div>
-                </div>
-              </div>
-              <div class="setting-text">
-                <p class="setting-lead" set:html={g.lead} />
-                <ul class="setting-points">
-                  {g.points.map((p) => (
-                    <li set:html={p} />
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
-        ))}
-      </div>
-
-      <!-- ③ まとめる（AIまとめ） -->
-      <section class="card ai-card" aria-labelledby="ai-title">
+      <!-- ② 思い出をさがす（Discovery） -->
+      <section class="card ai-card" aria-labelledby="discovery-title">
         <div class="card-head">
-          <span class="card-emoji" aria-hidden="true">✨</span>
+          <span class="card-emoji" aria-hidden="true">🔎</span>
           <div>
-            <h2 class="card-title" id="ai-title">③ まとめる ― AI がやさしく言葉に</h2>
-            <p class="card-role">ボタンひとつで、暮らしを読み解く</p>
+            <h2 class="card-title" id="discovery-title">これまでの週を、思い出としてさがす</h2>
+            <p class="card-role">ことばを入れるだけ。気になるときだけ AI に</p>
           </div>
         </div>
         <div class="ai-body">
           <div class="shot ai-shot">
             <div class="shot-frame">
               <img
-                src={`${base}/screens/activity-ai-summary.png`}
-                alt="「✨まとめる」を押すと開く、AI が活動をやさしくまとめて語るダイアログ画面"
+                src={`${base}/screens/weekly-discovery.png`}
+                alt="「思い出をさがす」の検索画面。ことばを入力する欄と「1年前のきょう」「この季節の思い出」のおまかせ発見カードが並ぶ"
                 loading="lazy"
                 onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
               />
               <div class="shot-ph" aria-hidden="true" hidden>
                 <span>📱 スクリーンショット差し替え予定</span>
-                <code>screens/activity-ai-summary.png</code>
+                <code>screens/weekly-discovery.png</code>
               </div>
             </div>
           </div>
           <div class="ai-text">
             <p class="setting-lead">
-              「<strong>✨まとめる</strong>」を押すと、グラフの数字を AI が読み解いて、
-              暮らしのようすを<strong>やさしい言葉</strong>にまとめてくれます。
+              過去にとどいた「今週の家族」の物語を、<strong>自然な言葉</strong>でさがせます。
+              まずは<strong>すばやく</strong>近い週を表示し、気になるときだけ AI がまとめて答えます。
             </p>
             <ol class="ai-flow">
-              {aiFlow.map((f) => (
+              {discoverySteps.map((f) => (
                 <li class="ai-flow-item">
                   <span class="ai-flow-step" aria-hidden="true">{f.step}</span>
                   <div>
@@ -295,56 +214,25 @@ const filters = [
         </div>
       </section>
 
-      <!-- ④ まとめる時の絞り込み（任意） -->
-      <section class="card filter-card" aria-labelledby="filter-title">
-        <div class="card-head">
-          <span class="card-emoji" aria-hidden="true">🧭</span>
-          <div>
-            <h2 class="card-title" id="filter-title">④ まとめる時の絞り込み（任意）</h2>
-            <p class="card-role">気になるところに、しぼってまとめる</p>
-          </div>
-        </div>
-        <p class="filter-lead">
-          「まとめる」前に、見たいところへしぼれます。<br />
-          たとえば「気分が落ちていた日」や「散歩」だけに注目してまとめてもらえます。
-        </p>
-        <div class="filter-grid">
-          {filters.map((f) => (
-            <div class="filter-item">
-              <span class="filter-emoji" aria-hidden="true">{f.emoji}</span>
-              <h3 class="filter-item-title">{f.title}</h3>
-              <ul class="filter-points">
-                {f.points.map((p) => (
-                  <li set:html={p} />
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <p class="filter-note">
-          ※ 絞り込みは <strong>「まとめ（AI）」にだけ</strong>効きます。上のグラフは変わりません。
-        </p>
-      </section>
-
       <section class="notice" aria-labelledby="notice-title">
         <div class="notice-head">
           <span class="notice-emoji" aria-hidden="true">💡</span>
           <h2 class="notice-title" id="notice-title">知っておくと安心なこと</h2>
         </div>
         <ul class="notice-list">
-          <li>家族の活動を見られるのは、<strong>「分析のおまかせ」をONにした方だけ</strong>です。家族のプライバシーは守られます。</li>
-          <li>「活動を見る」と AI まとめは、<strong>どのプランでも</strong>お使いいただけます。</li>
-          <li>おまかせの設定は、<strong>あとからいつでもOFF</strong>にできます。気軽に試してみてください。</li>
+          {notices.map((n) => (
+            <li set:html={n} />
+          ))}
         </ul>
       </section>
 
       <section class="help">
         <h2 class="help-title">関連ページ</h2>
         <p class="help-text">
-          家族を見守る手順や、役割の決め方とあわせてご覧ください。
+          グラフでの見える化や、家族を見守る手順とあわせてご覧ください。
         </p>
         <div class="help-links">
-          <a href={`${base}/weekly-family`} class="help-back">📖 今週の家族（週次まとめ・思い出さがし）を見る</a>
+          <a href={VIEW_ACTIVITY_URL} class="help-back">📈 活動を見る（AIまとめ）を見る</a>
           <a href={SUPPORT_PARENT_URL} class="help-back">🤝 離れた親をサポートする方法を見る</a>
           <a href={FAMILY_ROLES_URL} class="help-back">🗂 役割とできることを見る</a>
           <a href={FIRST_SETTINGS_URL} class="help-back">🌱 設定のととのえ方を見る</a>
@@ -424,13 +312,6 @@ const filters = [
     font-size: var(--fs-body);
     line-height: 1.9;
     color: var(--color-text-muted);
-  }
-
-  .intro-pick {
-    margin-top: var(--space-sm);
-    font-size: var(--fs-body);
-    line-height: 1.8;
-    color: var(--color-text);
   }
 
   .intro-pick-note {
@@ -534,12 +415,6 @@ const filters = [
   }
 
   /* ── カード（共通） ── */
-  .cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
-  }
-
   .card {
     display: flex;
     flex-direction: column;
@@ -551,10 +426,9 @@ const filters = [
     box-shadow: var(--shadow-sm);
   }
 
-  /* 単体カード（条件・AI・絞り込み）はカード間の余白を確保 */
-  .cond-card,
-  .ai-card,
-  .filter-card {
+  /* 単体カードはカード間の余白を確保 */
+  .weekly-card,
+  .ai-card {
     margin-bottom: var(--space-xl);
   }
 
@@ -582,68 +456,7 @@ const filters = [
     color: var(--color-text-muted);
   }
 
-  /* ── ① 分析の条件 ── */
-  .cond-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
-  }
-
-  .cond-block-title {
-    font-size: var(--fs-body);
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: var(--space-xs);
-  }
-
-  .cond-block-lead {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--color-text);
-    margin-bottom: var(--space-md);
-  }
-
-  .cond-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .cond-chip {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-accent-ink);
-    background: var(--color-accent-soft);
-    border: 1px solid var(--color-accent);
-    border-radius: var(--radius-pill);
-  }
-
-  .cond-chip-free {
-    color: var(--color-text-muted);
-    background: #fff;
-    border-color: var(--color-border-subtle);
-    border-style: dashed;
-  }
-
-  .cond-note {
-    margin-top: var(--space-sm);
-    font-size: var(--fs-small);
-    line-height: 1.7;
-    color: var(--color-text-muted);
-  }
-
-  .cond-note :global(a) {
-    color: var(--color-accent-ink);
-    text-decoration: underline;
-  }
-
-  /* ── セクション見出し（パネル群の上） ── */
+  /* ── セクション見出し（思い出をさがすの上） ── */
   .section-lead {
     text-align: center;
     margin-bottom: var(--space-lg);
@@ -659,10 +472,6 @@ const filters = [
     margin-top: var(--space-xs);
     font-size: 15px;
     color: var(--color-text-muted);
-  }
-
-  .panels-cards {
-    margin-bottom: var(--space-xl);
   }
 
   /* ── パネル／設定の中身（スクショ＋説明） ── */
@@ -751,7 +560,7 @@ const filters = [
     color: var(--color-text);
   }
 
-  /* ── ③ AI まとめの流れ ── */
+  /* ── 思い出をさがすの流れ（ai-flow 流用） ── */
   .ai-body {
     display: flex;
     flex-direction: column;
@@ -804,59 +613,6 @@ const filters = [
     font-size: 14px;
     line-height: 1.7;
     color: var(--color-text);
-  }
-
-  /* ── ④ 絞り込み ── */
-  .filter-lead {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--color-text);
-  }
-
-  .filter-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-  }
-
-  .filter-item {
-    padding: var(--space-lg);
-    background: var(--color-accent-soft);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
-  }
-
-  .filter-emoji {
-    font-size: 24px;
-    line-height: 1;
-  }
-
-  .filter-item-title {
-    margin-top: var(--space-xs);
-    font-size: var(--fs-body);
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: var(--space-sm);
-  }
-
-  .filter-points {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    padding-left: 1.2em;
-    list-style: disc;
-  }
-
-  .filter-points li {
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--color-text);
-  }
-
-  .filter-note {
-    font-size: var(--fs-small);
-    line-height: 1.7;
-    color: var(--color-text-muted);
   }
 
   /* ── 知っておくと安心なこと ── */
@@ -956,16 +712,7 @@ const filters = [
       font-size: var(--fs-h1-lg);
     }
 
-    /* 条件の2ブロックを横並びに */
-    .cond-body {
-      flex-direction: row;
-    }
-
-    .cond-block {
-      flex: 1;
-    }
-
-    /* パネルのスクショと説明を横並びに */
+    /* 今週の家族：スクショと説明を横並びに */
     .setting-body {
       flex-direction: row;
       align-items: flex-start;
@@ -976,7 +723,7 @@ const filters = [
       flex: 1;
     }
 
-    /* AI：スクショと流れを横並びに */
+    /* 思い出をさがす：スクショと流れを横並びに */
     .ai-body {
       flex-direction: row;
       align-items: flex-start;
@@ -985,11 +732,6 @@ const filters = [
 
     .ai-text {
       flex: 1;
-    }
-
-    /* 絞り込みの2カードを横並びに */
-    .filter-grid {
-      grid-template-columns: 1fr 1fr;
     }
   }
 </style>
