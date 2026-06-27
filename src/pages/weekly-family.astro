@@ -28,25 +28,21 @@ const weeklyPoints = [
   '<strong>過去12週ぶん</strong>をさかのぼって読み返せます。電波がないときも、前回ひらいた内容を表示します。',
 ];
 
-// ② 思い出をさがす（Discovery）の流れ ― view-activity の ai-flow UI を流用
+// ② 思い出をさがす（Discovery）の使い方 ― ①「今週の家族」と同じカード＋箇条書きでそろえる
 const discoverySteps = [
   {
-    step: '①',
     title: '自然な言葉でさがす',
     text: '「<strong>家族で海に行ったのは？</strong>」「<strong>散歩したのはいつ？</strong>」のように入力すると、内容の近い週の物語カードが<strong>すぐに</strong>出てきます（このときは AI を動かさず、すばやく表示します）。',
   },
   {
-    step: '②',
     title: 'おまかせ発見',
     text: '「<strong>1年前のきょう</strong>」「<strong>この季節の思い出</strong>」を、入力しなくてもそっと提案します。タップするだけで、ふとした思い出にふれられます。',
   },
   {
-    step: '③',
     title: 'お名前でしぼる',
     text: 'ご家族のお名前（例：「<strong>はる子さんが登場するのは？</strong>」）を入れると、その方が出てくる週にしぼってさがせます。',
   },
   {
-    step: '④',
     title: 'まとめて答えてもらう',
     text: '気になるときだけ「<strong>まとめて答えてもらう</strong>」を押すと、AI が質問に沿ってまとめてお答えします。どの週を参照したかも、いっしょに教えてくれます。',
   },
@@ -141,7 +137,7 @@ const notices = [
             <div class="shot-frame">
               <img
                 src={`${base}/screens/weekly-summary.png`}
-                alt="毎週日曜の朝に届く「今週の家族」。家族の一週間をまとめた物語とお気に入り写真上位3枚が並ぶ画面"
+                alt="毎週日曜の朝に届く「今週の家族」。家族の一週間をまとめた物語とお気に入り写真上位3枚が並び、見出しの右に「音声で聞く」ボタンがある画面"
                 loading="lazy"
                 onerror="this.style.display='none'; this.nextElementSibling.hidden=false;"
               />
@@ -160,27 +156,30 @@ const notices = [
                 <li set:html={p} />
               ))}
             </ul>
+            <div class="audio-callout">
+              <span class="audio-callout-icon" aria-hidden="true">🔊</span>
+              <div class="audio-callout-body">
+                <h3 class="audio-callout-title">音声で聞く ― 耳でも受け取れます</h3>
+                <p class="audio-callout-text">
+                  見出しの右の<strong>「音声で聞く」</strong>を押すと、その週の物語を<strong>やさしい声</strong>で読み上げます。物語といっしょに音声も<strong>毎週自動で</strong>用意されるので、<strong>文字を読むのがつらいとき</strong>や<strong>年配のご家族</strong>も、耳でゆっくり受け取れます。もう一度押すと止まります。
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ② 思い出をさがす の見出し -->
-      <section class="section-lead">
-        <h2 class="section-lead-title">② 思い出をさがす</h2>
-        <p class="section-lead-text">同じ「今週の家族」の画面で、これまでの週を言葉でさがせます。</p>
-      </section>
-
-      <!-- ② 思い出をさがす（Discovery） -->
+      <!-- ② 思い出をさがす（Discovery）― ①「今週の家族」と同じカード構成にそろえる -->
       <section class="card ai-card" aria-labelledby="discovery-title">
         <div class="card-head">
           <span class="card-emoji" aria-hidden="true">🔎</span>
           <div>
-            <h2 class="card-title" id="discovery-title">これまでの週を、思い出としてさがす</h2>
+            <h2 class="card-title" id="discovery-title">② 思い出をさがす ― これまでの週を、ことばでたどる</h2>
             <p class="card-role">ことばを入れるだけ。気になるときだけ AI に</p>
           </div>
         </div>
-        <div class="ai-body">
-          <div class="shot ai-shot">
+        <div class="setting-body">
+          <div class="shot">
             <div class="shot-frame">
               <img
                 src={`${base}/screens/weekly-discovery.png`}
@@ -194,22 +193,16 @@ const notices = [
               </div>
             </div>
           </div>
-          <div class="ai-text">
+          <div class="setting-text">
             <p class="setting-lead">
-              過去にとどいた「今週の家族」の物語を、<strong>自然な言葉</strong>でさがせます。
+              同じ「今週の家族」の画面で、過去にとどいた物語を<strong>自然な言葉</strong>でさがせます。
               まずは<strong>すばやく</strong>近い週を表示し、気になるときだけ AI がまとめて答えます。
             </p>
-            <ol class="ai-flow">
+            <ul class="setting-points">
               {discoverySteps.map((f) => (
-                <li class="ai-flow-item">
-                  <span class="ai-flow-step" aria-hidden="true">{f.step}</span>
-                  <div>
-                    <h3 class="ai-flow-title">{f.title}</h3>
-                    <p class="ai-flow-text" set:html={f.text} />
-                  </div>
-                </li>
+                <li set:html={`<strong>${f.title}</strong>：${f.text}`} />
               ))}
-            </ol>
+            </ul>
           </div>
         </div>
       </section>
@@ -456,24 +449,6 @@ const notices = [
     color: var(--color-text-muted);
   }
 
-  /* ── セクション見出し（思い出をさがすの上） ── */
-  .section-lead {
-    text-align: center;
-    margin-bottom: var(--space-lg);
-  }
-
-  .section-lead-title {
-    font-size: var(--fs-h3);
-    font-weight: 700;
-    color: var(--color-text);
-  }
-
-  .section-lead-text {
-    margin-top: var(--space-xs);
-    font-size: 15px;
-    color: var(--color-text-muted);
-  }
-
   /* ── パネル／設定の中身（スクショ＋説明） ── */
   .setting-body {
     display: flex;
@@ -560,58 +535,35 @@ const notices = [
     color: var(--color-text);
   }
 
-  /* ── 思い出をさがすの流れ（ai-flow 流用） ── */
-  .ai-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-lg);
-  }
-
-  .ai-shot {
-    align-self: center;
-  }
-
-  .ai-text {
-    width: 100%;
-  }
-
-  .ai-flow {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .ai-flow-item {
+  /* ── 音声で聞く（年配の方の負担軽減ハイライト） ── */
+  .audio-callout {
     display: flex;
     align-items: flex-start;
     gap: var(--space-md);
-    padding: var(--space-md);
+    margin-top: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
     background: var(--color-accent-soft);
+    border: 1px solid var(--color-border-subtle);
+    border-left: 4px solid var(--color-accent);
     border-radius: var(--radius-md);
   }
 
-  .ai-flow-step {
+  .audio-callout-icon {
     flex-shrink: 0;
-    font-size: var(--fs-h3);
-    font-weight: 700;
-    color: var(--color-accent-ink);
-    line-height: 1.4;
+    font-size: 24px;
+    line-height: 1.5;
   }
 
-  .ai-flow-title {
+  .audio-callout-title {
     font-size: 15px;
     font-weight: 700;
     color: var(--color-text);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
 
-  .ai-flow-text {
+  .audio-callout-text {
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.8;
     color: var(--color-text);
   }
 
@@ -712,7 +664,7 @@ const notices = [
       font-size: var(--fs-h1-lg);
     }
 
-    /* 今週の家族：スクショと説明を横並びに */
+    /* カード本文（①今週の家族・②思い出をさがす 共通）：スクショと説明を横並びに */
     .setting-body {
       flex-direction: row;
       align-items: flex-start;
@@ -720,17 +672,6 @@ const notices = [
     }
 
     .setting-text {
-      flex: 1;
-    }
-
-    /* 思い出をさがす：スクショと流れを横並びに */
-    .ai-body {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: var(--space-2xl);
-    }
-
-    .ai-text {
       flex: 1;
     }
   }
