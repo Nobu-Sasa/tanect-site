@@ -1,0 +1,256 @@
+---
+// ペットのあゆみ — 「ペットの様子」機能の紹介
+// 実装（Tanect2 PetVoiceDialog / GPT-4o Vision）に忠実に、
+// 「写真を撮る → AIがやさしく解説 → 家族で見守る」の流れを訴求する。
+type PetFeature = {
+  emoji: string;
+  title: string;
+  body: string;
+};
+
+const petFeatures: PetFeature[] = [
+  {
+    emoji: '📷',
+    title: '写真を撮るだけ',
+    body: 'シャッターひとつで、その日のペットを記録。「散歩中」「ごはん」などの様子を選ぶだけで、むずかしい操作はいりません。',
+  },
+  {
+    emoji: '✨',
+    title: 'AIがやさしく解説',
+    body: '写真とそのときの状況から、AIがペットの様子をあたたかい言葉で綴ります。読んで、そのまま家族に届けられます。',
+  },
+  {
+    emoji: '👨‍👩‍👧',
+    title: '家族みんなで見守る',
+    body: 'ペットも家族の一員。「みんなの活動」や週のふりかえりに自然に登場し、離れて暮らす家族にも毎日が届きます。',
+  },
+  {
+    emoji: '🌱',
+    title: '誇張しない安心設計',
+    body: 'ペットの健康についてなどは触れません。あくまで「AIによる想像のおしゃべり」として、やさしさを大切にお届けします。',
+  },
+];
+
+// 「写真 → 解説 → 記録」の流れ（3ステップ）
+const steps: { label: string; caption: string }[] = [
+  { label: '1', caption: 'ペットを選んで写真をとる' },
+  { label: '2', caption: '「様子を解説」をタップ' },
+  { label: '3', caption: '整えて、家族へ記録' },
+];
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class="pet" id="pet-stories" aria-labelledby="pet-title">
+  <div class="pet-inner">
+    <header class="pet-head">
+      <span class="badge">🐾 ペットのあゆみ</span>
+      <h2 class="pet-title" id="pet-title">
+        ペットも、家族。<wbr />写真を撮るだけで、そっとつながる。
+      </h2>
+      <p class="pet-lead">
+        離れて暮らす家族へ、実家のペットの毎日を。<br />
+        写真を撮ると、AIがその様子をやさしい言葉で綴ってくれます。
+      </p>
+    </header>
+
+    <div class="pet-body">
+      <figure class="pet-shot">
+        <img
+          class="pet-shot-img"
+          src={`${base}/screens/pet-voice.png`}
+          alt="「ペットの様子」で写真を撮って解説する画面"
+          loading="lazy"
+          decoding="async"
+          width="260"
+        />
+      </figure>
+
+      <ol class="pet-steps">
+        {steps.map((s) => (
+          <li class="pet-step">
+            <span class="pet-step-num" aria-hidden="true">{s.label}</span>
+            <span class="pet-step-caption">{s.caption}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <ul class="pet-grid">
+      {petFeatures.map((f) => (
+        <li class="pet-card">
+          <span class="pet-emoji" aria-hidden="true">{f.emoji}</span>
+          <h3 class="pet-card-title">{f.title}</h3>
+          <p class="pet-card-body">{f.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pet {
+    padding: var(--space-3xl) 0;
+    background: var(--color-bg-soft);
+  }
+
+  .pet-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-md);
+  }
+
+  .pet-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .pet-title {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+    /* 文節の途中で折らず、<wbr> を入れた位置でのみ改行する */
+    word-break: keep-all;
+  }
+
+  .pet-lead {
+    max-width: 640px;
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  /* 画面イメージ + 3ステップ */
+  .pet-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .pet-shot {
+    margin: 0;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .pet-shot-img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    display: block;
+  }
+
+  .pet-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    width: fit-content;
+    max-width: 420px;
+    list-style: none;
+    padding: 0;
+    margin-inline: auto;
+    margin-block: 0;
+  }
+
+  .pet-step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: 15px;
+    color: var(--color-text);
+  }
+
+  .pet-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .pet-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .pet-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-xl);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .pet-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .pet-emoji {
+    font-size: 36px;
+    line-height: 1;
+  }
+
+  .pet-card-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+  }
+
+  .pet-card-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .pet-title {
+      font-size: 36px;
+    }
+
+    .pet-body {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-3xl);
+    }
+
+    .pet-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-xl);
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .pet-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>
