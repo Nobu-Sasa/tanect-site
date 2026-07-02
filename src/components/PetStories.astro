@@ -56,14 +56,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <div class="pet-body">
       <figure class="pet-shot">
-        <img
-          class="pet-shot-img"
-          src={`${base}/screens/pet-voice.png`}
-          alt="「ペットの様子」で写真を撮って解説する画面"
-          loading="lazy"
-          decoding="async"
-          width="260"
-        />
+        <div class="pet-shot-frame">
+          <img
+            class="pet-shot-img"
+            src={`${base}/screens/pet-voice.png`}
+            alt="「ペットの様子」で写真を撮って解説する画面"
+            loading="lazy"
+            decoding="async"
+            width="260"
+          />
+        </div>
       </figure>
 
       <ol class="pet-steps">
@@ -141,11 +143,23 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     max-width: 260px;
   }
 
+  /* ThreeGenerationScenarios の .screenshot-frame と同じスマホはめ込み風フレーム */
+  .pet-shot-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 19;
+    border-radius: 32px;
+    background: linear-gradient(148deg, #1a1a2e 0%, #030213 100%);
+    padding: 12px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
   .pet-shot-img {
     width: 100%;
-    height: auto;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    height: 100%;
+    object-fit: cover;
+    border-radius: 24px;
     display: block;
   }
 
