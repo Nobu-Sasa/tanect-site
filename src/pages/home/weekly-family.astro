@@ -10,15 +10,15 @@
 // 出典（ラベル・挙動）：Tanect2 WeeklySummary.razor / Discovery.razor、release-notes L50。
 // ⚠️ スクショ差し替え：下の screens/weekly-*.png はまだ未配置。
 //    画像が無いあいだは「差し替え予定」プレースホルダが表示される（onerror フォールバック）。
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const HOME_URL = import.meta.env.BASE_URL;
-const FAMILY_SETUP_URL = `${base}/family-setup`;
-const FIRST_SETTINGS_URL = `${base}/first-settings`;
-const FAMILY_ROLES_URL = `${base}/family-roles`;
-const SUPPORT_PARENT_URL = `${base}/support-parent`;
-const VIEW_ACTIVITY_URL = `${base}/view-activity`;
+const HOME_URL = import.meta.env.BASE_URL.replace(/\/$/, '') + '/home/';
+const FAMILY_SETUP_URL = `${base}/home/family-setup`;
+const FIRST_SETTINGS_URL = `${base}/home/first-settings`;
+const FAMILY_ROLES_URL = `${base}/home/family-roles`;
+const SUPPORT_PARENT_URL = `${base}/home/support-parent`;
+const VIEW_ACTIVITY_URL = `${base}/home/view-activity`;
 
 // ① 今週の家族（週次AIサマリー）の説明ポイント
 const weeklyPoints = [

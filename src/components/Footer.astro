@@ -1,50 +1,56 @@
 ---
-// フッター — ロゴ・ナビ・コピーライト
+// 共通フッター — コーポレート・LP（/home/ 配下）の全ページで使用。
+// 法務リンク（会社概要・プライバシーポリシー・お問い合わせ）をここに集約する。
+import TanectMark from './TanectMark.astro';
+
 const year = 2026;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 type NavLink = {
   href: string;
   label: string;
-  external?: boolean;
 };
 
-const navLinks: NavLink[] = [
-  { href: '#use-case', label: '使い方' },
-  { href: '#features', label: '機能' },
-  { href: '#faq', label: 'よくある質問' },
-  { href: '#pricing', label: '料金' },
-  { href: '#monitor', label: '家族モニター募集' },
-  { href: 'https://nobu-sasa.github.io/tanect-privacy/', label: 'プライバシーポリシー', external: true },
+const serviceLinks: NavLink[] = [
+  { href: `${base}/home/`, label: 'Tanect Home（家族をつなぐアプリ）' },
+  { href: `${base}/dev-support`, label: 'システム開発支援' },
+];
+
+const companyLinks: NavLink[] = [
+  { href: `${base}/about`, label: 'タネクトについて' },
+  { href: `${base}/company`, label: '会社概要' },
+  { href: `${base}/privacy`, label: 'プライバシーポリシー' },
+  // 特商法表記（/tokushoho）は住所確定・有料化前に公開したらここへ追加する
+  { href: `${base}/contact`, label: 'お問い合わせ' },
 ];
 ---
 
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <a href={import.meta.env.BASE_URL} class="footer-logo" aria-label="Tanect Home">
-        <img
-          class="footer-logo-mark"
-          src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/app-icon.png`}
-          width="30"
-          height="30"
-          alt=""
-          aria-hidden="true"
-        />
+      <a href={import.meta.env.BASE_URL} class="footer-logo" aria-label="タネクト（Tanect）トップへ">
+        <span class="footer-logo-mark">
+          <TanectMark size={28} />
+        </span>
         <span class="footer-logo-text">Tanect</span>
       </a>
       <p class="footer-tagline">
-        奈良からはじまる、家族のつながり。<br />
-        日々のあゆみを、家族とそっとつなぐアプリ。
+        タネクト = 種 × コネクト。<br />
+        奈良と東京の二拠点から、システム・サービスの開発と開発支援を。
       </p>
     </div>
 
-    <nav class="footer-nav" aria-label="フッターナビゲーション">
-      {navLinks.map((link) => (
-        <a
-          href={link.href}
-          class="footer-link"
-          {...(link.external === true ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-        >{link.label}</a>
+    <nav class="footer-nav" aria-label="サービス">
+      <p class="footer-nav-title">サービス</p>
+      {serviceLinks.map((link) => (
+        <a href={link.href} class="footer-link">{link.label}</a>
+      ))}
+    </nav>
+
+    <nav class="footer-nav" aria-label="運営情報">
+      <p class="footer-nav-title">運営情報</p>
+      {companyLinks.map((link) => (
+        <a href={link.href} class="footer-link">{link.label}</a>
       ))}
     </nav>
   </div>
@@ -79,10 +85,8 @@ const navLinks: NavLink[] = [
   }
 
   .footer-logo-mark {
-    width: 30px;
-    height: 30px;
-    border-radius: 7px;
-    display: block;
+    display: inline-flex;
+    color: #ffffff; /* マーク色は暫定（色は別途相談中） */
   }
 
   .footer-logo-text {
@@ -99,8 +103,16 @@ const navLinks: NavLink[] = [
 
   .footer-nav {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md) var(--space-xl);
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .footer-nav-title {
+    font-size: var(--fs-small);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-xs);
   }
 
   .footer-link {

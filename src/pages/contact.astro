@@ -1,0 +1,39 @@
+---
+// お問い合わせ — 静的サイトのためフォームは置かず、メール（mailto）を主導線にする。
+// 参照: tanect-management/01_strategy/brand_foundation_setup.md §4
+import PageLayout from '../layouts/PageLayout.astro';
+import { FORM_URL, SUPPORT_EMAIL } from '../config';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<PageLayout
+  title="お問い合わせ — タネクト（Tanect）"
+  description="タネクト（Tanect）へのお問い合わせ先のご案内です。Tanect Home のこと、システム開発のご相談など、お気軽にご連絡ください。"
+  pageTitle="お問い合わせ"
+  lead="Tanect Home のこと、システム開発のご相談、その他のご連絡は、下記までお気軽にどうぞ。"
+>
+  <h2>メールでのお問い合わせ</h2>
+  <p>
+    下のボタンを押すと、お使いのメールアプリが開きます。
+    数日以内にお返事しますので、お名前とご用件をお書き添えください。
+  </p>
+  <p>
+    <a href={`mailto:${SUPPORT_EMAIL}`} class="btn btn-primary">メールを送る（{SUPPORT_EMAIL}）</a>
+  </p>
+
+  <h2>Tanect Home をお使いの方</h2>
+  <p>
+    アプリの不具合・ご要望は、アプリ内の「お問い合わせ」（画面右上の人アイコン → お問い合わせ）からが確実です。
+    お使いの端末情報が自動で添えられるため、調査がはやく進みます。
+  </p>
+
+  <h2>家族モニターへのお申し込み</h2>
+  <p>
+    Tanect Home の家族モニター（無料お試し）へのご参加は、専用フォームからお申し込みください。
+  </p>
+  <ul>
+    <li><a href={FORM_URL} target="_blank" rel="noopener noreferrer">家族モニター申し込みフォーム</a></li>
+    <li><a href={`${base}/home/`}>Tanect Home について詳しく見る</a></li>
+  </ul>
+</PageLayout>

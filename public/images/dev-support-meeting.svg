@@ -1,0 +1,67 @@
+<svg viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="お客様と作り手がシステム開発の打ち合わせをし、AIがそれを支えている様子のイラスト">
+  <!-- 背景（ブランドのクリーム） -->
+  <rect width="800" height="520" fill="#FDEEE6"/>
+  <ellipse cx="400" cy="300" rx="330" ry="200" fill="#FFF1E2"/>
+
+  <!-- AIオーブ（中央上・ふたりを支える存在） -->
+  <g>
+    <circle cx="400" cy="140" r="46" fill="#FCA351"/>
+    <circle cx="400" cy="140" r="46" stroke="#ED7232" stroke-width="3"/>
+    <!-- スパークル（AI） -->
+    <path d="M400 112 l9 19 19 9 -19 9 -9 19 -9 -19 -19 -9 19 -9 z" fill="#FFFFFF"/>
+    <circle cx="424" cy="118" r="4" fill="#FFFFFF"/>
+    <circle cx="378" cy="164" r="3" fill="#FFFFFF"/>
+    <!-- まわりの小さな輝き -->
+    <path d="M330 92 l4 9 9 4 -9 4 -4 9 -4 -9 -9 -4 9 -4 z" fill="#ED7232"/>
+    <path d="M474 96 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z" fill="#82B96A"/>
+  </g>
+
+  <!-- AIとふたりをつなぐ点線 -->
+  <path d="M362 168 Q300 200 268 236" stroke="#C9741B" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
+  <path d="M438 168 Q500 200 532 236" stroke="#C9741B" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
+
+  <!-- 左：依頼主（セージグリーン） -->
+  <g>
+    <circle cx="256" cy="268" r="34" fill="#82B96A"/>
+    <path d="M208 386 v-42 q0 -40 48 -40 q48 0 48 40 v42 z" fill="#82B96A"/>
+    <!-- 吹き出し（想像・アイデア） -->
+    <g>
+      <rect x="146" y="176" width="86" height="56" rx="16" fill="#FFFFFF"/>
+      <path d="M206 232 l10 18 4 -18 z" fill="#FFFFFF"/>
+      <circle cx="171" cy="204" r="5" fill="#82B96A"/>
+      <circle cx="189" cy="204" r="5" fill="#82B96A"/>
+      <circle cx="207" cy="204" r="5" fill="#82B96A"/>
+    </g>
+  </g>
+
+  <!-- 右：作り手（テラコッタ） -->
+  <g>
+    <circle cx="544" cy="268" r="34" fill="#ED7232"/>
+    <path d="M496 386 v-42 q0 -40 48 -40 q48 0 48 40 v42 z" fill="#ED7232"/>
+    <!-- 吹き出し（かたちにする） -->
+    <g>
+      <rect x="568" y="176" width="86" height="56" rx="16" fill="#FFFFFF"/>
+      <path d="M594 232 l-10 18 -4 -18 z" fill="#FFFFFF"/>
+      <path d="M590 214 l12 -22 12 10 12 -16" stroke="#ED7232" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- テーブル -->
+  <rect x="170" y="384" width="460" height="22" rx="11" fill="#E8B54A"/>
+  <rect x="206" y="406" width="16" height="72" rx="8" fill="#D9A63C"/>
+  <rect x="578" y="406" width="16" height="72" rx="8" fill="#D9A63C"/>
+
+  <!-- テーブルの上：左＝資料、右＝ノートPC -->
+  <g>
+    <rect x="252" y="352" width="92" height="32" rx="6" fill="#FFFFFF" transform="rotate(-4 298 368)"/>
+    <line x1="268" y1="362" x2="326" y2="358" stroke="#82B96A" stroke-width="4" stroke-linecap="round"/>
+    <line x1="270" y1="372" x2="316" y2="369" stroke="#D9D9D9" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g>
+    <path d="M470 322 h84 q6 0 6 6 v50 h-96 v-50 q0 -6 6 -6 z" fill="#333333"/>
+    <rect x="472" y="330" width="80" height="40" rx="3" fill="#FFF1E2"/>
+    <!-- 画面の中にもAIの気配 -->
+    <path d="M506 338 l5 11 11 5 -11 5 -5 11 -5 -11 -11 -5 11 -5 z" fill="#FCA351"/>
+    <path d="M450 378 h124 l-8 10 h-108 z" fill="#4A4A4A"/>
+  </g>
+</svg>

@@ -9,14 +9,14 @@
 // 出典（ラベル・挙動）：Tanect2 Analysis.razor / AiAnalysis.razor
 // ⚠️ スクショ差し替え：下の screens/activity-*.png はまだ未配置。
 //    画像が無いあいだは「差し替え予定」プレースホルダが表示される（onerror フォールバック）。
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const HOME_URL = import.meta.env.BASE_URL;
-const FAMILY_SETUP_URL = `${base}/family-setup`;
-const FIRST_SETTINGS_URL = `${base}/first-settings`;
-const FAMILY_ROLES_URL = `${base}/family-roles`;
-const SUPPORT_PARENT_URL = `${base}/support-parent`;
+const HOME_URL = import.meta.env.BASE_URL.replace(/\/$/, '') + '/home/';
+const FAMILY_SETUP_URL = `${base}/home/family-setup`;
+const FIRST_SETTINGS_URL = `${base}/home/first-settings`;
+const FAMILY_ROLES_URL = `${base}/home/family-roles`;
+const SUPPORT_PARENT_URL = `${base}/home/support-parent`;
 
 // 対象期間のかんたんボタン（Analysis.razor のプリセット）
 const periods = ['今日', '1週間', '1ヶ月', '3ヶ月'];
@@ -344,7 +344,7 @@ const filters = [
           家族を見守る手順や、役割の決め方とあわせてご覧ください。
         </p>
         <div class="help-links">
-          <a href={`${base}/weekly-family`} class="help-back">📖 今週の家族（週次まとめ・思い出さがし）を見る</a>
+          <a href={`${base}/home/weekly-family`} class="help-back">📖 今週の家族（週次まとめ・思い出さがし）を見る</a>
           <a href={SUPPORT_PARENT_URL} class="help-back">🤝 離れた親をサポートする方法を見る</a>
           <a href={FAMILY_ROLES_URL} class="help-back">🗂 役割とできることを見る</a>
           <a href={FIRST_SETTINGS_URL} class="help-back">🌱 設定のととのえ方を見る</a>

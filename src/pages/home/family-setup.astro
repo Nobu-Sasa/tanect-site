@@ -11,14 +11,14 @@
 //
 // ⚠️ スクショ差し替え：下の screens/setup-*.png はまだ未配置。
 //    画像が無いあいだは「差し替え予定」プレースホルダが表示される（onerror フォールバック）。
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const HOME_URL = import.meta.env.BASE_URL;
-const INSTALL_URL = `${base}/install`;
-const FIRST_SETTINGS_URL = `${base}/first-settings`;
-const RELEASE_NOTES_URL = `${base}/release-notes`;
-const FAMILY_ROLES_URL = `${base}/family-roles`;
+const HOME_URL = import.meta.env.BASE_URL.replace(/\/$/, '') + '/home/';
+const INSTALL_URL = `${base}/home/install`;
+const FIRST_SETTINGS_URL = `${base}/home/first-settings`;
+const RELEASE_NOTES_URL = `${base}/home/release-notes`;
+const FAMILY_ROLES_URL = `${base}/home/family-roles`;
 
 // まとめ役（家族をはじめる人）の手順
 const adminSteps = [

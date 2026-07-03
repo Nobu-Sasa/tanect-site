@@ -1,0 +1,135 @@
+---
+// コーポレート系の1カラム文章ページ用レイアウト（About・会社概要・法務ページ等）。
+// CorporateHeader + 見出し + 本文スロット + 共通 Footer。
+import BaseLayout from './BaseLayout.astro';
+import CorporateHeader from '../components/CorporateHeader.astro';
+import Footer from '../components/Footer.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  pageTitle: string;
+  lead?: string;
+  noindex?: boolean;
+}
+
+const { title, description, pageTitle, lead, noindex } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} noindex={noindex}>
+  <CorporateHeader />
+  <main class="page">
+    <div class="page-inner">
+      <header class="page-header">
+        <h1 class="page-title">{pageTitle}</h1>
+        {lead && <p class="page-lead" set:html={lead} />}
+      </header>
+      <div class="prose">
+        <slot />
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .page {
+    padding: var(--space-2xl) var(--space-md) var(--space-3xl);
+  }
+
+  .page-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+
+  .page-header {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .page-title {
+    font-size: var(--fs-h1);
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .page-lead {
+    font-size: var(--fs-body);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  /* 本文（slot内）の文章スタイル — Markdown 由来の見出し・表・リストを整える */
+  .prose :global(h2) {
+    font-size: var(--fs-h2);
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+    margin: var(--space-2xl) 0 var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .prose :global(h3) {
+    font-size: var(--fs-h3);
+    color: var(--color-text);
+    margin: var(--space-xl) 0 var(--space-sm);
+  }
+
+  .prose :global(p) {
+    font-size: var(--fs-body);
+    line-height: 1.9;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 var(--space-md) var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .prose :global(li) {
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-lg);
+    /* --fs-small(12.25px) だと読みづらいため本文寄りのサイズに（レビュー修正⑧） */
+    font-size: var(--fs-button);
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    border: 1px solid var(--color-border);
+    padding: var(--space-sm) var(--space-md);
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.7;
+  }
+
+  .prose :global(th) {
+    background: var(--color-bg-soft);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .prose :global(a) {
+    color: var(--color-accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose :global(a:hover) {
+    color: var(--color-accent-hover);
+  }
+
+  .prose :global(strong) {
+    font-weight: 700;
+  }
+</style>

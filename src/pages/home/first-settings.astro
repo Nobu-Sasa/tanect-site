@@ -10,14 +10,14 @@
 //
 // ⚠️ スクショ差し替え：下の screens/settings-*.png はまだ未配置。
 //    画像が無いあいだは「差し替え予定」プレースホルダが表示される（onerror フォールバック）。
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const HOME_URL = import.meta.env.BASE_URL;
-const INSTALL_URL = `${base}/install`;
-const FAMILY_SETUP_URL = `${base}/family-setup`;
-const SUPPORT_PARENT_URL = `${base}/support-parent`;
-const RELEASE_NOTES_URL = `${base}/release-notes`;
+const HOME_URL = import.meta.env.BASE_URL.replace(/\/$/, '') + '/home/';
+const INSTALL_URL = `${base}/home/install`;
+const FAMILY_SETUP_URL = `${base}/home/family-setup`;
+const SUPPORT_PARENT_URL = `${base}/home/support-parent`;
+const RELEASE_NOTES_URL = `${base}/home/release-notes`;
 
 // お好みに合わせて整える設定（カード）
 const settingGroups = [

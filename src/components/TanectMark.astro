@@ -1,0 +1,38 @@
+---
+// タネクト コーポレートマーク — nobu さん支給の SVG 原本（public/images/tanect-mark.svg・2026-07-02）をそのまま使用。
+// 変更点は stroke: black → currentColor のみ（置く場所の CSS の color で色を変えられる）。形状は原本に手を加えない。
+// Tanect Home（双葉 app-icon.png）とは使い分ける: コーポレート系ページ＝このマーク、LP/ガイド＝双葉。
+export interface Props {
+  size?: number;
+}
+
+const { size = 32 } = Astro.props;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 1024 1024"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <path
+    d="M884.95 551.2C877.72 619.979 851.61 685.419 809.509 740.284C767.407 795.15 710.954 837.305 646.389 862.088C581.825 886.871 511.664 893.318 443.665 880.714C375.665 868.111 312.475 836.949 261.081 790.673C209.687 744.398 172.091 684.812 152.448 618.502C132.806 552.192 131.883 481.742 149.782 414.941C167.68 348.14 203.703 287.589 253.868 239.983C304.032 192.377 366.384 159.571 434.03 145.19"
+    stroke="currentColor"
+    stroke-width="70"
+    stroke-linecap="round"
+  />
+  <path
+    d="M589.97 145.19C654.359 158.877 714.01 189.271 762.929 233.319C811.847 277.366 848.309 333.515 868.65 396.12"
+    stroke="currentColor"
+    stroke-width="70"
+    stroke-linecap="round"
+  />
+  <path
+    d="M512 512L739.5 259.33"
+    stroke="currentColor"
+    stroke-width="70"
+    stroke-linecap="round"
+  />
+</svg>

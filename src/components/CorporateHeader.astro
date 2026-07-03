@@ -1,37 +1,35 @@
 ---
-// Tanect Home Header（LP用） — Navigation bar
-import IconHome from './icons/IconHome.astro';
+// タネクト コーポレートヘッダー — コーポレートトップ・About・法務ページ等で使用。
+// LP（/home/ 配下）は従来の Header.astro（モニターCTA付き）を使う。
+import TanectMark from './TanectMark.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const navLinks = [
+  { href: `${base}/home/`, label: 'Tanect Home' },
+  { href: `${base}/dev-support`, label: '開発支援' },
+  { href: `${base}/about`, label: 'タネクトについて' },
+  { href: `${base}/company`, label: '会社概要' },
+];
 ---
 
 <header class="header">
   <div class="header-inner">
-    <a href={`${base}/home/`} class="logo" aria-label="Tanect Home">
-      <img
-        class="logo-mark"
-        src={`${base}/images/app-icon.png`}
-        width="32"
-        height="32"
-        alt=""
-        aria-hidden="true"
-      />
-      <span class="logo-text">Tanect<span class="logo-home"> Home</span></span>
+    <a href={import.meta.env.BASE_URL} class="logo" aria-label="タネクト（Tanect）トップへ">
+      <span class="logo-mark">
+        <TanectMark size={30} />
+      </span>
+      <span class="logo-text">Tanect</span>
     </a>
 
     <nav id="site-nav" class="nav" aria-label="メインナビゲーション">
-      <a href="#use-case" class="nav-link">使い方</a>
-      <a href="#features" class="nav-link">機能</a>
-      <a href="#faq" class="nav-link">よくある質問</a>
-      <a href="#pricing" class="nav-link">料金</a>
-      <a href={import.meta.env.BASE_URL} class="nav-link">運営：タネクト</a>
+      {navLinks.map((link) => (
+        <a href={link.href} class="nav-link">{link.label}</a>
+      ))}
     </nav>
 
     <div class="header-actions">
-      <a href="#monitor" class="btn btn-accent btn-sm" data-track-event="monitor_cta_click" data-cta-location="header">
-        <IconHome size={16} />
-        家族モニターに参加
-      </a>
+      <a href={`${base}/contact`} class="btn btn-primary btn-sm">お問い合わせ</a>
 
       <button
         type="button"
@@ -108,10 +106,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   .logo-mark {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: block;
+    display: inline-flex;
+    color: var(--color-primary); /* マーク色は暫定（色は別途相談中） */
   }
 
   .logo-text {

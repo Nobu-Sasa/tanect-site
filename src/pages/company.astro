@@ -1,0 +1,68 @@
+---
+// 会社概要（運営者情報）
+// ⚠️ 所在地は事業所住所の確定待ち（百田さん相談ルート）。確定したら下の表に「所在地」行を追加し、
+//    /privacy/ の事業者情報・特商法表記（/tokushoho/）とあわせて一括更新する。
+//    参照: tanect-management/01_strategy/brand_foundation_setup.md §5「一括更新リスト」
+import PageLayout from '../layouts/PageLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<PageLayout
+  title="会社概要 — タネクト（Tanect）"
+  description="タネクト（Tanect）の運営者情報です。屋号・代表者・事業内容・連絡先をご案内します。"
+  pageTitle="会社概要"
+>
+  <table>
+    <tbody>
+      <tr>
+        <th>屋号</th>
+        <td>タネクト（Tanect）</td>
+      </tr>
+      <tr>
+        <th>代表者</th>
+        <td>
+          笹部 敦之<br />
+          Microsoft Certified: Azure AI Engineer Associate 保有
+        </td>
+      </tr>
+      <tr>
+        <th>開業</th>
+        <td>2026年7月</td>
+      </tr>
+      <tr>
+        <th>拠点</th>
+        <td>奈良と東京の二拠点</td>
+      </tr>
+      <tr>
+        <th>事業内容</th>
+        <td>
+          システム・サービスの開発・提供<br />
+          （自社アプリ「Tanect Home」の開発・運営／事業者さま向けのシステム開発支援・AI導入支援）
+        </td>
+      </tr>
+      <tr>
+        <th>連絡先</th>
+        {/* Astro コンパイラは <table> 内の式展開を外へ吹き飛ばす（後続要素がリンクに巻き込まれる）ため、ここだけ静的に書く */}
+        <td><a href="mailto:support@tanect.jp">support@tanect.jp</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>ビジョン</h2>
+  <p>
+    変わらないものを大切にしながら、変わるものを最大限に生かす。<br />
+    小さな種から始めて、みんなで繋がり合いながら、<br />
+    世の中に貢献していく。
+  </p>
+  <p>
+    ビジョンに込めた想いや屋号の由来は
+    <a href={`${base}/about`}>タネクトについて</a> をご覧ください。
+  </p>
+
+  <h2>関連ページ</h2>
+  <ul>
+    <li><a href={`${base}/privacy`}>プライバシーポリシー</a></li>
+    <li><a href={`${base}/contact`}>お問い合わせ</a></li>
+  </ul>
+</PageLayout>

@@ -1,5 +1,7 @@
 ---
 // よくある質問 — <details> ベースのアコーディオン
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 type Qa = {
   q: string;
   a: string;
@@ -34,7 +36,7 @@ const faqs: Qa[] = [
   {
     q: '家族の情報はどう扱われますか？',
     a: '記録した内容は、招待した家族の中だけで共有されます。大切な毎日の記録だからこそ、取り扱いには十分配慮して運用しています。詳しくは参加時のご案内でお伝えします。',
-    link: { href: 'https://nobu-sasa.github.io/tanect-privacy/', label: '詳しくはプライバシーポリシーをご覧ください' },
+    link: { href: `${base}/privacy`, label: '詳しくはプライバシーポリシーをご覧ください' },
   },
 ];
 ---

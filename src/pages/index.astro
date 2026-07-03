@@ -1,0 +1,360 @@
+---
+// タネクト コーポレートトップ — 2本柱（Tanect Home / システム開発支援）の入口。
+// Tanect Home のLPは /home/ 配下（src/pages/home/index.astro）。
+// 構成: Hero → 事業内容 → タネクトが大切にしたいこと → お問い合わせ（代表紹介は /company/ で触れる程度に）
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CorporateHeader from '../components/CorporateHeader.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout
+  title="タネクト（Tanect）— システム・サービスの開発と開発支援"
+  description="タネクト（Tanect）は奈良と東京の二拠点で活動する開発事業者です。家族をつなぐアプリ「Tanect Home」の開発・提供と、事業者さま向けのシステム開発支援を行っています。"
+>
+  <CorporateHeader />
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="hero-badge">🌱 タネクト = 種 × コネクト</span>
+        <h1 class="hero-title">
+          システム・サービスの<br class="br-sp" />開発と開発支援
+        </h1>
+        <p class="hero-lead">
+          タネクトは、奈良と東京の二拠点で活動する開発事業者です。<br />
+          自社アプリ「Tanect Home」の開発・提供と、<br class="br-pc" />
+          事業者さまのシステム開発のご支援を行っています。
+        </p>
+      </div>
+    </section>
+
+    <!-- 2本柱 -->
+    <section class="pillars" aria-labelledby="pillars-title">
+      <div class="pillars-inner">
+        <h2 class="section-title" id="pillars-title">事業内容</h2>
+        <div class="pillar-grid">
+          <!-- 柱①: Tanect Home -->
+          <a href={`${base}/home/`} class="pillar-card">
+            <div class="pillar-media">
+              <div class="phone-frame">
+                <img
+                  src={`${base}/screens/child-family-activity.png`}
+                  alt="Tanect Home の家族の活動画面"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div class="pillar-body">
+              <span class="pillar-badge pillar-badge-accent">家族モニター実施中</span>
+              <h3 class="pillar-title">Tanect Home</h3>
+              <p class="pillar-desc">
+                離れて暮らす家族の、気配を届けるアプリ。<br />
+                見守りではなく、共感。管理ではなく、つながり。<br />
+                日々のあゆみを、家族とそっと共有できます。
+              </p>
+              <span class="pillar-link">Tanect Home を見る →</span>
+            </div>
+          </a>
+
+          <!-- 柱②: システム開発支援 -->
+          <a href={`${base}/dev-support`} class="pillar-card">
+            <div class="pillar-media pillar-media-illust">
+              <img
+                src={`${base}/images/dev-support-meeting.svg`}
+                alt="お客様と作り手がシステム開発の打ち合わせをし、AIがそれを支えている様子"
+                loading="lazy"
+              />
+            </div>
+            <div class="pillar-body">
+              <span class="pillar-badge">ご相談受付中</span>
+              <h3 class="pillar-title">システム開発支援</h3>
+              <p class="pillar-desc">
+                システムの導入や改善をお考えの事業者さま向けに、<br class="br-pc" />
+                企画から実装・運用までご支援します。<br />
+                AIを活用した機能のご提案・実装も得意としています。
+              </p>
+              <span class="pillar-link">開発支援について →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- タネクトが大切にしたいこと -->
+    <section class="vision" aria-labelledby="vision-title">
+      <div class="vision-inner">
+        <h2 class="section-title" id="vision-title">タネクトが大切にしたいこと</h2>
+        <blockquote class="vision-quote">
+          変わらないものを大切にしながら、<br class="br-sp" />変わるものを最大限に生かす。<br />
+          小さな種から始めて、みんなで繋がり合いながら、<br />
+          世の中に貢献していく。
+        </blockquote>
+        <p class="vision-note">
+          屋号のタネクトは「種 × コネクト」。両親からもらった種から芽吹いた双葉が、私たちのシンボルです。
+        </p>
+        <a href={`${base}/about`} class="btn btn-secondary">タネクトの想いを読む</a>
+      </div>
+    </section>
+
+    <!-- お問い合わせ CTA -->
+    <section class="contact-cta" aria-labelledby="contact-title">
+      <div class="contact-inner">
+        <h2 class="section-title" id="contact-title">お問い合わせ</h2>
+        <p class="contact-lead">
+          Tanect Home のこと、システム開発のご相談、その他のご連絡はお気軽にどうぞ。
+        </p>
+        <a href={`${base}/contact`} class="btn btn-primary">お問い合わせページへ</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .section-title {
+    font-size: var(--fs-h2);
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: var(--space-3xl) var(--space-md);
+    text-align: center;
+  }
+
+  .hero-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  /* 汎用 .badge（10.5px）だと小さすぎるため、Hero専用にひと回り大きく */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-soft);
+    color: var(--color-accent-ink);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-title {
+    font-size: var(--fs-h1);
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+
+  .hero-lead {
+    font-size: var(--fs-body);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  /* ── 2本柱 ── */
+  .pillars {
+    padding: var(--space-2xl) var(--space-md) var(--space-3xl);
+    background: var(--color-bg-soft);
+  }
+
+  .pillars-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
+  .pillar-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .pillar-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .pillar-media {
+    background: var(--color-accent-soft);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 240px;
+    overflow: hidden;
+    padding-top: var(--space-lg);
+  }
+
+  /* スマホのベゼル — LP（ThreeGenerationScenarios の .screenshot-frame）と同じ意匠 */
+  .phone-frame {
+    width: 180px;
+    aspect-ratio: 9 / 19;
+    border-radius: 32px;
+    background: linear-gradient(148deg, #1a1a2e 0%, #030213 100%);
+    padding: 10px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .phone-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 22px;
+    display: block;
+  }
+
+  .pillar-media-illust {
+    padding-top: 0;
+    align-items: stretch;
+  }
+
+  .pillar-media-illust img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .pillar-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+  }
+
+  .pillar-badge {
+    font-size: var(--fs-badge);
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--color-badge-bg);
+    color: var(--color-text-muted);
+  }
+
+  .pillar-badge-accent {
+    background: var(--color-accent-soft);
+    color: var(--color-accent-ink);
+  }
+
+  .pillar-title {
+    font-size: var(--fs-h3);
+    color: var(--color-text);
+  }
+
+  .pillar-desc {
+    font-size: var(--fs-small);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  .pillar-link {
+    margin-top: var(--space-sm);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-accent-ink);
+  }
+
+  /* ── タネクトが大切にしたいこと ── */
+  .vision {
+    padding: var(--space-3xl) var(--space-md);
+    text-align: center;
+  }
+
+  .vision-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .vision-quote {
+    font-size: var(--fs-h3);
+    line-height: 2;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .vision-note {
+    font-size: var(--fs-small);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  /* ── お問い合わせ ── */
+  .contact-cta {
+    padding: var(--space-2xl) var(--space-md) var(--space-3xl);
+    background: var(--color-bg-soft);
+    text-align: center;
+  }
+
+  .contact-inner {
+    max-width: var(--content-max);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .contact-lead {
+    font-size: var(--fs-body);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  /* ── レスポンシブ ── */
+  .br-pc {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: var(--fs-h1-lg);
+    }
+
+    .br-sp {
+      display: none;
+    }
+
+    .br-pc {
+      display: inline;
+    }
+
+    .pillar-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
