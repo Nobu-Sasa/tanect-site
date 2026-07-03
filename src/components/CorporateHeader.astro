@@ -19,7 +19,10 @@ const navLinks = [
       <span class="logo-mark">
         <TanectMark size={30} />
       </span>
-      <span class="logo-text">Tanect</span>
+      <span class="logo-text">
+        Tanect
+        <span class="logo-kana">− タネクト −</span>
+      </span>
     </a>
 
     <nav id="site-nav" class="nav" aria-label="メインナビゲーション">
@@ -111,9 +114,23 @@ const navLinks = [
   }
 
   .logo-text {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
     font-size: 20px;
+    line-height: 1.1;
     color: var(--color-primary);
     letter-spacing: -0.01em;
+  }
+
+  /* 名刺と同じく、Tanect の下にカタカナ読みを添える */
+  .logo-kana {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    /* letter-spacing は末尾にも付くため、左に少しずらして視覚的に中央へ */
+    margin-right: -0.28em;
+    color: var(--color-primary);
   }
 
   .nav {

@@ -3,6 +3,8 @@
 // 理念の正文: 2026-07-02 nobu さん提供（レビュー修正⑥）。物語の正本: tanect-management/02_marketing/brand_story.md（長文版）
 // 代表プロフィールは載せない（会社概要で触れる程度に）。
 import PageLayout from '../layouts/PageLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <PageLayout
@@ -46,6 +48,16 @@ import PageLayout from '../layouts/PageLayout.astro';
   </p>
 
   <h2>屋号の由来と、Tanect Home の物語</h2>
+  <figure class="story-icon">
+    <img
+      src={`${base}/images/app-icon.png`}
+      width="96"
+      height="96"
+      alt="Tanect Home のアイコン。種から芽吹いた双葉の下に、寄り添う家族のシルエット"
+      loading="lazy"
+    />
+    <figcaption>Tanect Home のアイコン — 種から芽吹く双葉（ふたば）</figcaption>
+  </figure>
   <p>
     タネクトという屋号は、両親からもらった種から始まりました。<br />
     父から受け継いだ価値観、母から教わったやさしさ。<br />
@@ -95,3 +107,23 @@ import PageLayout from '../layouts/PageLayout.astro';
     それが、Tanect Home。
   </p>
 </PageLayout>
+
+<style>
+  .story-icon {
+    margin: var(--space-lg) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .story-icon img {
+    border-radius: 22px;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+  }
+
+  .story-icon figcaption {
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+</style>
