@@ -1,8 +1,10 @@
 ---
-// プライバシーポリシー — 正本: tanect-management/output/privacy_policy_draft.md（2026-04-17版）
+// プライバシーポリシー — 正本: tanect-management/output/privacy_policy_draft.md（2026-07-08版）
 // これまで別リポジトリ（nobu-sasa.github.io/tanect-privacy/）で公開していた内容をこのサイトへ統合。
 // 所在地・電話番号は確定済み（2026-07-08）。下の事業者情報に反映済み。
-// ⚠️ 内容を変更したら「最終更新日」も更新し、正本（privacy_policy_draft.md）と同期させること。
+// ⚠️ 内容を変更したら「最終更新日」も更新し、正本（privacy_policy_draft.md）および
+//    アプリ同梱版（Tanect2/src/Tanect2.UI/Components/PrivacyPolicyContent.razor +
+//    LegalDocumentVersions.PrivacyPolicy）と文面・版を同期させること。
 import PageLayout from '../layouts/PageLayout.astro';
 ---
 
@@ -10,7 +12,7 @@ import PageLayout from '../layouts/PageLayout.astro';
   title="プライバシーポリシー — タネクト（Tanect）"
   description="タネクト（Tanect）が提供するアプリ「Tanect Home」における個人情報の取り扱いについて定めたプライバシーポリシーです。"
   pageTitle="プライバシーポリシー"
-  lead="<strong>最終更新日：2026年7月9日</strong><br />タネクト（以下「当社」）は、提供するアプリケーション「Tanect Home」（以下「本アプリ」）における利用者の個人情報の取り扱いについて、以下のとおりプライバシーポリシーを定めます。"
+  lead="<strong>最終更新日：2026年7月8日</strong><br />タネクト（以下「当社」）は、提供するアプリケーション「Tanect Home」（以下「本アプリ」）における利用者の個人情報の取り扱いについて、以下のとおりプライバシーポリシーを定めます。"
 >
   <h2>1. 事業者情報</h2>
   <table>
@@ -45,14 +47,14 @@ import PageLayout from '../layouts/PageLayout.astro';
 
   <h2>3. 情報の利用目的</h2>
   <p>収集した情報は以下の目的にのみ使用します。</p>
-  <ol>
+  <ul>
     <li>本アプリのサービス提供（活動記録・家族間共有機能）</li>
     <li>プッシュ通知の送信</li>
     <li>天気情報の取得・表示</li>
     <li>お問い合わせへの対応</li>
     <li>サービスの改善・不具合の調査</li>
     <li>法令に基づく対応</li>
-  </ol>
+  </ul>
 
   <h2>4. 第三者提供</h2>
   <p>当社は、以下の場合を除き、利用者の個人情報を第三者に提供しません。</p>
@@ -69,6 +71,7 @@ import PageLayout from '../layouts/PageLayout.astro';
     </thead>
     <tbody>
       <tr><td>Microsoft Azure</td><td>サーバー・データベース・ファイルストレージ</td><td>Microsoft Corporation</td></tr>
+      <tr><td>Microsoft Azure OpenAI Service / Azure AI</td><td>音声の文字起こし、活動記録の要約・分析、読み上げ音声の生成（AI機能）</td><td>Microsoft Corporation</td></tr>
       <tr><td>Apple Push Notification Service（APNs）</td><td>iOS プッシュ通知</td><td>Apple Inc.</td></tr>
       <tr><td>Visual Crossing Weather API</td><td>天気情報取得</td><td>Visual Crossing Corporation</td></tr>
     </tbody>
@@ -76,7 +79,14 @@ import PageLayout from '../layouts/PageLayout.astro';
   <p>各サービスのプライバシーポリシーについては、各社の公式サイトをご参照ください。</p>
 
   <h2>6. データの保存場所</h2>
-  <p>利用者のデータは、Microsoft Azure（日本リージョン）のサーバーに保存されます。</p>
+  <p>利用者のデータは、原則として Microsoft Azure の日本リージョン（東日本）のサーバーに保存されます。ただし、AI 機能の一部については、以下のとおり日本国外の Azure リージョンで処理される場合があります。</p>
+  <ul>
+    <li><strong>音声の文字起こし</strong>：録音した音声データは、利用可能な AI モデルの都合により、Microsoft Azure の米国リージョン（East US 2）で処理・保存されます。</li>
+    <li><strong>活動記録の要約・分析等の AI 機能</strong>：処理の一部が Microsoft Azure の日本国外のデータセンターで行われる場合があります。処理後のデータの保管は日本リージョンで行われます。</li>
+  </ul>
+  <p>これらの AI 処理は Microsoft の Azure OpenAI Service 上で行われ、利用者のデータが AI モデルの学習に使用されることはありません。</p>
+  <h3>端末内への保存</h3>
+  <p>本アプリは、通信環境がない場所でもご利用いただけるよう、ご自身および家族グループの活動記録等の一部を、お使いの端末内にも保存します。端末内のデータは本アプリ専用の保存領域に保存され、他のアプリからアクセスできない仕組み（iOS / Android の標準的な保護機能）で管理されます。端末の画面ロック（パスコード等）を設定いただくと、端末の紛失・盗難時の保護がさらに高まります。</p>
 
   <h2>7. データの保存期間</h2>
   <ul>
@@ -129,7 +139,9 @@ import PageLayout from '../layouts/PageLayout.astro';
   <h3>データの取り扱い方針</h3>
   <ul>
     <li>収集したデータはサービス提供に必要な範囲のみに使用します</li>
-    <li>データは暗号化して転送・保存されます</li>
+    <li>データの送受信は、すべて暗号化された通信（TLS）で保護されます</li>
+    <li>サーバー（Microsoft Azure）に保存されるデータは、Azure の標準暗号化機能により暗号化して保存されます</li>
+    <li>端末内に保存されるデータは、本アプリ専用の保存領域で管理され、他のアプリからアクセスできないよう OS（iOS / Android）の標準機能で保護されます</li>
     <li>利用者はデータの削除を申請できます（退会機能またはお問い合わせ）</li>
     <li>第三者へのデータ販売は行いません</li>
   </ul>
