@@ -6,7 +6,7 @@ import TanectMark from './TanectMark.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const navLinks = [
-  { href: `${base}/home/`, label: 'Tanect Home' },
+  { href: `${base}/home/`, label: 'アプリ：Tanect Home' },
   { href: `${base}/dev-support`, label: '開発支援' },
   { href: `${base}/about`, label: 'タネクトについて' },
   { href: `${base}/company`, label: '会社概要' },
@@ -15,7 +15,7 @@ const navLinks = [
 
 <header class="header">
   <div class="header-inner">
-    <a href={import.meta.env.BASE_URL} class="logo" aria-label="タネクト（Tanect）トップへ">
+    <a href={import.meta.env.BASE_URL} class="logo" aria-label="Tanect（タネクト）トップへ">
       <span class="logo-mark">
         <TanectMark size={30} />
       </span>
