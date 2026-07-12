@@ -1,5 +1,6 @@
 ---
-// タネクト コーポレートトップ — 2本柱（Tanect Home / システム開発支援）の入口。
+// タネクト コーポレートトップ — 2本柱（Tanect Home / Tanect Develop）の入口。
+// 「Tanect Develop」＝システム開発支援サービスの正式名称（2026-07-12 採用・名刺と同時展開）。
 // Tanect Home のLPは /home/ 配下（src/pages/home/index.astro）。
 // 構成: Hero → 事業内容 → タネクトが大切にしたいこと → お問い合わせ（代表紹介は /company/ で触れる程度に）
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -11,7 +12,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <BaseLayout
   title="Tanect（タネクト）— システム・サービスの開発と開発支援"
-  description="Tanect（タネクト）は奈良と東京の二拠点で活動する開発事業者です。家族をつなぐアプリ「Tanect Home」の開発・提供と、事業者さま向けのシステム開発支援を行っています。"
+  description="Tanect（タネクト）は奈良と東京の二拠点で活動する開発事業者です。家族をつなぐアプリ「Tanect Home」の開発・提供と、事業者さま向けのシステム開発支援「Tanect Develop」を行っています。"
 >
   <CorporateHeader />
   <main>
@@ -58,7 +59,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             </div>
           </a>
 
-          <!-- 柱②: システム開発支援 -->
+          <!-- 柱②: Tanect Develop（システム開発支援） -->
           <a href={`${base}/dev-support`} class="pillar-card">
             <div class="pillar-media pillar-media-illust">
               <img
@@ -69,9 +70,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             </div>
             <div class="pillar-body">
               <span class="pillar-badge">ご相談受付中</span>
-              <h3 class="pillar-title">システム開発支援</h3>
+              <h3 class="pillar-title">Tanect Develop</h3>
               <p class="pillar-desc">
-                システムの導入や改善をお考えの事業者さま向けに、<br class="br-pc" />
+                事業者さま向けの、システム開発支援サービス。<br />
                 企画から実装・運用までご支援します。<br />
                 AIを活用した機能のご提案・実装も得意としています。
               </p>
