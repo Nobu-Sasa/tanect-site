@@ -12,6 +12,7 @@
 // ⚠️ スクショ差し替え：下の screens/setup-*.png はまだ未配置。
 //    画像が無いあいだは「差し替え予定」プレースホルダが表示される（onerror フォールバック）。
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SUPPORT_EMAIL } from '../../config';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const HOME_URL = import.meta.env.BASE_URL.replace(/\/$/, '') + '/home/';
@@ -226,8 +227,11 @@ const joinSteps = [
         <h2 class="help-title">困ったときは</h2>
         <p class="help-text">
           途中で止まってしまっても、まったく問題ありません。<br />
-          画面の写真を撮って、この案内をお送りしたメール（または LINE）に返信していただければ、こちらで一緒に確認します。<br />
+          画面の写真を撮って、メールでお送りいただければ、こちらで一緒に確認します。<br />
           インストール後は、アプリ内の画面右上の人アイコン →「お問い合わせ」からもご連絡いただけます。
+        </p>
+        <p class="help-mail">
+          <a href={`mailto:${SUPPORT_EMAIL}`} class="btn btn-primary">メールを送る（{SUPPORT_EMAIL}）</a>
         </p>
         <div class="help-links">
           <a href={FIRST_SETTINGS_URL} class="help-back">⚙️ つながったあとの設定のととのえ方を見る</a>
@@ -597,6 +601,15 @@ const joinSteps = [
     font-size: 15px;
     line-height: 1.9;
     color: var(--color-text-muted);
+  }
+
+  .help-mail {
+    margin-top: var(--space-lg);
+  }
+
+  .help-mail .btn {
+    width: 100%;
+    max-width: 360px;
   }
 
   .help-links {

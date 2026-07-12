@@ -1,18 +1,9 @@
 ---
 // 家族モニター募集 — Tanect Home の家族モニター参加を呼びかける最終CTAセクション
-import IconHome from './icons/IconHome.astro';
-import { FORM_URL } from '../config';
-
+// 申し込みフォームは廃止（同意はアプリ登録時に移設）。インストール案内がメイン導線。
 // 内部リンクは base 付きで組み立てる（他ページと同じパターン）
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const INSTALL_URL = `${base}/home/install`;
-
-// シンプルな募集ポイント（条件は最小限）
-const points = [
-  { emoji: '🆓', text: '家族モニター期間中は無料' },
-  { emoji: '✨', text: 'すべての機能を開放' },
-  { emoji: '📝', text: 'お申し込みはフォームから1分' },
-];
 ---
 
 <section class="monitor" id="monitor" aria-labelledby="monitor-title">
@@ -35,40 +26,16 @@ const points = [
       お試し後にアンケートへお答えいただくだけでも、私たちにとって本当にありがたいことです。
     </p>
 
-    <ul class="monitor-points">
-      {points.map((p) => (
-        <li class="monitor-point">
-          <span class="monitor-point-emoji" aria-hidden="true">{p.emoji}</span>
-          <span>{p.text}</span>
-        </li>
-      ))}
-    </ul>
-
     <div class="monitor-actions">
       <div class="monitor-action">
         <a
-          href={FORM_URL}
-          class="btn btn-accent monitor-cta"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-track-event="monitor_apply_click"
-        >
-          <IconHome size={20} />
-          家族モニターに<wbr />申し込む
-        </a>
-        <p class="monitor-subnote">代表の方おひとりがご回答（事前アンケート・約1分）</p>
-      </div>
-
-      <div class="monitor-action">
-        <a
           href={INSTALL_URL}
-          class="btn btn-secondary monitor-cta"
+          class="btn btn-accent monitor-cta"
           data-track-event="monitor_install_click"
         >
           <span class="monitor-cta-emoji" aria-hidden="true">📱</span>
           アプリの<wbr />入れかたを見る
         </a>
-        <p class="monitor-subnote">いっしょに使うご家族はこちら（アンケート不要）</p>
       </div>
 
       <div class="monitor-action">
@@ -161,33 +128,6 @@ const points = [
     border-radius: var(--radius-md);
   }
 
-  .monitor-points {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-md);
-    margin-block: var(--space-sm);
-  }
-
-  .monitor-point {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: #ffffff;
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-text);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .monitor-point-emoji {
-    font-size: 18px;
-    line-height: 1;
-  }
-
   .monitor-actions {
     display: flex;
     flex-direction: column;
@@ -210,19 +150,6 @@ const points = [
     padding: var(--space-md) var(--space-2xl);
     /* 文節の途中で折らず、<wbr> を入れた位置でのみ改行する */
     word-break: keep-all;
-  }
-
-  /* インストール導線：アクセント枠のアウトラインで視認性を確保 */
-  .monitor-cta.btn-secondary {
-    background: #ffffff;
-    color: var(--color-accent-ink);
-    border: 1.5px solid var(--color-accent);
-    box-shadow: 0 1px 2px rgba(252, 163, 81, 0.25);
-  }
-
-  .monitor-cta.btn-secondary:hover {
-    background: var(--color-accent-soft);
-    box-shadow: 0 4px 12px rgba(252, 163, 81, 0.3);
   }
 
   .monitor-cta-emoji {
