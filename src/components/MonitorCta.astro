@@ -23,8 +23,15 @@ const INSTALL_URL = `${base}/home/install`;
 
     <p class="monitor-note">
       実際に使ってみて Tanect Home を知っていただき、共感できる点や「ここを直してほしい」という声をいただくこと——その改善こそが、いちばんの目的です。<br />
-      お試し後にアンケートへお答えいただくだけでも、私たちにとって本当にありがたいことです。
+      お試し後にアンケートでご感想をお聞かせいただけますと、私たちにとって本当にありがたいことです。
     </p>
+
+    <div class="monitor-period">
+      <p class="monitor-period-title">🗓️ お試しいただける期間：<strong>2026年8月31日（月）まで</strong></p>
+      <p class="monitor-period-body">
+        この間に、毎日の記録と <strong>AI週次レポート</strong>（毎週日曜の朝9時に、前の週の記録をまとめて作成）まで、ぜひ一度は体験してみてください。どこかで1週間ほど続けて記録いただくと、日曜の朝にレポートが届きます。
+      </p>
+    </div>
 
     <div class="monitor-actions">
       <div class="monitor-action">
@@ -126,6 +133,28 @@ const INSTALL_URL = `${base}/home/install`;
     background: var(--color-accent-soft);
     border: 1px solid var(--color-accent);
     border-radius: var(--radius-md);
+  }
+
+  /* お試し期間の明示：いつまでに試すか・週次レポート体験の導線 */
+  .monitor-period {
+    max-width: 600px;
+    padding: var(--space-md) var(--space-lg);
+    background: #ffffff;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+  }
+
+  .monitor-period-title {
+    font-size: var(--fs-body);
+    font-weight: 700;
+    color: var(--color-accent-ink);
+    margin-bottom: var(--space-xs);
+  }
+
+  .monitor-period-body {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--color-text);
   }
 
   .monitor-actions {
