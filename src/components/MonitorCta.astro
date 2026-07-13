@@ -4,6 +4,7 @@
 // 内部リンクは base 付きで組み立てる（他ページと同じパターン）
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const INSTALL_URL = `${base}/home/install`;
+const SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd58UzNN4Wg1W-iWpn0knXfG6IdAngpkJS6EPm7O8EnWr6Iuw/viewform';
 ---
 
 <section class="monitor" id="monitor" aria-labelledby="monitor-title">
@@ -46,42 +47,21 @@ const INSTALL_URL = `${base}/home/install`;
       </div>
 
       <div class="monitor-action">
-        <button
-          type="button"
-          class="btn btn-prep monitor-cta"
-          id="surveyPrepButton"
+        <a
+          href={SURVEY_URL}
+          class="btn btn-secondary monitor-cta"
+          target="_blank"
+          rel="noopener"
           data-track-event="monitor_survey_click"
         >
           <span class="monitor-cta-emoji" aria-hidden="true">📝</span>
-          お試し後の<wbr />アンケート（準備中）
-        </button>
+          お試し後の<wbr />アンケート
+        </a>
         <p class="monitor-subnote">利用後に、ご家族みなさんからお聞かせください</p>
       </div>
     </div>
   </div>
-
-  <dialog class="prep-dialog" id="surveyPrepDialog" aria-labelledby="prep-dialog-title">
-    <button type="button" class="prep-dialog-close" aria-label="閉じる">×</button>
-    <p class="prep-dialog-title" id="prep-dialog-title">準備中です 🌱</p>
-    <p class="prep-dialog-body">
-      お試し後のアンケートは、ただいま準備中です。<br />
-      しばらくお待ちください。
-    </p>
-  </dialog>
 </section>
-
-<script>
-  const button = document.getElementById('surveyPrepButton');
-  const dialog = document.getElementById('surveyPrepDialog') as HTMLDialogElement | null;
-  const closeBtn = dialog?.querySelector('.prep-dialog-close');
-
-  button?.addEventListener('click', () => dialog?.showModal());
-  closeBtn?.addEventListener('click', () => dialog?.close());
-  // 背景（::backdrop）クリックで閉じる
-  dialog?.addEventListener('click', (e) => {
-    if (e.target === dialog) dialog.close();
-  });
-</script>
 
 <style>
   .monitor {
@@ -186,66 +166,8 @@ const INSTALL_URL = `${base}/home/install`;
     line-height: 1;
   }
 
-  /* 準備中ボタン：クリック可だが控えめな見た目 */
-  .btn-prep {
-    background: var(--color-badge-bg);
-    color: var(--color-text-muted);
-  }
-
-  .btn-prep:hover {
-    background: var(--color-border-subtle);
-    transform: translateY(-1px);
-  }
-
   .monitor-subnote {
     font-size: var(--fs-small);
-    color: var(--color-text-muted);
-  }
-
-  /* 準備中ダイアログ */
-  .prep-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    max-width: 360px;
-    width: calc(100% - 2 * var(--space-lg));
-    padding: var(--space-2xl) var(--space-xl) var(--space-xl);
-    border: 1px solid var(--color-accent);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    background: linear-gradient(150deg, var(--color-accent-soft) 0%, #ffffff 70%);
-    text-align: center;
-    color: var(--color-text);
-  }
-
-  .prep-dialog::backdrop {
-    background: rgba(10, 10, 10, 0.4);
-  }
-
-  .prep-dialog-close {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-md);
-    font-size: 22px;
-    line-height: 1;
-    color: var(--color-text-muted);
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .prep-dialog-title {
-    font-size: var(--fs-h3, 20px);
-    font-weight: 700;
-    color: var(--color-accent-ink);
-    margin-bottom: var(--space-sm);
-  }
-
-  .prep-dialog-body {
-    font-size: var(--fs-body);
-    line-height: 1.8;
     color: var(--color-text-muted);
   }
 
