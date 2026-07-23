@@ -1,7 +1,7 @@
 ---
-// プライバシーポリシー — 正本: tanect-management/output/privacy_policy_draft.md（2026-07-08版）
+// プライバシーポリシー — 正本: tanect-management/output/privacy_policy_draft.md（2026-07-16版）
 // これまで別リポジトリ（nobu-sasa.github.io/tanect-privacy/）で公開していた内容をこのサイトへ統合。
-// 所在地・電話番号は確定済み（2026-07-08）。下の事業者情報に反映済み。
+// 所在地は確定済み（2026-07-08）。電話番号は特商法ページ側に集約したためここには記載しない。
 // ⚠️ 内容を変更したら「最終更新日」も更新し、正本（privacy_policy_draft.md）および
 //    アプリ同梱版（Tanect2/src/Tanect2.UI/Components/PrivacyPolicyContent.razor +
 //    LegalDocumentVersions.PrivacyPolicy）と文面・版を同期させること。
@@ -12,7 +12,7 @@ import PageLayout from '../layouts/PageLayout.astro';
   title="プライバシーポリシー — Tanect（タネクト）"
   description="Tanect（タネクト）が提供するアプリ「Tanect Home」における個人情報の取り扱いについて定めたプライバシーポリシーです。"
   pageTitle="プライバシーポリシー"
-  lead="<strong>最終更新日：2026年7月8日</strong><br />タネクト（以下「当社」）は、提供するアプリケーション「Tanect Home」（以下「本アプリ」）における利用者の個人情報の取り扱いについて、以下のとおりプライバシーポリシーを定めます。"
+  lead="<strong>最終更新日：2026年7月16日</strong><br />タネクト（以下「当社」）は、提供するアプリケーション「Tanect Home」（以下「本アプリ」）における利用者の個人情報の取り扱いについて、以下のとおりプライバシーポリシーを定めます。"
 >
   <h2>1. 事業者情報</h2>
   <table>
@@ -20,7 +20,6 @@ import PageLayout from '../layouts/PageLayout.astro';
       <tr><th>屋号</th><td>Tanect（タネクト）</td></tr>
       <tr><th>代表者</th><td>笹部 敦之</td></tr>
       <tr><th>所在地</th><td>〒631-0817 奈良県奈良市西大寺北町1-2-4 HSビル</td></tr>
-      <tr><th>電話番号</th><td>070-3846-9875</td></tr>
       <tr><th>メールアドレス</th><td>support@tanect.jp</td></tr>
       <tr><th>お問い合わせ</th><td>本アプリ内のお問い合わせフォーム、またはメールにてご連絡ください</td></tr>
     </tbody>
@@ -34,21 +33,27 @@ import PageLayout from '../layouts/PageLayout.astro';
     <li>メールアドレス（アカウント作成時）</li>
     <li>パスワード（暗号化して保存）</li>
     <li>活動記録（日々の行動・体調・メモ等）</li>
-    <li>プロフィール画像・家族パネル背景画像</li>
+    <li>写真（活動記録に添える画像、プロフィール画像・家族パネル背景画像。カメラで撮影した写真および写真ライブラリから選んだ写真）</li>
+    <li>音声（「ひとこと」の音声入力で録音した音声。AIで文字起こしを行うために送信し、文字起こし後に破棄します。音声そのものは保存しません）</li>
+    <li>位置情報（活動記録に「現在地を取得」を行った場合の緯度・経度、および天気情報の取得のために設定した緯度・経度）</li>
     <li>お問い合わせ内容</li>
   </ul>
   <h3>自動的に収集する情報</h3>
   <ul>
     <li>デバイス情報（OS種別・バージョン）</li>
     <li>アプリのバージョン</li>
-    <li>位置情報（天気情報取得のために設定した緯度・経度のみ。GPSによるリアルタイム追跡は行いません）</li>
     <li>プッシュ通知トークン</li>
   </ul>
+  <h3>位置情報の取り扱いについて</h3>
+  <p>位置情報は、ご利用者が「現在地を取得」を操作されたとき、および天気情報の表示地点を設定されたときにのみ取得します。<strong>バックグラウンドでの常時取得やリアルタイムの追跡は行いません。</strong></p>
+  <p>活動記録に付けた位置情報は、活動記録の一部として保存され、<strong>同じ家族グループのメンバーに地図上で共有されます</strong>（アプリ内の「地図」機能）。また、その地点の地名を表示するために、緯度・経度を外部のサービスに送信して地名を調べます（どのサービスに委託しているかは「5. 業務委託先」をご覧ください）。</p>
 
   <h2>3. 情報の利用目的</h2>
   <p>収集した情報は以下の目的にのみ使用します。</p>
   <ul>
     <li>本アプリのサービス提供（活動記録・家族間共有機能）</li>
+    <li>活動記録の地図表示・地名の表示（同一家族グループ内）</li>
+    <li>音声入力の文字起こし、活動記録の要約・分析、読み上げ音声の生成（AI機能）</li>
     <li>プッシュ通知の送信</li>
     <li>天気情報の取得・表示</li>
     <li>お問い合わせへの対応</li>
@@ -74,6 +79,7 @@ import PageLayout from '../layouts/PageLayout.astro';
       <tr><td>Microsoft Azure OpenAI Service / Azure AI</td><td>音声の文字起こし、活動記録の要約・分析、読み上げ音声の生成（AI機能）</td><td>Microsoft Corporation</td></tr>
       <tr><td>Apple Push Notification Service（APNs）</td><td>iOS プッシュ通知</td><td>Apple Inc.</td></tr>
       <tr><td>Visual Crossing Weather API</td><td>天気情報取得</td><td>Visual Crossing Corporation</td></tr>
+      <tr><td>HeartRails Geo API</td><td>逆ジオコーディング（緯度・経度から地名を取得）</td><td>株式会社ハートレイルズ</td></tr>
     </tbody>
   </table>
   <p>各サービスのプライバシーポリシーについては、各社の公式サイトをご参照ください。</p>
@@ -81,7 +87,7 @@ import PageLayout from '../layouts/PageLayout.astro';
   <h2>6. データの保存場所</h2>
   <p>利用者のデータは、原則として Microsoft Azure の日本リージョン（東日本）のサーバーに保存されます。ただし、AI 機能の一部については、以下のとおり日本国外の Azure リージョンで処理される場合があります。</p>
   <ul>
-    <li><strong>音声の文字起こし</strong>：録音した音声データは、利用可能な AI モデルの都合により、Microsoft Azure の米国リージョン（East US 2）で処理・保存されます。</li>
+    <li><strong>音声の文字起こし</strong>：録音した音声データは、利用可能な AI モデルの都合により、Microsoft Azure の米国リージョン（East US 2）で処理されます。音声データは文字起こしのために送信されるのみで、文字起こし後に破棄され、保存されません。保存されるのは文字起こし後のテキストのみです。</li>
     <li><strong>活動記録の要約・分析等の AI 機能</strong>：処理の一部が Microsoft Azure の日本国外のデータセンターで行われる場合があります。処理後のデータの保管は日本リージョンで行われます。</li>
   </ul>
   <p>これらの AI 処理は Microsoft の Azure OpenAI Service 上で行われ、利用者のデータが AI モデルの学習に使用されることはありません。</p>
@@ -108,7 +114,9 @@ import PageLayout from '../layouts/PageLayout.astro';
   <p>本アプリは家族の招待によってアカウントが作成される招待制のサービスです。13歳未満のお子様がご利用になる場合は、保護者（法定代理人）の方が本ポリシーの内容に同意し、その管理のもとでご利用ください。13歳未満のお子様の個人情報は、保護者の方の同意なく収集いたしません。</p>
 
   <h2>10. Cookie・トラッキング</h2>
-  <p>本アプリはWebブラウザ向けのCookieを使用しません。アプリ内のセッション管理にはセキュアなトークンを使用します。</p>
+  <p>本アプリ（スマートフォンアプリ）はWebブラウザ向けのCookieを使用しません。アプリ内のセッション管理にはセキュアなトークンを使用します。</p>
+  <p>本Webサイト（www.tanect.jp）では、サイトの利用状況を把握し改善するため、Googleが提供するアクセス解析ツール「Google Analytics」を利用しています。Google AnalyticsはCookieを用いて、個人を特定しない形でアクセス情報（閲覧されたページ、参照元、おおよその地域、ご利用の環境など）を収集します。収集された情報はGoogleのプライバシーポリシーに基づいて管理されます。</p>
+  <p>ブラウザの設定でCookieを無効にする、または<a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Google アナリティクス オプトアウト アドオン</a>を導入することで、データの収集を停止できます。Googleによるデータの取り扱いについては<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Googleのプライバシーポリシー</a>をご確認ください。</p>
 
   <h2>11. プライバシーポリシーの変更</h2>
   <p>本ポリシーの内容は、法令の変更やサービスの改善に伴い変更することがあります。重要な変更がある場合は、アプリ内またはプッシュ通知にてお知らせします。</p>
@@ -128,14 +136,17 @@ import PageLayout from '../layouts/PageLayout.astro';
       <tr><th>データの種類</th><th>収集</th><th>共有</th><th>目的</th></tr>
     </thead>
     <tbody>
-      <tr><td>名前</td><td>✓</td><td>しない</td><td>アカウント管理・表示</td></tr>
-      <tr><td>メールアドレス</td><td>✓</td><td>しない</td><td>アカウント認証</td></tr>
-      <tr><td>ユーザー作成コンテンツ（活動記録・画像）</td><td>✓</td><td>同一家族グループ内のみ</td><td>サービス提供</td></tr>
-      <tr><td>デバイス情報・OS</td><td>✓</td><td>しない</td><td>問い合わせ対応・不具合調査</td></tr>
-      <tr><td>アプリのアクティビティ</td><td>✓</td><td>しない</td><td>サービス改善</td></tr>
-      <tr><td>大まかな位置情報（緯度・経度）</td><td>✓</td><td>しない</td><td>天気情報の取得</td></tr>
+      <tr><td>個人情報（名前）</td><td>✓</td><td>しない</td><td>アカウント管理・表示</td></tr>
+      <tr><td>個人情報（メールアドレス）</td><td>✓</td><td>しない</td><td>アカウント認証</td></tr>
+      <tr><td>正確な位置情報</td><td>✓</td><td>しない</td><td>活動記録への地点の記録・同一家族グループ内での地図表示・天気情報の取得</td></tr>
+      <tr><td>写真</td><td>✓</td><td>しない</td><td>活動記録・プロフィール画像</td></tr>
+      <tr><td>音声（音声録音）</td><td>✓</td><td>しない</td><td>音声入力の文字起こし（文字起こし後に破棄。保存しません）</td></tr>
+      <tr><td>アプリのアクティビティ</td><td>✓</td><td>しない</td><td>サービス提供・サービス改善</td></tr>
+      <tr><td>アプリの情報とパフォーマンス</td><td>✓</td><td>しない</td><td>問い合わせ対応・不具合調査</td></tr>
     </tbody>
   </table>
+  <p>「共有」とは、Google Play の定義における第三者へのデータの転送を指します。本アプリが利用する Microsoft Azure・Azure OpenAI Service・HeartRails Geo API・Visual Crossing Weather API は、いずれも当社の指示に基づいて当社に代わってデータを処理するサービスプロバイダであるため、「共有」には該当しません（各社への委託の内容は「5. 業務委託先」に記載しています）。</p>
+  <p>活動記録・写真・位置情報を同じ家族グループのメンバーが閲覧できることは、本アプリの機能としてのアプリ内共有であり、Google Play の定義における第三者への「共有」には該当しません。</p>
   <h3>データの取り扱い方針</h3>
   <ul>
     <li>収集したデータはサービス提供に必要な範囲のみに使用します</li>
