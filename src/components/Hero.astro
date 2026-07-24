@@ -1,9 +1,8 @@
 ---
 // Tanect Hero — Based on Mindful Figma template, adapted for Tanect brand.
 // Japanese copy. Hero image rotates through the Nara landscape and four seasons.
-import IconHome from './icons/IconHome.astro';
-
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const INSTALL_URL = `${base}/home/install`;
 
 const heroImages = [
   { src: `${base}/images/hero-nara.png`, alt: '奈良の山並みと木漏れ日。Tanect Home が生まれた土地の風景。' },
@@ -29,12 +28,16 @@ const heroImages = [
         言葉にしない気配まで、やさしくつなぐ。見守りではなく「つながり」を、管理ではなく「共感」を。
       </p>
 
+      <p class="hero-monitor-note">
+        いまは、より良いアプリへ育てるための<strong>家族モニター</strong>を募集しています。離れて暮らすご家族を思うあなたの率直なご意見が、開発のいちばんの力になります。
+      </p>
+
       <div class="hero-actions">
-        <a href="#monitor" class="btn btn-accent" data-track-event="monitor_cta_click" data-cta-location="hero">
-          <IconHome />
-          家族モニターに参加する
+        <a href={INSTALL_URL} class="btn btn-accent" data-track-event="monitor_install_click" data-cta-location="hero">
+          <span class="hero-cta-emoji" aria-hidden="true">📱</span>
+          アプリを入れて試す
         </a>
-        <a href="#features" class="btn btn-secondary">詳しく見る</a>
+        <a href="#monitor" class="btn btn-secondary">モニターについて詳しく</a>
       </div>
 
       <div class="hero-proof">
@@ -116,6 +119,28 @@ const heroImages = [
     line-height: 1.8;
     color: var(--color-text-muted);
     letter-spacing: -0.025em;
+  }
+
+  /* メルマガ流入者（子世代・テスト協力者）を受け止める一言 */
+  .hero-monitor-note {
+    max-width: 560px;
+    font-size: var(--fs-small);
+    line-height: 1.8;
+    color: var(--color-text);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+  }
+
+  .hero-monitor-note strong {
+    color: var(--color-accent-ink);
+    font-weight: 700;
+  }
+
+  .hero-cta-emoji {
+    font-size: 1.1em;
+    line-height: 1;
   }
 
   .hero-actions {

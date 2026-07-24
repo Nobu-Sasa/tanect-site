@@ -34,12 +34,22 @@ const SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd58UzNN4Wg1W-iWpn0
       </p>
     </div>
 
+    <div class="monitor-steps">
+      <p class="monitor-steps-title">🧭 テスト協力の流れ</p>
+      <ol class="monitor-steps-list">
+        <li><span class="step-num" aria-hidden="true">1</span><span>アプリを入れる</span></li>
+        <li><span class="step-num" aria-hidden="true">2</span><span>1週間つづけて記録する</span></li>
+        <li><span class="step-num" aria-hidden="true">3</span><span>日曜のAIレポートを見て、アンケートで感想を送る</span></li>
+      </ol>
+    </div>
+
     <div class="monitor-actions">
       <div class="monitor-action">
         <a
           href={INSTALL_URL}
           class="btn btn-accent monitor-cta"
           data-track-event="monitor_install_click"
+          data-cta-location="monitor_section"
         >
           <span class="monitor-cta-emoji" aria-hidden="true">📱</span>
           アプリの<wbr />入れかたを見る
@@ -60,6 +70,11 @@ const SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd58UzNN4Wg1W-iWpn0
         <p class="monitor-subnote">利用後に、ご家族みなさんからお聞かせください</p>
       </div>
     </div>
+
+    <p class="monitor-maker">
+      🌱 奈良で、離れて暮らす家族のためにこのアプリを開発しています。<br />
+      タネクト・笹部 敦之（<a href="mailto:support@tanect.jp">support@tanect.jp</a>）
+    </p>
   </div>
 </section>
 
@@ -169,6 +184,69 @@ const SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd58UzNN4Wg1W-iWpn0
   .monitor-subnote {
     font-size: var(--fs-small);
     color: var(--color-text-muted);
+  }
+
+  /* テスト協力の流れ（3ステップ）＝テスターが何をすればよいか可視化 */
+  .monitor-steps {
+    max-width: 600px;
+    width: 100%;
+    padding: var(--space-md) var(--space-lg);
+    background: #ffffff;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+  }
+
+  .monitor-steps-title {
+    font-size: var(--fs-body);
+    font-weight: 700;
+    color: var(--color-accent-ink);
+    margin-bottom: var(--space-sm);
+    text-align: center;
+  }
+
+  .monitor-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
+
+  .monitor-steps-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7em;
+    height: 1.7em;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+
+  /* 作り手の一言＝誰が作っているかの信頼 */
+  .monitor-maker {
+    max-width: 600px;
+    font-size: var(--fs-small);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  .monitor-maker a {
+    color: var(--color-accent-ink);
   }
 
   /* Tablet and up */
