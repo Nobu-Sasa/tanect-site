@@ -43,6 +43,9 @@ const SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd58UzNN4Wg1W-iWpn0
         <li><span class="step-num" aria-hidden="true">2</span><span>1週間つづけて記録する</span></li>
         <li><span class="step-num" aria-hidden="true">3</span><span>日曜のAIレポートを見て、アンケートで感想を送る</span></li>
       </ol>
+      <p class="monitor-steps-note">
+        <strong>まずはお一人でも試せます。</strong>記録がひとつでもあれば、日曜の朝にAI週次レポートが届きます。ご家族は、あとからいつでも招待できます。
+      </p>
     </div>
 
     <div class="monitor-actions">
@@ -204,6 +207,22 @@ const SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd58UzNN4Wg1W-iWpn0
     color: var(--color-accent-ink);
     margin-bottom: var(--space-sm);
     text-align: center;
+  }
+
+  /* 「家族を巻き込まないと試せないのでは」という迷いを先に解く一文 */
+  .monitor-steps-note {
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border-subtle);
+    font-size: var(--fs-small);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    text-align: left;
+  }
+
+  .monitor-steps-note strong {
+    color: var(--color-accent-ink);
+    font-weight: 700;
   }
 
   .monitor-steps-list {
