@@ -16,9 +16,13 @@ import { SUPPORT_EMAIL } from '../../config';
 const ANDROID_INVITE_LINK = 'https://appdistribution.firebase.dev/i/e839ccc26eed5ed4';
 // Step2: App Tester アプリのインストール（配布アプリのページ）
 const ANDROID_APP_TESTER_LINK = 'https://appdistribution.firebase.google.com/testerapps/1:327542930366:android:7b5bde13423dc28fcd57ef/releases/07cu2l78drfag?utm_source=firebase-console';
+// iOS の公開リンクは「枠（テスター上限）」の管理であって、来訪者に選ばせるものではない。
+// 画面には常に1つだけ出し、枠が埋まったら下の IOS_TESTFLIGHT_LINK を差し替える運用にする
+// （2026-07-27：公開リンクのテスター上限を 50→500 に引き上げたため、当面は1本で足りる）。
 const IOS_TESTFLIGHT_LINK = 'https://testflight.apple.com/join/1hjBMcpE';
-// コネクティル様経由のモニター向け TestFlight 公開リンク（一般とグループを分けて配布）
-const IOS_TESTFLIGHT_LINK_CONNECTIL = 'https://testflight.apple.com/join/8aYDSyHK';
+// 予備枠（旧・コネクティル様向けに分けていたリンク）。上の枠が埋まったらこちらへ差し替える。
+// ※ 取引先名を公開ページに出さないため、ボタンのラベルには使わない。
+const IOS_TESTFLIGHT_LINK_SPARE = 'https://testflight.apple.com/join/8aYDSyHK';
 
 // リンクが未発行のうちは true にしておくと、ボタンを「準備中」表示にできる
 const ANDROID_READY = true;
@@ -90,6 +94,22 @@ const iosSteps = [
           お使いのスマホにあわせて、下の手順どおりに進めてください。<br />
           むずかしい設定はありません。途中でつまずいても大丈夫です。
         </p>
+        {/* 「思ったより長い」で離脱しないよう、所要時間とやることを先に開示する */}
+        <div class="intro-time">
+          <p class="intro-time-title">⏱ かかる時間の目安</p>
+          <ul class="intro-time-list">
+            <li>
+              <span class="intro-time-device">iPhone</span>
+              <span class="intro-time-body"><strong>約3分</strong>／Apple公式のテスト用アプリ「TestFlight」を入れてから、Tanect Home を入れます</span>
+            </li>
+            <li>
+              <span class="intro-time-device">Android</span>
+              <span class="intro-time-body"><strong>約5分</strong>／Googleアカウントでテスター登録をしてから、Tanect Home を入れます</span>
+            </li>
+          </ul>
+          <p class="intro-time-note">このあとアプリでアカウントを作ります（メールに届く6けたの数字を入力します）。</p>
+        </div>
+
         <p class="intro-pick">
           お使いの端末は <strong>iPhone</strong> ですか？ <strong>Android</strong> ですか？<br />
           <span class="intro-pick-note">わからないときは、メールでお問い合わせください。</span>
@@ -127,29 +147,26 @@ const iosSteps = [
           </ol>
           <div class="card-cta">
             {IOS_READY ? (
-              <div class="btn-steps">
-                <a
-                  href={IOS_TESTFLIGHT_LINK}
-                  class="btn btn-accent"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  iPhoneでアプリを入れる<br />（一般の方向け）
-                </a>
-                <a
-                  href={IOS_TESTFLIGHT_LINK_CONNECTIL}
-                  class="btn btn-accent"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  iPhoneでアプリを入れる<br />（コネクティル様向け）
-                </a>
-              </div>
+              <a
+                href={IOS_TESTFLIGHT_LINK}
+                class="btn btn-accent"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="install_store_click"
+                data-cta-location="ios_testflight"
+              >
+                iPhoneでアプリを入れる
+              </a>
             ) : (
               <span class="btn btn-disabled" aria-disabled="true">準備中（リンクは個別にお送りします）</span>
             )}
             <p class="card-note">※ 次の新しいバージョンが出ると、TestFlight からお知らせが届きます。<br />※ うまくいかないときは、メールでお問い合わせください。</p>
-            <a href={`mailto:${SUPPORT_EMAIL}`} class="btn btn-primary">メールを送る（{SUPPORT_EMAIL}）</a>
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
+              class="btn btn-primary"
+              data-track-event="install_support_mail_click"
+              data-cta-location="ios_card"
+            >メールを送る（{SUPPORT_EMAIL}）</a>
           </div>
         </section>
 
@@ -175,6 +192,8 @@ const iosSteps = [
                   class="btn btn-accent"
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-track-event="install_store_click"
+                  data-cta-location="android_register"
                 >
                   ① 登録ページを開く
                 </a>
@@ -183,6 +202,8 @@ const iosSteps = [
                   class="btn btn-accent"
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-track-event="install_store_click"
+                  data-cta-location="android_apptester"
                 >
                   ② Androidでアプリを入れる
                 </a>
@@ -191,7 +212,12 @@ const iosSteps = [
               <span class="btn btn-disabled" aria-disabled="true">準備中（リンクは個別にお送りします）</span>
             )}
             <p class="card-note">※ かならず <strong>①→②</strong> の順に進めてください。<br />※ うまくいかないときは、メールでお問い合わせください。</p>
-            <a href={`mailto:${SUPPORT_EMAIL}`} class="btn btn-primary">メールを送る（{SUPPORT_EMAIL}）</a>
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
+              class="btn btn-primary"
+              data-track-event="install_support_mail_click"
+              data-cta-location="android_card"
+            >メールを送る（{SUPPORT_EMAIL}）</a>
           </div>
         </section>
       </div>
@@ -223,7 +249,12 @@ const iosSteps = [
           インストール後は、アプリ内の画面右上の人アイコン →「お問い合わせ」からもご連絡いただけます。
         </p>
         <p class="help-mail">
-          <a href={`mailto:${SUPPORT_EMAIL}`} class="btn btn-primary">メールを送る（{SUPPORT_EMAIL}）</a>
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            class="btn btn-primary"
+            data-track-event="install_support_mail_click"
+            data-cta-location="help_section"
+          >メールを送る（{SUPPORT_EMAIL}）</a>
         </p>
         <div class="help-links">
           <a href={FAMILY_SETUP_URL} class="help-back">👪 アプリを開いたら（家族のつくり方）を見る</a>
@@ -300,6 +331,64 @@ const iosSteps = [
   .intro-lead {
     font-size: var(--fs-body);
     line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+
+  /* ── 所要時間の先出し ── */
+  .intro-time {
+    width: 100%;
+    max-width: 560px;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    text-align: left;
+  }
+
+  .intro-time-title {
+    font-size: var(--fs-body);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+  }
+
+  .intro-time-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .intro-time-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+
+  .intro-time-device {
+    flex: 0 0 auto;
+    min-width: 4.5em;
+    font-size: var(--fs-small);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .intro-time-body {
+    flex: 1 1 14em;
+    font-size: var(--fs-small);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+
+  .intro-time-note {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border-subtle);
+    font-size: var(--fs-small);
+    line-height: 1.7;
     color: var(--color-text-muted);
   }
 
