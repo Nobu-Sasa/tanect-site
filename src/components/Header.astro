@@ -27,9 +27,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </nav>
 
     <div class="header-actions">
-      <a href="#monitor" class="btn btn-accent btn-sm" data-track-event="monitor_cta_click" data-cta-location="header">
+      {/* 「参加」は申込み・義務を連想させて重い。実際にやるのは「入れて使ってみる」だけなので動詞を軽くする。
+          行き先も #monitor（ページ内スクロール）ではなくインストール案内へ直行させ、
+          決めた人の最短路にする（Hero の主CTAと同じ計測イベントに統一）。 */}
+      <a
+        href={`${base}/home/install`}
+        class="btn btn-accent btn-sm"
+        data-track-event="monitor_install_click"
+        data-cta-location="header"
+      >
         <IconHome size={16} />
-        家族モニターに参加
+        アプリを試す
       </a>
 
       <button
