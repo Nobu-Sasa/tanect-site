@@ -22,6 +22,14 @@ const isNoindex = noindex ?? !INDEXABLE_PATHS.includes(path);
 
 // astro.config.mjs で site を設定済みのため必ず存在する。
 const canonicalUrl = new URL(path === '/' ? '/' : `${path}/`, Astro.site!).href;
+
+// GA4 の初期化スニペット。Google 公式の書式（測定IDをリテラルで埋め込む）をそのまま出力する。
+const gaSnippet = `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${GA_MEASUREMENT_ID}');
+`;
 ---
 
 <!doctype html>
@@ -66,17 +74,16 @@ const canonicalUrl = new URL(path === '/' ? '/' : `${path}/`, Astro.site!).href;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
-    {/* GA4: 測定IDが設定されているときだけ読み込む（config.ts の GA_MEASUREMENT_ID） */}
+    {/* GA4: 測定IDが設定されているときだけ読み込む（config.ts の GA_MEASUREMENT_ID）。
+        ⚠️ define:vars は使わない。IIFE で包まれ `gtag('config', 変数)` の形で出力されるため、
+        Search Console の「Google アナリティクス」による所有権確認がトラッキングコードを
+        検出できなかった（2026-07-29 実測）。Google 公式スニペットの形をそのまま出す。
+        gtag は module ではない素の <script> の関数宣言＝グローバルになるので、
+        body 末尾のCTAクリック計測が参照する window.gtag もこのまま動く。 */}
     {GA_MEASUREMENT_ID && (
       <Fragment>
         <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
-        <script is:inline define:vars={{ gaId: GA_MEASUREMENT_ID }}>
-          window.dataLayer = window.dataLayer || [];
-          function gtag() { window.dataLayer.push(arguments); }
-          window.gtag = gtag;
-          gtag('js', new Date());
-          gtag('config', gaId);
-        </script>
+        <script is:inline set:html={gaSnippet}></script>
       </Fragment>
     )}
   </head>
