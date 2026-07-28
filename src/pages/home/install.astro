@@ -112,11 +112,28 @@ const iosSteps = [
 
         <p class="intro-pick">
           お使いの端末は <strong>iPhone</strong> ですか？ <strong>Android</strong> ですか？<br />
-          <span class="intro-pick-note">わからないときは、メールでお問い合わせください。</span>
+          <span class="intro-pick-note">下のボタンを押すと、その手順まで進みます。わからないときは、メールでお問い合わせください。</span>
         </p>
+        {/* 端末を選ぶ手段。モバイルは1カラム縦積みで iPhone カード（スクショ4枚）が先に来るため、
+            Android の人は長くスクロールしないと自分の手順に届かなかった。ここが最大の離脱点。
+            あわせて下の script で、Android 端末なら Android カードを先頭へ並べ替える。 */}
+        <div class="intro-jump">
+          <a
+            href="#iphone"
+            class="btn btn-accent"
+            data-track-event="install_device_pick"
+            data-cta-location="ios"
+          >🍎 iPhone の手順へ</a>
+          <a
+            href="#android"
+            class="btn btn-accent"
+            data-track-event="install_device_pick"
+            data-cta-location="android"
+          >🤖 Android の手順へ</a>
+        </div>
       </section>
 
-      <div class="cards">
+      <div class="cards" id="cards">
         <!-- iPhone -->
         <section class="card" id="iphone" aria-labelledby="iphone-title">
           <div class="card-head">
@@ -268,6 +285,14 @@ const iosSteps = [
   <footer class="page-foot">
     <p class="page-foot-copy">© 2026 Tanect</p>
   </footer>
+
+  {/* Android 端末で開いたときは Android カードを先頭にする（モバイルの1カラム時のみ効く）。
+      JS が動かない環境では既定の並び（iPhone が先）のままで、内容は何も失われない。 */}
+  <script>
+    if (/Android/i.test(navigator.userAgent)) {
+      document.getElementById('cards')?.classList.add('android-first');
+    }
+  </script>
 </BaseLayout>
 
 <style>
@@ -404,6 +429,21 @@ const iosSteps = [
     color: var(--color-text-muted);
   }
 
+  /* ── 端末を選ぶジャンプボタン ── */
+  .intro-jump {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .intro-jump .btn {
+    width: 100%;
+    text-align: center;
+  }
+
   /* ── 端末カード ── */
   .cards {
     display: grid;
@@ -411,7 +451,17 @@ const iosSteps = [
     gap: var(--space-xl);
   }
 
+  /* Android 端末で開いたときだけ Android カードを先頭へ。
+     2カラムになるタブレット以上では並びを変えない（左右が入れ替わるだけで利得が無いため）。 */
+  @media (max-width: 767px) {
+    .cards.android-first #android {
+      order: -1;
+    }
+  }
+
   .card {
+    /* ジャンプボタンで飛んだとき、見出しが画面のきわに貼り付かないようにする */
+    scroll-margin-top: var(--space-lg);
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
