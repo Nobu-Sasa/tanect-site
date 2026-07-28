@@ -158,7 +158,7 @@ const iosSteps = [
                     </div>
                   </div>
                 </div>
-                <p class="step-text step-text-center" set:html={s.text} />
+                <p class="step-text step-text-shot" set:html={s.text} />
               </li>
             ))}
           </ol>
@@ -353,7 +353,12 @@ const iosSteps = [
     letter-spacing: 0.012em;
   }
 
+  /* 箱は中央・中の本文は左揃え（LP の各セクションと統一・2026-07-28）。
+     中央揃えのままだと実機幅で「います。」「てください。」のように行末が1〜2文字だけ残り、
+     行頭もばらついて読みにくかった（実機スクショで確認）。 */
   .intro-lead {
+    max-width: 560px;
+    text-align: left;
     font-size: var(--fs-body);
     line-height: 1.9;
     color: var(--color-text-muted);
@@ -418,6 +423,8 @@ const iosSteps = [
   }
 
   .intro-pick {
+    max-width: 560px;
+    text-align: left;
     margin-top: var(--space-sm);
     font-size: var(--fs-body);
     line-height: 1.8;
@@ -542,8 +549,12 @@ const iosSteps = [
     text-align: center;
   }
 
-  .step-text-center {
-    text-align: center;
+  /* スクショ付きステップの説明文。**手順を追いながら読む文章**なので読みやすさを優先し、
+     箱は中央のまま中を左揃えにした（2026-07-28）。旧クラス名 .step-text-center は挙動と
+     食い違うため .step-text-shot（＝スクショ用のステップ文）へ改名。 */
+  .step-text-shot {
+    max-width: 320px;
+    text-align: left;
     font-size: 15px;
     padding-top: 0;
   }
@@ -658,10 +669,12 @@ const iosSteps = [
     box-shadow: none;
   }
 
+  /* 「※ …」で始まる注記は箇条書きに近い。中央揃えだと ※ の位置が行ごとにずれて読みにくい（2026-07-28）。 */
   .card-note {
+    max-width: 360px;
     font-size: var(--fs-small);
     color: var(--color-text-muted);
-    text-align: center;
+    text-align: left;
   }
 
   /* ── 確認メールの注意 ── */
@@ -725,7 +738,11 @@ const iosSteps = [
     margin-bottom: var(--space-md);
   }
 
+  /* 3行の本文。中央揃えだと行頭がばらつくため左揃え（見出し「困ったときは」は中央のまま・2026-07-28）。 */
   .help-text {
+    max-width: 560px;
+    margin-inline: auto;
+    text-align: left;
     font-size: 15px;
     line-height: 1.9;
     color: var(--color-text-muted);
