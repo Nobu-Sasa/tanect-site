@@ -4,7 +4,7 @@
 // モニターからの質問「どの役割の人が何ができて何ができないの？」に答える俯瞰ページ。
 // 役割ごとの "できること・できないこと" を早見でまとめる（権限の俯瞰）。
 // 手順（どうやって委任するか等）は support-parent.astro へ相互リンクして重複を避ける。
-// サイト全体が noindex,nofollow（BaseLayout）。
+// /home/ 配下は検索に載せない（config.ts の INDEXABLE_PATHS に未掲載＝BaseLayout が自動で noindex,nofollow）。
 //
 // 出典（ラベル・挙動）：Tanect2
 //   FamilyRole.cs（Admin=まとめ役 / Payer=お支払い担当 / Analyst=サポーター）

@@ -2,7 +2,7 @@
 // リリースノート（更新情報）ページ（/release-notes）
 //
 // 家族モニター向け。/install ページからリンクする身内向けページ。
-// サイト全体が noindex,nofollow（BaseLayout）なので検索には載らない。
+// /home/ 配下は検索に載せない（config.ts の INDEXABLE_PATHS に未掲載＝BaseLayout が自動で noindex,nofollow）。
 //
 // 内容の出典：tanect-management の参照先 ~/src/Tanect2-1/Tanect2/CHANGELOG.md
 //   1.9.0 が現行公開バージョン（iOS）。1.9.1 〜 1.11.7 の変更を

@@ -3,7 +3,7 @@
 //
 // install.astro → family-setup.astro と続く身内向けページ群の3枚目。
 // アプリを入れて家族でつながったあと、お好みに合わせて整えておくと安心な設定を
-// スクショ付きで案内する。サイト全体が noindex,nofollow（BaseLayout）。
+// スクショ付きで案内する。/home/ 配下は検索に載せない（config.ts の INDEXABLE_PATHS に未掲載＝BaseLayout が自動で noindex,nofollow）。
 //
 // 掲載する設定（ユーザー確定）：表示まわり／便利機能／家族・見守り／家族ごとの背景画像。
 // （通知まわりは今回は載せない。出典：Tanect2 PersonalSettings.razor・FamilySettings.razor）

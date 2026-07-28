@@ -3,7 +3,7 @@
 //
 // 公開LPのナビからはリンクしない「身内向け」ページ。
 // 第一波モニターには、申し込み後の返信メール／LINE でこのページのURLを送る。
-// サイト全体が noindex,nofollow（BaseLayout）なので検索には載らない。
+// /home/ 配下は検索に載せない（config.ts の INDEXABLE_PATHS に未掲載＝BaseLayout が自動で noindex,nofollow）。
 //
 // ⚠️ 差し替え必須：下の2つのリンクを、発行済みの実URLに書き換えてください。
 //   - ANDROID_INVITE_LINK … Firebase App Distribution の monitors グループ「招待リンク」

@@ -4,7 +4,7 @@
 // first-settings.astro（親本人向けの設定案内）の続きにあたる、サポーター（子世代）向けページ。
 // 家族設定で役割（サポーター/まとめ役）を決め、親の端末で「委任」をONにしたあと、
 // サポーターが自分の端末から 親の設定の代行・予定の代理入力・活動の見守り を行う手順を案内する。
-// サイト全体が noindex,nofollow（BaseLayout）。
+// /home/ 配下は検索に載せない（config.ts の INDEXABLE_PATHS に未掲載＝BaseLayout が自動で noindex,nofollow）。
 //
 // 出典（ラベル・挙動）：Tanect2 PersonalSettings.razor / Calendar.razor / WeeklySummary.razor / Analysis.razor / FamilySettings.razor / RoleEditDialog.razor
 // ⚠️ 役割名は STG/最新版アプリに合わせ「サポーター」で統一。

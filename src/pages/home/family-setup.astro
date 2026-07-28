@@ -2,7 +2,7 @@
 // 家族モニター向け「家族のつくり方」案内ページ（/family-setup）
 //
 // install.astro の姉妹ページ。ログイン（アカウント作成）後に、家族をどう構成するかを
-// スクショ付きで案内する「身内向け」ページ。サイト全体が noindex,nofollow（BaseLayout）。
+// スクショ付きで案内する「身内向け」ページ。/home/ 配下は検索に載せない（config.ts の INDEXABLE_PATHS に未掲載＝BaseLayout が自動で noindex,nofollow）。
 //
 // 役割は2つ：
 //   - まとめ役（家族を作る人）… グループ作成 → 招待コード発行 → 参加申請の承認

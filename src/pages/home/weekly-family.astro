@@ -5,7 +5,7 @@
 // 毎週日曜朝に届く週次AIサマリー（今週の家族）と、その画面内の「思い出をさがす」
 // （Discovery.razor のハイブリッド検索）を、view-activity.astro と同じテイスト
 // （やさしい敬語・カード・暖色トークン）で紹介する。
-// サイト全体が noindex,nofollow（BaseLayout）。
+// /home/ 配下は検索に載せない（config.ts の INDEXABLE_PATHS に未掲載＝BaseLayout が自動で noindex,nofollow）。
 //
 // 出典（ラベル・挙動）：Tanect2 WeeklySummary.razor / Discovery.razor、release-notes L50。
 // ⚠️ スクショ差し替え：下の screens/weekly-*.png はまだ未配置。
