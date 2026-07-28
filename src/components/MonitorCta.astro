@@ -116,8 +116,10 @@ const SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd58UzNN4Wg1W-iWpn0
     letter-spacing: 0.012em;
   }
 
+  /* 箱は中央・中の本文は左揃え（Hero / ThreeGenerationScenarios と統一・2026-07-28）。基準はスマホ。 */
   .monitor-lead {
     max-width: 600px;
+    text-align: left;
     font-size: var(--fs-body);
     line-height: 1.8;
     color: var(--color-text-muted);
@@ -258,9 +260,11 @@ const SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd58UzNN4Wg1W-iWpn0
     font-size: 0.9em;
   }
 
-  /* 作り手の一言＝誰が作っているかの信頼 */
+  /* 作り手の一言＝誰が作っているかの信頼。
+     すぐ上の .monitor-lead を左揃えにしたため、ここだけ中央だと不揃いになる（2026-07-28）。 */
   .monitor-maker {
     max-width: 600px;
+    text-align: left;
     font-size: var(--fs-small);
     line-height: 1.9;
     color: var(--color-text-muted);

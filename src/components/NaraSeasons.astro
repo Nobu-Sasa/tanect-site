@@ -1,0 +1,110 @@
+---
+// 奈良の四季スライド。もとは Tanect Home の LP（Hero.astro）に置いていたが、
+// 2026-07-28 にコーポレートトップへ移設した。
+//  - LP の仕事は「インストールしてもらう」こと。風景のスライドは寄与せず、
+//    1カラムに折り返すと縦に大きく場所を取って CTA を画面外へ押し下げていた
+//  - 一方、コーポレート側は「タネクトがどこで生まれたか」を語る場所であり、
+//    画像がひとつも無かった。ここでこそ効く
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const images = [
+  { src: `${base}/images/hero-nara.png`, alt: '奈良の山並みと木漏れ日。タネクトが生まれた土地の風景。' },
+  { src: `${base}/images/hero-nara-spring.png`, alt: '奈良の春。桜並木の道を歩く犬。' },
+  { src: `${base}/images/hero-nara-summer.png`, alt: '奈良の夏。畑で実るゴーヤと青々とした葉。' },
+  { src: `${base}/images/hero-nara-autumn.png`, alt: '奈良の秋。紅葉と石灯籠のある庭。' },
+  { src: `${base}/images/hero-nara-winter.png`, alt: '奈良の冬。雪をまとった山と冬空。' },
+];
+---
+
+<section class="nara" aria-labelledby="nara-title">
+  <div class="nara-inner">
+    <p class="nara-eyebrow" id="nara-title">タネクトが生まれた土地</p>
+    <figure class="nara-image" aria-label="奈良の四季の風景">
+      {images.map((img, i) => (
+        <img
+          src={img.src}
+          alt={img.alt}
+          class={i === 0 ? 'is-active' : ''}
+          loading={i === 0 ? 'eager' : 'lazy'}
+        />
+      ))}
+    </figure>
+    <p class="nara-caption">
+      奈良の、めぐる四季のなかで。日々のあゆみが積み重なっていく風景から、タネクトは始まりました。
+    </p>
+  </div>
+</section>
+
+<script>
+  const imgs = document.querySelectorAll<HTMLImageElement>('.nara-image img');
+  if (imgs.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let idx = 0;
+    setInterval(() => {
+      imgs[idx].classList.remove('is-active');
+      idx = (idx + 1) % imgs.length;
+      imgs[idx].classList.add('is-active');
+    }, 4500);
+  }
+</script>
+
+<style>
+  .nara {
+    padding: var(--space-3xl) var(--space-md);
+  }
+
+  .nara-inner {
+    max-width: 900px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .nara-eyebrow {
+    font-size: var(--fs-small);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-accent-ink);
+  }
+
+  .nara-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    margin: 0;
+    background: var(--color-bg-soft);
+  }
+
+  .nara-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+  }
+
+  .nara-image img.is-active {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nara-image img {
+      transition: none;
+    }
+  }
+
+  .nara-caption {
+    max-width: 560px;
+    font-size: var(--fs-small);
+    line-height: 1.9;
+    color: var(--color-text-muted);
+  }
+</style>

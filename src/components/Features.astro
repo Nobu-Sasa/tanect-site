@@ -95,8 +95,12 @@ const features: Feature[] = [
     word-break: keep-all;
   }
 
+  /* 箱は中央・中の本文は左揃え（Hero / ThreeGenerationScenarios と統一・2026-07-28）。
+     基準はスマホ：max-width 640px に対し実機は 360px 前後で、<br> で切った行がさらに折り返されるため、
+     PC で長さを揃えて中央に置いた効果は消え、行頭だけがばらつく。 */
   .features-lead {
     max-width: 640px;
+    text-align: left;
     font-size: var(--fs-body);
     line-height: 1.8;
     color: var(--color-text-muted);

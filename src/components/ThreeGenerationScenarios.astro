@@ -166,8 +166,11 @@ const generations: Generation[] = [
       <h2 class="scenarios-title" id="scenarios-title">
         世代が違えば、<wbr />見たい風景も違う。
       </h2>
+      {/* 「…3世代でも。」は体言止めの投げかけ（＝読み手に「うちのことだ」と気づいてもらう一拍）。
+          句点のまま改行して独立させる。読点で次文に繋ぐと一文が長くなり、この一拍が消える（2026-07-28）。 */}
       <p class="scenarios-lead">
-        親と子の2世代でも、孫もふくめた3世代でも。離れて暮らすご家族の気持ちにあわせて、画面と機能が設計されています。<br />
+        親と子の2世代でも、孫もふくめた3世代でも。<br />
+        離れて暮らすご家族の気持ちにあわせて、画面と機能が設計されています。<br />
         タブを切り替えて、それぞれの一日を覗いてみてください。
       </p>
     </header>
@@ -330,8 +333,11 @@ const generations: Generation[] = [
     word-break: keep-all;
   }
 
+  /* Hero と同じ扱い：箱は中央に置き、中の本文だけ左揃え。
+     バッジと見出しは中央のまま。複数行の本文を中央揃えにすると行頭が揃わず読みにくい（2026-07-28）。 */
   .scenarios-lead {
     max-width: 640px;
+    text-align: left;
     font-size: var(--fs-body);
     line-height: 1.8;
     color: var(--color-text-muted);

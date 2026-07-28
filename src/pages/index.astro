@@ -2,9 +2,10 @@
 // タネクト コーポレートトップ — 2本柱（Tanect Home / Tanect Develop）の入口。
 // 「Tanect Develop」＝システム開発支援サービスの正式名称（2026-07-12 採用・名刺と同時展開）。
 // Tanect Home のLPは /home/ 配下（src/pages/home/index.astro）。
-// 構成: Hero → 事業内容 → タネクトが大切にしたいこと → お問い合わせ（代表紹介は /company/ で触れる程度に）
+// 構成: Hero → 事業内容 → 奈良の四季 → タネクトが大切にしたいこと → お問い合わせ（代表紹介は /company/ で触れる程度に）
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CorporateHeader from '../components/CorporateHeader.astro';
+import NaraSeasons from '../components/NaraSeasons.astro';
 import Footer from '../components/Footer.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -83,6 +84,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </section>
 
+    <!-- 奈良の四季（2026-07-28 に Tanect Home の LP から移設）。
+         次の「大切にしたいこと」で語る“種と双葉の由来”への導入になる位置に置く。 -->
+    <NaraSeasons />
+
     <!-- タネクトが大切にしたいこと -->
     <section class="vision" aria-labelledby="vision-title">
       <div class="vision-inner">
@@ -92,8 +97,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           小さな種から始めて、みんなで繋がり、<br />
           世の中に貢献していく。
         </blockquote>
+        {/* 2026-07-28：「両親からもらった種」→「育ててもらった価値観も、積み重ねてきた経験も、すべて種」。
+            ここは2本柱の共有面で、開発支援を検討する事業者も読む。私的な出自は判断材料にならず距離が生まれる。
+            ただし「経験を種に」だけへ置き換えると一般論になり差別化を失うため、種の定義を*広げる*形にした
+            （具体を2つ並べて抽象語を避ける）。個人の物語＝父母のくだりは /about に据え置き＝そこでしか語れない。
+            正本 01_strategy/brand_design_system.md も同じ定義に更新済み。 */}
         <p class="vision-note">
-          屋号のタネクトは「種 × コネクト」。両親からもらった種から芽吹いた双葉が、私たちのシンボルです。
+          屋号のタネクトは「種 × コネクト」。育ててもらった価値観も、積み重ねてきた経験も、すべて種。そこから芽吹いた双葉が、私たちのシンボルです。
         </p>
         <a href={`${base}/about`} class="btn btn-secondary">タネクトの想いを読む</a>
       </div>
