@@ -1,0 +1,179 @@
+---
+// あえて、つくらなかったもの — チャット／既読／催促を入れていない理由を説明するセクション
+//
+// なぜ必要か（2026-07-30）：
+//  - Tanect Home は「会話の継続」ではなく「気配の共有の継続」をめざしている。
+//    チャットが無いのは機能不足ではなく設計判断だが、それを言い切っている場所が
+//    サイトのどこにも無く、Hero の「見守りではなく〜」や Features の
+//    「長い言葉はいりません」に断片が散っているだけだった
+//  - 説明の軸は「通知が来ない」ではない（予定のアラーム・連続記録のバッジ・
+//    いいねのお知らせは実際に届くので、それは嘘になる）。
+//    軸は **「応じなかったことが、誰にも残らない」**。
+//    既読が人を追い詰めるのは通知が来るからではなく、返さなかったことが相手に見えるから。
+//    Tanect Home は押したときだけ伝わり、押さなかったことは伝わらない
+//  - この原則は機能を足すときの判断基準にもなる：
+//    「応じなかったことが相手に見えるか？」が Yes なら入れない
+//
+// 配置は Features の直後（index.astro）。できることを見せきった後なら「削ぎ落とした」に、
+// 前に置くと「足りない」に読まれるため。
+//
+// 背景は白（Features と同じ）のままにして、カードだけ bg-soft ＋ 影なしにしている。
+// 直前の Features が「白カード＋影」なので、沈んだカードが引き算の語感と合う。
+// 次の PetStories がセクションごと bg-soft なので、ここを bg-soft にすると帯が繋がってしまう。
+type Absence = {
+  emoji: string;
+  title: string;
+  body: string;
+};
+
+const absences: Absence[] = [
+  {
+    emoji: '💬',
+    title: 'チャットはありません',
+    body: '返す義務が生まれると、続かなくなるから。あるのは日々のひと言と「いいね・応援」だけです。込み入った話は電話やLINEで。その手前にある、言葉にならない毎日の気配を、Tanect Home が受け持ちます。',
+  },
+  {
+    emoji: '👁',
+    title: '既読はつきません',
+    body: '「読んだのに返事がない」を、誰にも作らせないため。いつ開いたかも、まだ開いていないことも、ご家族には伝わりません。',
+  },
+  {
+    emoji: '🤫',
+    title: '押さなくても、誰にも分かりません',
+    body: '「◯◯さんがいいねを押しました」は届きます。でも、押さなかったことは誰にも届きません。だから、押したいときにだけ押せます。',
+  },
+];
+---
+
+<section class="quiet" id="quiet-by-design" aria-labelledby="quiet-title">
+  <div class="quiet-inner">
+    <header class="quiet-head">
+      <span class="badge">🤫 あえて、つくらなかったもの</span>
+      <h2 class="quiet-title" id="quiet-title">
+        返さなくていい。<wbr />だから、続く。
+      </h2>
+      <p class="quiet-lead">
+        会話は、いつか途切れます。「返さなきゃ」が、続かない理由になるからです。<br />
+        めざすのは、会話が続くことではなく、気配が伝わりつづけること。<br />
+        そのために、あえて入れなかったものがあります。
+      </p>
+    </header>
+
+    <ul class="quiet-grid">
+      {absences.map((a) => (
+        <li class="quiet-card">
+          <span class="quiet-emoji" aria-hidden="true">{a.emoji}</span>
+          <h3 class="quiet-card-title">{a.title}</h3>
+          <p class="quiet-card-body">{a.body}</p>
+        </li>
+      ))}
+    </ul>
+
+    <p class="quiet-close">引き算のぶんだけ、続きます。</p>
+  </div>
+</section>
+
+<style>
+  .quiet {
+    padding: var(--space-3xl) 0;
+  }
+
+  .quiet-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-md);
+  }
+
+  .quiet-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .quiet-title {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+    /* 文節の途中で折らず、<wbr> を入れた位置でのみ改行する */
+    word-break: keep-all;
+  }
+
+  /* 箱は中央・中の本文は左揃え（Hero / Features と統一）。
+     スマホでは <br /> で切った行がさらに折り返されるため、中央揃えだと行頭がばらつく。 */
+  .quiet-lead {
+    max-width: 640px;
+    text-align: left;
+    font-size: var(--fs-body);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  .quiet-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  /* Features のカード（白＋影＝浮く）に対し、こちらは沈める。引き算のセクションなので前に出さない */
+  .quiet-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-xl);
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .quiet-emoji {
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  .quiet-card-title {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 0.012em;
+    /* 「押さなくても、誰にも分かりません」が「…分かりませ／ん」と割れて
+       「ん」だけ行に残るのを防ぐ。読点で折り返させる（2026-07-30） */
+    word-break: keep-all;
+  }
+
+  .quiet-card-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  .quiet-close {
+    margin-top: var(--space-2xl);
+    text-align: center;
+    font-size: var(--fs-body);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    color: var(--color-accent-ink);
+    letter-spacing: 0.012em;
+  }
+
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    .quiet-title {
+      font-size: 36px;
+    }
+  }
+
+  /* Desktop — カードは3枚。2カラムだと1枚あぶれるので 1 → 3 で切り替える。
+     768px で3カラムにすると本文の実効幅が 170px 前後まで痩せるため、1024px から。 */
+  @media (min-width: 1024px) {
+    .quiet-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+    }
+  }
+</style>
