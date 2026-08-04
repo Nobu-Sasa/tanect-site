@@ -9,13 +9,25 @@
 //   - ANDROID_INVITE_LINK … Firebase App Distribution の monitors グループ「招待リンク」
 //   - IOS_TESTFLIGHT_LINK  … App Store Connect → TestFlight 外部テストの「公開リンク」（Beta Review 承認後）
 // （手順の出典：tanect-management/04_customers/monitor_onboarding.md §1・§3）
+//
+// 2026-08-03：Android 手順から「App Tester 必須」を外した。
+//   モニターからの指摘＋実機検証（App Tester をアンインストールしても再インストールできる）で確認。
+//   Firebase 公式も App Tester を "optional, recommended" と明記している
+//   （https://firebase.google.com/docs/app-distribution/get-set-up-as-a-tester?platform=android）。
+//   招待を承諾済みなら、Android のブラウザから APK を直接ダウンロードして入れられる。
+//   ※ これは APK 配布だから成り立つ。AAB 配布に切り替えると Play の Internal app sharing 経由になり
+//     テスター側の手順が変わるので、そのときはこのページも書き直すこと。
+//   App Tester は「新バージョンの通知＋ワンタップ更新」のための任意オプションとして残してある。
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { SUPPORT_EMAIL } from '../../config';
 
-// Step1: テスターとしての追加登録（招待リンク）
+// Android のメイン導線：招待リンク。初回はここでテスター登録、2回目以降は
+// そのままリリース一覧が開いて「ダウンロード」できる（＝更新もこのリンク1本で足りる）
 const ANDROID_INVITE_LINK = 'https://appdistribution.firebase.dev/i/e839ccc26eed5ed4';
-// Step2: App Tester アプリのインストール（配布アプリのページ）
-const ANDROID_APP_TESTER_LINK = 'https://appdistribution.firebase.google.com/testerapps/1:327542930366:android:7b5bde13423dc28fcd57ef/releases/07cu2l78drfag?utm_source=firebase-console';
+// （任意）App Tester のインストール。テスター用ポータルを Android で開くと導入を案内される。
+// 旧リンクは特定リリース ID を指す固定URL（.../releases/07cu2l78drfag）だったため、
+// 配信を重ねると古い版を指し続ける。公式が案内しているポータルのルートに変更（2026-08-03）
+const ANDROID_APP_TESTER_LINK = 'https://appdistribution.firebase.google.com';
 // iOS の公開リンクは「枠（テスター上限）」の管理であって、来訪者に選ばせるものではない。
 // 画面には常に1つだけ出し、枠が埋まったら下の IOS_TESTFLIGHT_LINK を差し替える運用にする
 // （2026-07-27：公開リンクのテスター上限を 50→500 に引き上げたため、当面は1本で足りる）。
@@ -33,11 +45,11 @@ const RELEASE_NOTES_URL = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/home/r
 const FAMILY_SETUP_URL = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/home/family-setup`;
 
 const androidSteps = [
-  'このページを <strong>Androidスマホ</strong> で開き、まず下の <strong>「① 登録ページを開く」</strong> ボタンを押します。',
-  '<strong>Googleアカウント</strong>でサインインし、利用規約に同意します（テスター登録）。',
-  '次に <strong>「② Androidでアプリを入れる」</strong> ボタンを押し、画面の案内に従って <strong>「App Tester」アプリ</strong> をインストールします。',
-  'App Tester の中から <strong>Tanect Home</strong> をインストールします。<br />※「提供元不明のアプリ」の確認が出たら、画面の案内に従って許可してください（アプリストア以外からのお届けのためです）。',
-  '次の新しいバージョンが出ると、App Tester からお知らせが届きます。',
+  'このページを <strong>Androidスマホ</strong> で開き、下の <strong>「Androidでアプリを入れる」</strong> ボタンを押します。',
+  '<strong>Googleアカウント</strong>でサインインし、利用規約に同意します（テスター登録）。<br /><span class="step-sub">※ここは最初の1回だけです。2回目からは出ません。</span>',
+  '<strong>Tanect Home</strong> の画面が開いたら <strong>「ダウンロード」</strong> を押します。<br /><span class="step-sub">※「提供元不明のアプリ」の確認が出たら、画面の案内に従って許可してください（アプリストア以外からのお届けのためです）。</span>',
+  'ダウンロードが終わったら <strong>「インストール」</strong> を押します。これでおしまいです！',
+  '次の新しいバージョンが出ると、<strong>メールでお知らせ</strong>が届きます。同じボタンから、いつでも最新版を入れられます。',
 ];
 
 // iPhone の手順（スクショ付き）
@@ -202,33 +214,44 @@ const iosSteps = [
             ))}
           </ol>
           <div class="card-cta">
+            {/* GA4 の cta_location は既存の値をそのまま使う（`android_register` が Android のインストール導線・
+                `android_apptester` が任意の App Tester）。ボタンは2段→1本に減ったが、名前を変えると
+                7月からの時系列が切れるため据え置き（02_marketing/ga4_reading_guide.md §イベント一覧）。 */}
             {ANDROID_READY ? (
-              <div class="btn-steps">
-                <a
-                  href={ANDROID_INVITE_LINK}
-                  class="btn btn-accent"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-track-event="install_store_click"
-                  data-cta-location="android_register"
-                >
-                  ① 登録ページを開く
-                </a>
-                <a
-                  href={ANDROID_APP_TESTER_LINK}
-                  class="btn btn-accent"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-track-event="install_store_click"
-                  data-cta-location="android_apptester"
-                >
-                  ② Androidでアプリを入れる
-                </a>
-              </div>
+              <a
+                href={ANDROID_INVITE_LINK}
+                class="btn btn-accent"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="install_store_click"
+                data-cta-location="android_register"
+              >
+                Androidでアプリを入れる
+              </a>
             ) : (
               <span class="btn btn-disabled" aria-disabled="true">準備中（リンクは個別にお送りします）</span>
             )}
-            <p class="card-note">※ かならず <strong>①→②</strong> の順に進めてください。<br />※ うまくいかないときは、メールでお問い合わせください。</p>
+            <p class="card-note">※ 新しいバージョンに入れかえるときも、このボタンからで大丈夫です。<br />※ うまくいかないときは、メールでお問い合わせください。</p>
+
+            {/* App Tester は必須ではない（Firebase 公式も "optional, recommended"）。
+                更新のたびにこのページへ戻るのが面倒な人向けの任意オプションとして、控えめに置く。 */}
+            <div class="opt">
+              <p class="opt-title">🔔 更新をラクにしたい方へ（任意）</p>
+              <p class="opt-text">
+                Google の「App Tester」というアプリを入れておくと、新しいバージョンが出たときに<strong>スマホにお知らせが届き</strong>、その場で入れかえられます。<br />
+                <strong>入れなくても Tanect Home はふつうに使えます</strong>ので、必要な方だけどうぞ。
+              </p>
+              <a
+                href={ANDROID_APP_TESTER_LINK}
+                class="btn btn-secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="install_store_click"
+                data-cta-location="android_apptester"
+              >
+                App Tester を入れる（任意）
+              </a>
+            </div>
             <a
               href={`mailto:${SUPPORT_EMAIL}`}
               class="btn btn-primary"
@@ -643,20 +666,6 @@ const iosSteps = [
     max-width: 360px;
   }
 
-  .btn-steps {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-sm);
-    width: 100%;
-  }
-
-  /* <br> 入りの2行ラベルは flex だと中央に揃わないため、ブロック＋中央揃えにする */
-  .btn-steps .btn {
-    display: block;
-    text-align: center;
-  }
-
   .btn-disabled {
     background: var(--color-badge-bg);
     color: var(--color-text-muted);
@@ -675,6 +684,42 @@ const iosSteps = [
     font-size: var(--fs-small);
     color: var(--color-text-muted);
     text-align: left;
+  }
+
+  /* ── 任意オプション（App Tester）──
+     必須の手順と見た目で差をつける。カード内の淡い囲み＋ btn-secondary で、
+     「押さなくてよい」ことが見ただけで伝わるようにする。 */
+  .opt {
+    width: 100%;
+    max-width: 360px;
+    margin-top: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    text-align: left;
+  }
+
+  .opt-title {
+    font-size: var(--fs-small);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+  }
+
+  .opt-text {
+    font-size: var(--fs-small);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+
+  .opt .btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--fs-small);
   }
 
   /* ── 確認メールの注意 ── */
