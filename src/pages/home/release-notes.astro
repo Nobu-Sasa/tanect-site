@@ -17,7 +17,7 @@
 // 掲載中：
 //   ※ 1.19.2（2026-08-17）家族ごとの枠線をなくし、背景写真をふわっと切り替え。
 //     👍の付き忘れ・背景のちらつき・Android の写真の向きを修正。
-//     Android 配布済み／iOS は TestFlight 審査へ提出。
+//     同日に Android（Firebase）と iOS（TestFlight）の両方へ配信し、両OSとも 1.19.2 で揃った。
 //   ✅ 2026-08-17 更新時に 1.19.0 / 1.18.2 のブロックを削除（git 履歴に残る）。
 //     理由：iOS が 2026-08-15 に 1.19.0 を受け取り、Android に追いついたため
 //     （＝「1つ前の版を残す」例外の解除。PREV_VERSION は 1.19.0）。
@@ -36,7 +36,7 @@ const INSTALL_URL = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/home/install
 // ── いま公開中のバージョン（公開のたびに更新） ──
 // date は「実際にモニターへ配布／公開した日」。未確定のうちは '—' のままでOK。
 const currentVersions = [
-  { os: 'iPhone（iOS）', emoji: '🍎', version: '1.19.0', date: '2026-08-15', note: '1.19.2 を審査に提出中' },
+  { os: 'iPhone（iOS）', emoji: '🍎', version: '1.19.2', date: '2026-08-17', note: '最新版' },
   { os: 'Android', emoji: '🤖', version: '1.19.2', date: '2026-08-17', note: '最新版' },
 ];
 
