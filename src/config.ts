@@ -15,9 +15,10 @@ export const SUPPORT_EMAIL = 'support@tanect.jp';
  *   2. canonical URL の出力有無（BaseLayout）
  *   3. sitemap.xml に載る URL（src/pages/sitemap.xml.ts）
  *
- * 2026-07-28 時点でコーポレート6ページのみ公開（Phase 3）。除外中のページと解除条件:
- *   - /tokushoho     … 「準備中」注記が付いているため。有料課金の開始時（2026年8月想定）に追加
+ * 2026-09-18 時点でコーポレート7ページを公開。除外中のページと解除条件:
  *   - /home 配下     … Tanect Home のLP・ガイド。家族モニター（検証）期間中のため据え置き
+ * 解除ずみ:
+ *   - /tokushoho     … ✅ 2026-09-18 公開（有料プラン月480円の表記を確定・「準備中」注記を削除）
  * 参照: tanect-management CLAUDE.md / brand_foundation_setup.md §4・§8
  */
 export const INDEXABLE_PATHS = [
@@ -27,4 +28,5 @@ export const INDEXABLE_PATHS = [
   '/dev-support',
   '/contact',
   '/privacy',
+  '/tokushoho',
 ];
